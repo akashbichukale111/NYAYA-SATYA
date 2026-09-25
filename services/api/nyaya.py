@@ -13,7 +13,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
 from lib.auth import Principal
-from services.api.security import require_human_principal, require_principal
+from services.api.security import (
+    require_human_principal,
+    require_principal,
+    reset_rate_limits,
+)
 from tarka_vyuh.contracts.proposal import (
     ProposalStatus,
     ProposedAction,
@@ -51,6 +55,30 @@ from nyaya_evidence.registry.store import get_evidence_registry, EvidenceRegistr
 from nyaya_evidence.tarka_integration.safe_refs import create_safe_evidence_ref
 from nyaya_evidence.contradiction.engine import ContradictionAnalysisEngine
 
+from nyaya_twin.contracts.case_twin import CaseDigitalTwin
+from nyaya_twin.contracts.entities import Entity, EntityType, EntityStatus
+from nyaya_twin.contracts.claims import Claim, ClaimType, ClaimStatus
+from nyaya_twin.contracts.issues import Issue, IssueStatus
+from nyaya_twin.contracts.events import TimelineEvent, TimePrecision, TemporalStatus
+from nyaya_twin.contracts.relationships import CaseRelationship, RelationshipType
+from nyaya_twin.builders.twin_builder import CaseTwinBuilder
+from nyaya_twin.graph.case_graph import CaseGraph
+from nyaya_twin.graph.timeline_graph import TimelineGraph
+from nyaya_twin.validation.graph_validator import validate_case_graph
+from nyaya_twin.traversal.evidence_paths import (
+    get_supporting_evidence_for_claim,
+    get_contradicting_evidence_for_claim,
+    get_evidence_dependent_claims,
+    get_unsupported_claims,
+)
+from nyaya_twin.traversal.claim_dependencies import (
+    get_claim_prerequisites,
+    get_claim_dependents,
+    get_claim_ancestors,
+    get_claim_descendants,
+)
+from nyaya_twin.traversal.downstream_impact import compute_evidence_invalidation_impact
+
 router = APIRouter(prefix="/api/nyaya", tags=["nyaya-satya"])
 
 # In-memory repositories for proposals and runtime instances
@@ -66,14 +94,19 @@ _SANITIZER = AdversarialSanitizer()
 _PARSER = DocumentParserDispatcher()
 _CONTRADICTION = ContradictionAnalysisEngine()
 
+# Case Digital Twin repository
+_TWINS: dict[str, CaseDigitalTwin] = {}
+
 
 def reset_nyaya_api_state() -> None:
     """Test hook to reset API in-memory repositories."""
     _PROPOSALS.clear()
+    _TWINS.clear()
     _HUMAN_GATE.reset_for_test()
     _GUARD.reset_for_test()
     get_audit_store().reset_for_test()
     get_evidence_registry().reset_for_test()
+    reset_rate_limits()
 
 
 # Pydantic schemas for request bodies
@@ -110,6 +143,16 @@ class HumanDecisionRequest(BaseModel):
     decision: str  # "APPROVE" or "REJECT"
     reason: str
     authorization_record: dict[str, Any] = Field(default_factory=dict)
+
+
+class BuildTwinRequest(BaseModel):
+    twin_id: str | None = None
+    entities: list[dict[str, Any]] = Field(default_factory=list)
+    claims: list[dict[str, Any]] = Field(default_factory=list)
+    issues: list[dict[str, Any]] = Field(default_factory=list)
+    events: list[dict[str, Any]] = Field(default_factory=list)
+    relationships: list[dict[str, Any]] = Field(default_factory=list)
+    unresolved_items: list[str] = Field(default_factory=list)
 
 
 @router.post("/proposals", status_code=201)
@@ -632,6 +675,382 @@ async def analyze_contradictions(
         "candidates": [c.to_dict() for c in candidates],
         "generated_proposals": proposals,
     }
+
+
+# ============================================================================
+# PHASE 3: CASE DIGITAL TWIN API ENDPOINTS
+# ============================================================================
+@router.post("/cases/{case_id}/twin/build")
+async def build_case_twin(
+    case_id: str,
+    req: BuildTwinRequest,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Constructs or updates the Case Digital Twin from entities, claims, events, and evidence."""
+    registry = get_evidence_registry()
+    case = registry.get_case(case_id)
+    if not case:
+        raise HTTPException(404, f"Case {case_id} not found")
+
+    builder = CaseTwinBuilder(case_id=case_id, twin_id=req.twin_id)
+
+    # Attach all registered safe evidence for this case
+    all_evidence = registry.list_case_evidence(case_id)
+    registered_items = {
+        item.evidence_id: item
+        for item in all_evidence
+        if item.is_safe_for_reasoning
+    }
+
+    safe_refs_list = []
+    for ev_id, item in registered_items.items():
+        san = registry.get_sanitization(ev_id)
+        parsed = registry.get_parsed_document(ev_id)
+        provs = registry.get_provenance(ev_id)
+        try:
+            ref = create_safe_evidence_ref(
+                item=item,
+                sanitization=san,
+                parsed=parsed,
+                provenance_refs=provs,
+            )
+            builder.add_evidence_ref(ref)
+            safe_refs_list.append(ref)
+        except QuarantineViolationError:
+            continue
+
+    # Add entities
+    for edata in req.entities:
+        etype_str = edata.get("entity_type", "PERSON")
+        try:
+            etype = EntityType(etype_str)
+        except ValueError:
+            etype = EntityType.OTHER
+        builder.entity_builder.add_entity(
+            canonical_label=edata["canonical_label"],
+            entity_type=etype,
+            entity_id=edata.get("entity_id"),
+            aliases=edata.get("aliases"),
+            source_evidence_ids=edata.get("source_evidence_ids"),
+            metadata=edata.get("metadata"),
+        )
+
+    # Add claims
+    for cdata in req.claims:
+        ctype_str = cdata.get("claim_type", "FACTUAL")
+        try:
+            ctype = ClaimType(ctype_str)
+        except ValueError:
+            ctype = ClaimType.FACTUAL
+        builder.claim_builder.add_claim(
+            subject_entity_id=cdata["subject_entity_id"],
+            predicate=cdata["predicate"],
+            object_value=cdata["object_value"],
+            claim_id=cdata.get("claim_id"),
+            claim_type=ctype,
+            source_evidence_ids=cdata.get("source_evidence_ids"),
+            supporting_evidence_ids=cdata.get("supporting_evidence_ids"),
+            contradicting_evidence_ids=cdata.get("contradicting_evidence_ids"),
+            notes=cdata.get("notes", ""),
+            metadata=cdata.get("metadata"),
+        )
+
+    # Add issues
+    for idata in req.issues:
+        builder.add_issue(
+            title=idata["title"],
+            issue_id=idata.get("issue_id"),
+            description=idata.get("description", ""),
+            related_claim_ids=idata.get("related_claim_ids"),
+            related_evidence_ids=idata.get("related_evidence_ids"),
+            unresolved_questions=idata.get("unresolved_questions"),
+        )
+
+    # Add events
+    for evdata in req.events:
+        tprec_str = evdata.get("time_precision", "UNKNOWN")
+        try:
+            tprec = TimePrecision(tprec_str)
+        except ValueError:
+            tprec = TimePrecision.UNKNOWN
+        builder.timeline_builder.add_event(
+            title=evdata["title"],
+            event_id=evdata.get("event_id"),
+            event_type=evdata.get("event_type", "FACTUAL_EVENT"),
+            description=evdata.get("description", ""),
+            event_time=evdata.get("event_time"),
+            start_time=evdata.get("start_time"),
+            end_time=evdata.get("end_time"),
+            time_precision=tprec,
+            participants=evdata.get("participants"),
+            location=evdata.get("location"),
+            source_evidence_ids=evdata.get("source_evidence_ids"),
+            related_claim_ids=evdata.get("related_claim_ids"),
+            metadata=evdata.get("metadata"),
+        )
+
+    # Add relationships
+    for rdata in req.relationships:
+        rtype_str = rdata["relationship_type"]
+        try:
+            rtype = RelationshipType(rtype_str)
+        except ValueError:
+            raise HTTPException(400, f"Invalid relationship_type: {rtype_str}")
+        builder.add_relationship(
+            source_id=rdata["source_id"],
+            source_type=rdata.get("source_type", "CLAIM"),
+            target_id=rdata["target_id"],
+            target_type=rdata.get("target_type", "CLAIM"),
+            relationship_type=rtype,
+            relationship_id=rdata.get("relationship_id"),
+            weight=rdata.get("weight", 1.0),
+            metadata=rdata.get("metadata"),
+        )
+
+    # Add unresolved items
+    for item_str in req.unresolved_items:
+        builder.add_unresolved_item(item_str)
+
+    # Run pairwise contradiction analysis across attached safe references
+    for i in range(len(safe_refs_list)):
+        for j in range(i + 1, len(safe_refs_list)):
+            cands = _CONTRADICTION.analyze_pair(safe_refs_list[i], safe_refs_list[j])
+            for cand in cands:
+                builder.add_contradiction(cand)
+
+    all_evidence_map = {item.evidence_id: item for item in all_evidence}
+    twin = builder.build(evidence_items=all_evidence_map)
+    _TWINS[case_id] = twin
+
+    return {
+        "twin_id": twin.twin_id,
+        "case_id": twin.case_id,
+        "version": twin.version,
+        "integrity_hash": twin.integrity_hash,
+        "entities_count": len(twin.entities),
+        "claims_count": len(twin.claims),
+        "issues_count": len(twin.issues),
+        "events_count": len(twin.events),
+        "evidence_refs_count": len(twin.evidence_refs),
+        "relationships_count": len(twin.relationships),
+        "contradictions_count": len(twin.contradictions),
+        "temporal_conflicts_count": len(twin.temporal_conflicts),
+        "graph_integrity": twin.graph_integrity,
+    }
+
+
+@router.get("/cases/{case_id}/twin")
+async def get_case_twin(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Retrieves high-level summary of the Case Digital Twin."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    return {
+        "twin_id": twin.twin_id,
+        "case_id": twin.case_id,
+        "version": twin.version,
+        "integrity_hash": twin.integrity_hash,
+        "entities_count": len(twin.entities),
+        "claims_count": len(twin.claims),
+        "issues_count": len(twin.issues),
+        "events_count": len(twin.events),
+        "evidence_refs_count": len(twin.evidence_refs),
+        "relationships_count": len(twin.relationships),
+        "contradictions_count": len(twin.contradictions),
+        "temporal_conflicts_count": len(twin.temporal_conflicts),
+        "graph_integrity": twin.graph_integrity,
+        "unresolved_items": twin.unresolved_items,
+    }
+
+
+@router.get("/cases/{case_id}/twin/entities")
+async def get_case_twin_entities(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Retrieves entities registered in the Case Digital Twin."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    return {
+        "case_id": case_id,
+        "entities": [e.to_dict() for e in twin.entities.values()],
+    }
+
+
+@router.get("/cases/{case_id}/twin/claims")
+async def get_case_twin_claims(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Retrieves claims registered in the Case Digital Twin."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    return {
+        "case_id": case_id,
+        "claims": [c.to_dict() for c in twin.claims.values()],
+    }
+
+
+@router.get("/cases/{case_id}/twin/issues")
+async def get_case_twin_issues(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Retrieves legal issues registered in the Case Digital Twin."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    return {
+        "case_id": case_id,
+        "issues": [i.to_dict() for i in twin.issues.values()],
+    }
+
+
+@router.get("/cases/{case_id}/twin/timeline")
+async def get_case_twin_timeline(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Retrieves chronologically sorted events and temporal conflicts."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    tg = TimelineGraph(case_id)
+    for ev in twin.events.values():
+        tg.add_event(ev)
+    stream = tg.get_chronological_stream()
+    return {
+        "case_id": case_id,
+        "timeline_events": [e.to_dict() for e in stream],
+        "temporal_conflicts": twin.temporal_conflicts,
+    }
+
+
+@router.get("/cases/{case_id}/twin/graph")
+async def get_case_twin_graph(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Retrieves full graph nodes and relationships."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    return {
+        "case_id": case_id,
+        "twin_id": twin.twin_id,
+        "nodes": {
+            "entities": [e.to_dict() for e in twin.entities.values()],
+            "claims": [c.to_dict() for c in twin.claims.values()],
+            "issues": [i.to_dict() for i in twin.issues.values()],
+            "events": [e.to_dict() for e in twin.events.values()],
+            "evidence_refs": [ref.to_dict() for ref in twin.evidence_refs.values()],
+        },
+        "relationships": [rel.to_dict() for rel in twin.relationships.values()],
+        "contradictions": [cand.to_dict() for cand in twin.contradictions],
+    }
+
+
+@router.get("/cases/{case_id}/twin/evidence/{evidence_id}/dependencies")
+async def get_evidence_dependencies(
+    case_id: str,
+    evidence_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Computes downstream impact if an evidence reference is altered or invalidated."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    report = compute_evidence_invalidation_impact(twin, evidence_id)
+    return report.to_dict()
+
+
+@router.get("/cases/{case_id}/twin/claims/{claim_id}/support")
+async def get_claim_support(
+    case_id: str,
+    claim_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Returns supporting and contradicting evidence for a specific claim."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    if claim_id not in twin.claims:
+        raise HTTPException(404, f"Claim {claim_id} not found in twin")
+
+    claim = twin.claims[claim_id]
+    supporting = get_supporting_evidence_for_claim(twin, claim_id)
+    contradicting = get_contradicting_evidence_for_claim(twin, claim_id)
+
+    return {
+        "case_id": case_id,
+        "claim_id": claim_id,
+        "statement": claim.statement,
+        "status": claim.status.value,
+        "confidence": claim.confidence.value,
+        "supporting_evidence_ids": supporting,
+        "contradicting_evidence_ids": contradicting,
+    }
+
+
+@router.get("/cases/{case_id}/twin/claims/{claim_id}/dependencies")
+async def get_claim_dependencies(
+    case_id: str,
+    claim_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Returns direct and transitive upstream/downstream claim dependencies."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    if claim_id not in twin.claims:
+        raise HTTPException(404, f"Claim {claim_id} not found in twin")
+
+    prereqs = get_claim_prerequisites(twin, claim_id)
+    deps = get_claim_dependents(twin, claim_id)
+    ancestors = get_claim_ancestors(twin, claim_id)
+    descendants = get_claim_descendants(twin, claim_id)
+
+    return {
+        "case_id": case_id,
+        "claim_id": claim_id,
+        "direct_prerequisites": prereqs,
+        "direct_dependents": deps,
+        "all_ancestors": ancestors,
+        "all_descendants": descendants,
+    }
+
+
+@router.get("/cases/{case_id}/twin/snapshot")
+async def get_twin_snapshot(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Returns the reproducible, deterministic JSON snapshot of the twin."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    return twin.snapshot()
+
+
+@router.post("/cases/{case_id}/twin/validate")
+async def validate_twin_endpoint(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Validates the Case Digital Twin against the 15 graph integrity rules."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    registry = get_evidence_registry()
+    all_evidence = registry.list_case_evidence(case_id)
+    evidence_map = {item.evidence_id: item for item in all_evidence}
+    res = validate_case_graph(twin, evidence_items=evidence_map)
+    return res.to_dict()
 
 
 __all__ = [
