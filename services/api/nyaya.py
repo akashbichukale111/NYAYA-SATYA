@@ -79,6 +79,32 @@ from nyaya_twin.traversal.claim_dependencies import (
 )
 from nyaya_twin.traversal.downstream_impact import compute_evidence_invalidation_impact
 
+from nyaya_adversarial.contracts.assumption import (
+    Assumption,
+    AssumptionRegistry,
+    AssumptionStatus,
+    AssumptionType,
+)
+from nyaya_adversarial.contracts.attack import AttackScenario, AttackStatus, AttackType
+from nyaya_adversarial.contracts.conflict import ConflictSet, EvidenceConflict, ConflictType, ConflictSeverity
+from nyaya_adversarial.contracts.fragility import FragilityReport, AchillesHeel, StructuralSeverity
+from nyaya_adversarial.contracts.missing_evidence import MissingEvidenceCandidate
+from nyaya_adversarial.contracts.result import AdversarialFinding, AdversarialGauntletReport, FindingType
+from nyaya_adversarial.contracts.voi import NextBestEvidence
+from nyaya_adversarial.arena.conflict_arena import ConflictArena
+from nyaya_adversarial.arena.contradiction_cluster import ContradictionClusterer
+from nyaya_adversarial.arena.hypothesis_manager import HypothesisManager
+from nyaya_adversarial.gauntlet.gauntlet import AdversarialGauntlet
+from nyaya_adversarial.jenga.fragility_engine import JengaFragilityEngine
+from nyaya_adversarial.jenga.achilles_engine import AchillesHeelEngine
+from nyaya_adversarial.jenga.dependency_stress import DependencyStressEngine
+from nyaya_adversarial.missing.detector import MissingEvidenceDetector
+from nyaya_adversarial.missing.evidence_candidates import NextBestEvidenceEngine
+from nyaya_adversarial.missing.uncertainty_reduction import UncertaintyReductionEngine
+from nyaya_adversarial.validation.attack_validator import AttackValidator
+from nyaya_adversarial.validation.result_validator import ResultValidator
+from nyaya_adversarial.validation.safety_validator import SafetyValidator
+
 router = APIRouter(prefix="/api/nyaya", tags=["nyaya-satya"])
 
 # In-memory repositories for proposals and runtime instances
@@ -97,11 +123,17 @@ _CONTRADICTION = ContradictionAnalysisEngine()
 # Case Digital Twin repository
 _TWINS: dict[str, CaseDigitalTwin] = {}
 
+# Adversarial Subsystem repositories
+_ADVERSARIAL_REPORTS: dict[str, AdversarialGauntletReport] = {}
+_ASSUMPTION_REGISTRIES: dict[str, AssumptionRegistry] = {}
+
 
 def reset_nyaya_api_state() -> None:
     """Test hook to reset API in-memory repositories."""
     _PROPOSALS.clear()
     _TWINS.clear()
+    _ADVERSARIAL_REPORTS.clear()
+    _ASSUMPTION_REGISTRIES.clear()
     _HUMAN_GATE.reset_for_test()
     _GUARD.reset_for_test()
     get_audit_store().reset_for_test()
@@ -1053,8 +1085,303 @@ async def validate_twin_endpoint(
     return res.to_dict()
 
 
+# -------------------------------------------------------------
+# PHASE 4: ADVERSARIAL GAUNTLET & REASONING ENDPOINTS
+# -------------------------------------------------------------
+
+class RunGauntletPayload(BaseModel):
+    attack_types: list[str] | None = None
+    parameters: dict[str, Any] = Field(default_factory=dict)
+
+
+class AssumptionPayload(BaseModel):
+    assumption_id: str
+    description: str
+    assumption_type: str = "STRUCTURAL"
+    related_claim_ids: list[str] = Field(default_factory=list)
+    related_evidence_ids: list[str] = Field(default_factory=list)
+    support_status: str = "UNSUPPORTED"
+    uncertainty: float = 0.5
+
+
+@router.post("/cases/{case_id}/adversarial/run")
+async def run_adversarial_gauntlet_endpoint(
+    case_id: str,
+    payload: RunGauntletPayload | None = None,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Runs the Adversarial Gauntlet against the Case Digital Twin."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+
+    if case_id not in _ASSUMPTION_REGISTRIES:
+        _ASSUMPTION_REGISTRIES[case_id] = AssumptionRegistry(case_id=case_id)
+    assump_reg = _ASSUMPTION_REGISTRIES[case_id]
+
+    gauntlet = AdversarialGauntlet(twin, assumption_registry=assump_reg)
+    report = gauntlet.run_gauntlet()
+    _ADVERSARIAL_REPORTS[case_id] = report
+    return report.to_dict()
+
+
+@router.get("/cases/{case_id}/adversarial/findings")
+async def list_adversarial_findings(
+    case_id: str,
+    severity: str | None = None,
+    finding_type: str | None = None,
+    caller: Principal = Depends(require_principal),
+) -> list[dict[str, Any]]:
+    """Returns adversarial findings, optionally filtered by severity or type."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    if case_id not in _ADVERSARIAL_REPORTS:
+        twin = _TWINS[case_id]
+        assump_reg = _ASSUMPTION_REGISTRIES.get(case_id, AssumptionRegistry(case_id=case_id))
+        gauntlet = AdversarialGauntlet(twin, assumption_registry=assump_reg)
+        _ADVERSARIAL_REPORTS[case_id] = gauntlet.run_gauntlet()
+
+    report = _ADVERSARIAL_REPORTS[case_id]
+    findings = report.findings
+    if severity:
+        findings = [f for f in findings if f.severity.value == severity.upper()]
+    if finding_type:
+        findings = [f for f in findings if f.finding_type.value == finding_type.upper()]
+    return [f.to_dict() for f in findings]
+
+
+@router.get("/cases/{case_id}/adversarial/conflicts")
+async def list_case_conflicts(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Returns the ConflictSet, clusters, and hypotheses from the Conflict Arena."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    arena = ConflictArena(twin)
+    cset = arena.detect_conflicts()
+    clusterer = ContradictionClusterer()
+    clusters = clusterer.cluster_conflicts(cset)
+    hyp_mgr = HypothesisManager(twin)
+    hyp_map = hyp_mgr.build_case_hypothesis_map(cset.conflicts)
+
+    return {
+        "case_id": case_id,
+        "conflict_set": cset.to_dict(),
+        "clusters": [cl.to_dict() for cl in clusters],
+        "hypotheses": {k: [h.to_dict() for h in v] for k, v in hyp_map.items()},
+    }
+
+
+@router.get("/cases/{case_id}/adversarial/attacks")
+async def list_generated_attacks(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> list[dict[str, Any]]:
+    """Lists all attack scenarios generated across the 10 attack classes."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    assump_reg = _ASSUMPTION_REGISTRIES.get(case_id, AssumptionRegistry(case_id=case_id))
+    gauntlet = AdversarialGauntlet(twin, assumption_registry=assump_reg)
+    attacks = gauntlet.generator.generate_all_attacks()
+    return [a.to_dict() for a in attacks]
+
+
+@router.get("/cases/{case_id}/adversarial/fragility")
+async def get_fragility_analysis(
+    case_id: str,
+    target_id: str | None = None,
+    caller: Principal = Depends(require_principal),
+) -> list[dict[str, Any]]:
+    """Returns Jenga structural fragility reports for nodes in the case."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    engine = JengaFragilityEngine(twin)
+    if target_id:
+        if target_id in twin.evidence_refs:
+            return [engine.analyze_evidence_fragility(target_id).to_dict()]
+        elif target_id in twin.claims:
+            return [engine.analyze_claim_fragility(target_id).to_dict()]
+        else:
+            raise HTTPException(404, f"Node {target_id} not found in case twin")
+    else:
+        return [r.to_dict() for r in engine.analyze_all_evidence()]
+
+
+@router.get("/cases/{case_id}/adversarial/achilles-heels")
+async def list_achilles_heels(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> list[dict[str, Any]]:
+    """Returns detected Achilles-heel vulnerabilities in the case."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    engine = AchillesHeelEngine(twin)
+    heels = engine.detect_achilles_heels()
+    return [h.to_dict() for h in heels]
+
+
+@router.get("/cases/{case_id}/adversarial/assumptions")
+async def list_assumptions(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Returns all registered assumptions for the case."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    reg = _ASSUMPTION_REGISTRIES.get(case_id, AssumptionRegistry(case_id=case_id))
+    return reg.to_dict()
+
+
+@router.post("/cases/{case_id}/adversarial/assumptions")
+async def register_assumption(
+    case_id: str,
+    payload: AssumptionPayload,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Registers an explicit or structural assumption."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    if case_id not in _ASSUMPTION_REGISTRIES:
+        _ASSUMPTION_REGISTRIES[case_id] = AssumptionRegistry(case_id=case_id)
+    reg = _ASSUMPTION_REGISTRIES[case_id]
+    assump = Assumption(
+        assumption_id=payload.assumption_id,
+        case_id=case_id,
+        description=payload.description,
+        assumption_type=AssumptionType(payload.assumption_type.upper()),
+        related_claim_ids=payload.related_claim_ids,
+        related_evidence_ids=payload.related_evidence_ids,
+        support_status=AssumptionStatus(payload.support_status.upper()),
+        uncertainty=payload.uncertainty,
+    )
+    reg.register(assump)
+    return assump.to_dict()
+
+
+@router.get("/cases/{case_id}/adversarial/missing-evidence")
+async def list_missing_evidence(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> list[dict[str, Any]]:
+    """Returns detected missing evidence questions and candidates."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    detector = MissingEvidenceDetector(twin)
+    cands = detector.detect_missing_evidence()
+    return [c.to_dict() for c in cands]
+
+
+@router.get("/cases/{case_id}/adversarial/next-best-evidence")
+async def list_next_best_evidence(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> list[dict[str, Any]]:
+    """Returns ranked next-best-evidence candidates based on uncertainty reduction."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    engine = NextBestEvidenceEngine(twin)
+    ranked = engine.rank_next_best_evidence()
+    return [r.to_dict() for r in ranked]
+
+
+@router.get("/cases/{case_id}/adversarial/claims/{claim_id}/attacks")
+async def get_claim_attacks(
+    case_id: str,
+    claim_id: str,
+    caller: Principal = Depends(require_principal),
+) -> list[dict[str, Any]]:
+    """Returns attacks specifically targeting a claim or its dependency tree."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    if claim_id not in twin.claims:
+        raise HTTPException(404, f"Claim {claim_id} not found in case {case_id}")
+    assump_reg = _ASSUMPTION_REGISTRIES.get(case_id, AssumptionRegistry(case_id=case_id))
+    gauntlet = AdversarialGauntlet(twin, assumption_registry=assump_reg)
+    all_attacks = gauntlet.generator.generate_all_attacks()
+    claim_attacks = [
+        a for a in all_attacks
+        if a.target_node_id == claim_id or claim_id in a.parameters.get("descendants", [])
+    ]
+    return [a.to_dict() for a in claim_attacks]
+
+
+@router.get("/cases/{case_id}/adversarial/evidence/{evidence_id}/dependencies")
+async def get_evidence_dependency_stress(
+    case_id: str,
+    evidence_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Returns dependency chain stress analysis rooted at a specific evidence node."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    if evidence_id not in twin.evidence_refs:
+        raise HTTPException(404, f"Evidence {evidence_id} not found in case {case_id}")
+    engine = DependencyStressEngine(twin)
+    summary = engine.stress_test_all_chains()
+    chains = [c.to_dict() for c in summary.high_stress_chains if c.root_evidence_id == evidence_id]
+    return {
+        "case_id": case_id,
+        "evidence_id": evidence_id,
+        "is_single_point_of_failure": evidence_id in summary.single_points_of_failure,
+        "stress_chains": chains,
+    }
+
+
+@router.post("/cases/{case_id}/adversarial/validate")
+async def validate_adversarial_findings_endpoint(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Validates adversarial findings for compliance with non-adjudication rules."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    if case_id not in _ADVERSARIAL_REPORTS:
+        assump_reg = _ASSUMPTION_REGISTRIES.get(case_id, AssumptionRegistry(case_id=case_id))
+        gauntlet = AdversarialGauntlet(twin, assumption_registry=assump_reg)
+        _ADVERSARIAL_REPORTS[case_id] = gauntlet.run_gauntlet()
+
+    report = _ADVERSARIAL_REPORTS[case_id]
+    validator = ResultValidator()
+    validator.validate_report(report)
+    return {
+        "status": "VALID",
+        "case_id": case_id,
+        "total_findings_validated": len(report.findings),
+        "non_adjudication_verified": True,
+    }
+
+
+@router.get("/cases/{case_id}/adversarial/snapshot")
+async def get_adversarial_snapshot(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Returns the full adversarial report snapshot for a case."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    if case_id not in _ADVERSARIAL_REPORTS:
+        assump_reg = _ASSUMPTION_REGISTRIES.get(case_id, AssumptionRegistry(case_id=case_id))
+        gauntlet = AdversarialGauntlet(twin, assumption_registry=assump_reg)
+        _ADVERSARIAL_REPORTS[case_id] = gauntlet.run_gauntlet()
+
+    report = _ADVERSARIAL_REPORTS[case_id]
+    return report.to_dict()
+
+
 __all__ = [
     "reset_nyaya_api_state",
     "router",
 ]
+
 
