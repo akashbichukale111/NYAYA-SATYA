@@ -5,6 +5,10 @@ benchmarks, and reports for the NYAYA-SATYA Adversarial Evidence System.
 """
 
 from nyaya_impact.collection.event_collector import ImpactEventCollector
+from nyaya_impact.collection.real_deployment import (
+    RealDeploymentTracker,
+    get_real_deployment_tracker,
+)
 from nyaya_impact.collection.session_tracker import SessionTracker
 from nyaya_impact.collection.workflow_tracker import WorkflowTracker
 from nyaya_impact.contracts.impact_baseline import (
@@ -19,6 +23,7 @@ from nyaya_impact.contracts.impact_experiment import (
 )
 from nyaya_impact.contracts.impact_measurement import ImpactMeasurement
 from nyaya_impact.contracts.impact_metric import (
+    EpistemicStatus,
     ImpactMetric,
     MetricCategory,
     MetricClassification,
@@ -68,6 +73,7 @@ __all__ = [
     "BaselineMeasurement",
     "BenchmarkScenarioResult",
     "ComparativeTrialResult",
+    "EpistemicStatus",
     "EvidenceExporter",
     "ExperimentResult",
     "ExecutiveKPIs",
@@ -91,13 +97,14 @@ __all__ = [
     "TreatmentMeasurement",
     # Collection
     "ImpactEventCollector",
+    "RealDeploymentTracker",
     "SessionTracker",
     "WorkflowTracker",
+    "get_real_deployment_tracker",
     # Experiments
     "BaselineRunner",
     "ExperimentRunner",
     "TreatmentRunner",
-    # Metrics
     "ContradictionMetricCalculator",
     "EvidenceGapMetricCalculator",
     "ProcessingTimeMetricCalculator",

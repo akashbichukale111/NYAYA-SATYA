@@ -15,10 +15,23 @@ from pydantic import BaseModel, Field
 
 from lib.auth import Principal
 from services.api.security import (
+    Role,
+    UserContext,
+    check_expensive_rate_limit,
+    grant_case_access,
     require_human_principal,
     require_principal,
+    require_role,
+    reset_case_access,
     reset_rate_limits,
+    verify_case_access,
 )
+from nyaya_observability import (
+    get_metrics_registry,
+    get_security_audit_logger,
+    record_audit,
+)
+from nyaya_impact.collection.real_deployment import get_real_deployment_tracker
 from tarka_vyuh.contracts.proposal import (
     ProposalStatus,
     ProposedAction,
@@ -284,6 +297,11 @@ def reset_nyaya_api_state() -> None:
     get_audit_store().reset_for_test()
     get_evidence_registry().reset_for_test()
     reset_rate_limits()
+    reset_case_access()
+    get_real_deployment_tracker().reset_for_test()
+    get_metrics_registry().reset_for_test()
+    get_security_audit_logger().reset_for_test()
+
 
 
 
@@ -600,6 +618,8 @@ async def upload_evidence(
     caller: Principal = Depends(require_principal),
 ) -> dict[str, Any]:
     """Ingests raw evidence bytes into quarantine with SHA-256 and provenance."""
+    verify_case_access(caller, case_id)
+    check_expensive_rate_limit(caller.principal)
     registry = get_evidence_registry()
     case = registry.get_case(case_id)
     if not case:
@@ -626,7 +646,14 @@ async def upload_evidence(
             custom_metadata=req.custom_metadata,
         )
         registry.register_evidence(item, artifact, prov)
+        record_audit(
+            "EVIDENCE_INGESTED",
+            actor_id=caller.principal,
+            case_id=case_id,
+            details={"evidence_id": item.evidence_id, "filename": req.filename},
+        )
     except EvidenceIngestionError as exc:
+        record_audit("UPLOAD_VALIDATION_FAILED", level="WARNING", actor_id=caller.principal, case_id=case_id, status="FAILED", details={"error": str(exc)})
         raise HTTPException(422, str(exc)) from exc
     except EvidenceRegistryError as exc:
         raise HTTPException(409, str(exc)) from exc
@@ -865,6 +892,7 @@ async def build_case_twin(
     caller: Principal = Depends(require_principal),
 ) -> dict[str, Any]:
     """Constructs or updates the Case Digital Twin from entities, claims, events, and evidence."""
+    verify_case_access(caller, case_id)
     registry = get_evidence_registry()
     case = registry.get_case(case_id)
     if not case:
@@ -2266,6 +2294,7 @@ def build_judicial_dossier(
     caller: Principal = Depends(require_principal),
 ) -> dict[str, Any]:
     """Build the comprehensive 24-section auditable Judicial Review Dossier."""
+    verify_case_access(caller, case_id)
     if case_id not in _TWINS:
         raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
     twin = _TWINS[case_id]
@@ -2646,10 +2675,39 @@ def verify_impact_export(
     return {"is_valid": is_valid}
 
 
+# ---------------------------------------------------------------------------
+# PHASE 8: OBSERVABILITY & REAL DEPLOYMENT ENDPOINTS
+# ---------------------------------------------------------------------------
+
+@router.get("/impact/deployment-status")
+def get_deployment_status() -> dict[str, Any]:
+    """Retrieves real deployment impact status without fabricating metrics."""
+    return get_real_deployment_tracker().get_deployment_status()
+
+
+@router.get("/observability/metrics")
+def get_observability_metrics(
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Retrieves runtime request metrics, error rates, and duration histograms."""
+    return get_metrics_registry().get_summary()
+
+
+@router.get("/observability/audit")
+def get_observability_audit_events(
+    event: str | None = None,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Retrieves structured security and operational audit events."""
+    events = get_security_audit_logger().get_events(event_filter=event)
+    return {"events": events, "count": len(events)}
+
+
 __all__ = [
     "reset_nyaya_api_state",
     "router",
 ]
+
 
 
 

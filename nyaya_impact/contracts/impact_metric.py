@@ -36,6 +36,10 @@ class MetricClassification(str, Enum):
     REAL_DEPLOYMENT = "REAL_DEPLOYMENT"
 
 
+# Epistemic classification alias
+EpistemicStatus = MetricClassification
+
+
 @dataclass
 class ImpactMetric:
     """A quantified, reproducible structural metric."""

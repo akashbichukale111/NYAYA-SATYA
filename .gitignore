@@ -23,7 +23,12 @@ poetry.lock
 .env
 .env.*
 *.pem
+*.key
+*.p12
+*.pfx
 *-key.json
+secrets/
+.secrets/
 
 # corpus/data/ IS COMMITTED ON PURPOSE. A cold clone must not need a generation
 # step, and the manifest is how the committed bytes are proven reproducible.

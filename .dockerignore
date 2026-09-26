@@ -2,6 +2,8 @@
 .git/
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 .pytest_cache/
 .ruff_cache/
 node_modules/
@@ -10,3 +12,17 @@ web/node_modules/
 docs/shots/
 evals/results/
 .cache/
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*-key.json
+secrets/
+.secrets/
+.quarantine/
+.sandbox/
+.media/
+scratch/
+*.log

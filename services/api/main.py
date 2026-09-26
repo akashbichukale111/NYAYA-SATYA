@@ -17,19 +17,30 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
+import time
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from fastapi import Depends, FastAPI, HTTPException, Query
+from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
 from lib.auth import Principal
 from lib.config import ALL_TOPICS, COLLECTION_AGENTS, get_config
 from lib.telemetry import configure_telemetry
+from nyaya_observability.health import check_liveness
+from nyaya_observability.metrics import get_metrics_registry
+from nyaya_observability.readiness import check_readiness
+from nyaya_observability.tracing import (
+    generate_request_id,
+    set_current_correlation_id,
+    set_current_request_id,
+)
 from services.api.security import require_human_principal, require_principal
 
 BUILD_STAGE = "task-5-interface"
@@ -56,6 +67,62 @@ app = FastAPI(
     description="Cache invalidation for decisions.",
     lifespan=lifespan,
 )
+
+# ---------------------------------------------------------------------------
+# SECURITY HEADERS & REQUEST CORRELATION MIDDLEWARE
+# ---------------------------------------------------------------------------
+@app.middleware("http")
+async def security_and_tracing_middleware(request: Request, call_next) -> Response:
+    req_id = request.headers.get("x-request-id") or generate_request_id()
+    corr_id = request.headers.get("x-correlation-id") or req_id
+    set_current_request_id(req_id)
+    set_current_correlation_id(corr_id)
+
+    start_time = time.perf_counter()
+    try:
+        response = await call_next(request)
+    except Exception as exc:
+        if os.environ.get("UNWIND_ENV", "").strip().lower() == "production":
+            from fastapi.responses import JSONResponse
+            response = JSONResponse(
+                status_code=500,
+                content={"error": "Internal server error", "request_id": req_id},
+            )
+        else:
+            raise
+
+    elapsed_ms = (time.perf_counter() - start_time) * 1000.0
+    get_metrics_registry().record_request(request.url.path, response.status_code, elapsed_ms)
+
+    # Attach correlation and security headers
+    response.headers["X-Request-ID"] = req_id
+    response.headers["X-Correlation-ID"] = corr_id
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'"
+    if os.environ.get("UNWIND_ENV", "").strip().lower() == "production":
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+
+    return response
+
+
+# CORS configuration
+_cors_origins_env = os.environ.get("CORS_ALLOWED_ORIGINS", "").strip()
+if _cors_origins_env:
+    _origins = [o.strip() for o in _cors_origins_env.split(",") if o.strip()]
+elif os.environ.get("UNWIND_ENV", "").strip().lower() == "production":
+    _origins = ["https://nyaya-satya.unwind.law"]
+else:
+    _origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["*"],
+)
+
 
 
 def _store():
@@ -109,6 +176,44 @@ async def healthz() -> dict[str, object]:
         "telemetry_exporter": getattr(app.state, "telemetry_exporter", "not-configured"),
         "dependency_versions": _dependency_versions(),
     }
+
+
+# ---------------------------------------------------------------------------
+# NYAYA-SATYA OBSERVABILITY PROBES
+# ---------------------------------------------------------------------------
+
+@app.get("/health")
+@app.get("/api/health")
+async def health_probe() -> dict[str, Any]:
+    """Process liveness probe."""
+    return check_liveness()
+
+
+@app.get("/ready")
+@app.get("/api/ready")
+async def readiness_probe() -> dict[str, Any]:
+    """Readiness probe checking critical subsystems."""
+    result = check_readiness()
+    if not result.get("ready", False):
+        raise HTTPException(status_code=503, detail=result)
+    return result
+
+
+@app.get("/version")
+@app.get("/api/version")
+async def version_probe() -> dict[str, Any]:
+    """Public version endpoint without secret disclosure."""
+    return {
+        "app": "NYAYA-SATYA",
+        "description": "Adversarial Evidence & Case Reasoning System",
+        "version": "1.0.0",
+        "api_version": "v1",
+        "stage": BUILD_STAGE,
+        "commit": os.environ.get("GIT_COMMIT", "1e1a771"),
+        "governance": "UNWIND Core",
+        "reasoning_engine": "TARKA-VYUH",
+    }
+
 
 
 # ---------------------------------------------------------------------------

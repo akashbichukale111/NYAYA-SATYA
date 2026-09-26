@@ -17,6 +17,7 @@ from nyaya_impact.contracts.impact_measurement import (
     ImpactMeasurement,
 )
 from nyaya_impact.contracts.impact_metric import (
+    EpistemicStatus,
     ImpactMetric,
     MetricCategory,
     MetricClassification,
@@ -28,6 +29,7 @@ from nyaya_impact.contracts.impact_report import (
 __all__ = [
     "BaselineMeasurement",
     "ComparativeTrialResult",
+    "EpistemicStatus",
     "ExperimentResult",
     "ImpactEvent",
     "ImpactEventType",
