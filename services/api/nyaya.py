@@ -105,6 +105,30 @@ from nyaya_adversarial.validation.attack_validator import AttackValidator
 from nyaya_adversarial.validation.result_validator import ResultValidator
 from nyaya_adversarial.validation.safety_validator import SafetyValidator
 
+# Phase 5: Causal Reasoning Engine imports
+from nyaya_causal.blast_radius.engine import BlastRadiusEngine
+from nyaya_causal.contracts.intervention import (
+    Intervention,
+    InterventionOperation,
+    InterventionTargetType,
+)
+from nyaya_causal.contracts.scenario import CounterfactualScenario, ScenarioStatus
+from nyaya_causal.counterfactual.lab import CounterfactualLab
+from nyaya_causal.graph.causal_graph import CausalGraph
+from nyaya_causal.graph.path_engine import PathEngine
+from nyaya_causal.integration.adversarial_adapter import AdversarialToCausalAdapter
+from nyaya_causal.integration.tarka_adapter import CausalTarkaAdapter
+from nyaya_causal.integration.twin_adapter import TwinToCausalAdapter
+from nyaya_causal.integration.unwind_adapter import CausalUnwindAdapter
+from nyaya_causal.materiality.classifier import MaterialityClassifier
+from nyaya_causal.materiality.should_change import ShouldChangeAnalyzer
+from nyaya_causal.materiality.should_not_change import ShouldNotChangeAnalyzer
+from nyaya_causal.provenance.causal_provenance import CausalProvenanceTracker
+from nyaya_causal.validation.counterfactual_validator import CounterfactualValidator
+from nyaya_causal.validation.graph_validator import CausalGraphValidator
+from nyaya_causal.validation.intervention_validator import InterventionValidator
+from nyaya_causal.validation.safety_validator import CausalSafetyValidator
+
 router = APIRouter(prefix="/api/nyaya", tags=["nyaya-satya"])
 
 # In-memory repositories for proposals and runtime instances
@@ -127,6 +151,16 @@ _TWINS: dict[str, CaseDigitalTwin] = {}
 _ADVERSARIAL_REPORTS: dict[str, AdversarialGauntletReport] = {}
 _ASSUMPTION_REGISTRIES: dict[str, AssumptionRegistry] = {}
 
+# Causal Reasoning Subsystem repositories
+_CAUSAL_GRAPHS: dict[str, CausalGraph] = {}
+_COUNTERFACTUAL_LAB = CounterfactualLab()
+_BLAST_ENGINE = BlastRadiusEngine()
+_MATERIALITY_CLASSIFIER = MaterialityClassifier()
+_TWIN_ADAPTER = TwinToCausalAdapter()
+_CAUSAL_GRAPH_VALIDATOR = CausalGraphValidator()
+_INTERVENTION_VALIDATOR = InterventionValidator()
+_COUNTERFACTUAL_VALIDATOR = CounterfactualValidator()
+
 
 def reset_nyaya_api_state() -> None:
     """Test hook to reset API in-memory repositories."""
@@ -134,6 +168,8 @@ def reset_nyaya_api_state() -> None:
     _TWINS.clear()
     _ADVERSARIAL_REPORTS.clear()
     _ASSUMPTION_REGISTRIES.clear()
+    _CAUSAL_GRAPHS.clear()
+    _COUNTERFACTUAL_LAB.reset_for_test()
     _HUMAN_GATE.reset_for_test()
     _GUARD.reset_for_test()
     get_audit_store().reset_for_test()
@@ -1377,6 +1413,353 @@ async def get_adversarial_snapshot(
 
     report = _ADVERSARIAL_REPORTS[case_id]
     return report.to_dict()
+
+
+# ============================================================
+# Phase 5: Causal Reasoning Engine Endpoints
+# ============================================================
+
+
+class InterventionRequest(BaseModel):
+    target_id: str
+    target_type: str  # EVIDENCE, EVENT, CLAIM, ASSUMPTION
+    operation: str  # REMOVE, DISABLE, CHANGE_VALUE, CHANGE_TIME, etc.
+    rationale: str = ""
+    hypothetical_state: dict[str, Any] = Field(default_factory=dict)
+    assumptions: list[str] = Field(default_factory=list)
+
+
+class RunScenarioRequest(BaseModel):
+    intervention: InterventionRequest
+    preconditions: list[str] = Field(default_factory=list)
+    assumptions: list[str] = Field(default_factory=list)
+    execution_config: dict[str, Any] = Field(default_factory=dict)
+
+
+class ShouldChangeRequest(BaseModel):
+    intervention: InterventionRequest
+    expected_changed_ids: list[str]
+
+
+class ShouldNotChangeRequest(BaseModel):
+    intervention: InterventionRequest
+    protected_node_ids: list[str]
+
+
+def _build_intervention(case_id: str, req: InterventionRequest) -> Intervention:
+    """Helper: convert API request into Intervention contract."""
+    import uuid
+    return Intervention(
+        intervention_id=f"INT_{uuid.uuid4().hex[:12]}",
+        case_id=case_id,
+        target_id=req.target_id,
+        target_type=InterventionTargetType(req.target_type),
+        operation=InterventionOperation(req.operation),
+        rationale=req.rationale,
+        hypothetical_state=req.hypothetical_state,
+        assumptions=req.assumptions,
+    )
+
+
+@router.post("/cases/{case_id}/causal/graph/build")
+def build_causal_graph(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Build a causal graph from the Case Digital Twin."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    graph = _TWIN_ADAPTER.build_causal_graph(twin)
+    _CAUSAL_GRAPHS[case_id] = graph
+    return graph.to_dict()
+
+
+@router.get("/cases/{case_id}/causal/graph")
+def get_causal_graph(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Get the causal graph for a case."""
+    if case_id not in _CAUSAL_GRAPHS:
+        raise HTTPException(404, f"Causal graph for {case_id} not found")
+    return _CAUSAL_GRAPHS[case_id].to_dict()
+
+
+@router.get("/cases/{case_id}/causal/graph/validate")
+def validate_causal_graph(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Validate causal graph integrity."""
+    if case_id not in _CAUSAL_GRAPHS:
+        raise HTTPException(404, f"Causal graph for {case_id} not found")
+    result = _CAUSAL_GRAPH_VALIDATOR.validate(_CAUSAL_GRAPHS[case_id])
+    return result.to_dict()
+
+
+@router.get("/cases/{case_id}/causal/graph/paths")
+def get_causal_paths(
+    case_id: str,
+    source_id: str,
+    target_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Find causal paths between two nodes."""
+    if case_id not in _CAUSAL_GRAPHS:
+        raise HTTPException(404, f"Causal graph for {case_id} not found")
+    engine = PathEngine(_CAUSAL_GRAPHS[case_id])
+    try:
+        result = engine.find_paths(source_id, target_id)
+    except ValueError as e:
+        raise HTTPException(400, str(e))
+    return result.to_dict()
+
+
+@router.get("/cases/{case_id}/causal/graph/downstream/{node_id}")
+def get_downstream_nodes(
+    case_id: str,
+    node_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Get all nodes downstream of a given node."""
+    if case_id not in _CAUSAL_GRAPHS:
+        raise HTTPException(404, f"Causal graph for {case_id} not found")
+    graph = _CAUSAL_GRAPHS[case_id]
+    if node_id not in graph.nodes:
+        raise HTTPException(404, f"Node {node_id} not found")
+    downstream = graph.get_downstream(node_id)
+    return {"node_id": node_id, "downstream": downstream, "count": len(downstream)}
+
+
+@router.get("/cases/{case_id}/causal/graph/upstream/{node_id}")
+def get_upstream_nodes(
+    case_id: str,
+    node_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Get all nodes upstream of a given node."""
+    if case_id not in _CAUSAL_GRAPHS:
+        raise HTTPException(404, f"Causal graph for {case_id} not found")
+    graph = _CAUSAL_GRAPHS[case_id]
+    if node_id not in graph.nodes:
+        raise HTTPException(404, f"Node {node_id} not found")
+    upstream = graph.get_upstream(node_id)
+    return {"node_id": node_id, "upstream": upstream, "count": len(upstream)}
+
+
+@router.post("/cases/{case_id}/causal/blast-radius")
+def compute_blast_radius(
+    case_id: str,
+    req: InterventionRequest,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Compute the causal blast-radius of an intervention."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    intervention = _build_intervention(case_id, req)
+
+    # Validate
+    iv_result = _INTERVENTION_VALIDATOR.validate(intervention, twin)
+    if not iv_result.valid:
+        raise HTTPException(400, f"Invalid intervention: {iv_result.errors}")
+
+    report = _BLAST_ENGINE.compute(twin, intervention)
+    return report.to_dict()
+
+
+@router.post("/cases/{case_id}/causal/scenarios")
+def create_counterfactual_scenario(
+    case_id: str,
+    req: RunScenarioRequest,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Create and run a counterfactual scenario."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    intervention = _build_intervention(case_id, req.intervention)
+
+    # Validate intervention
+    iv_result = _INTERVENTION_VALIDATOR.validate(intervention, twin)
+    if not iv_result.valid:
+        raise HTTPException(400, f"Invalid intervention: {iv_result.errors}")
+
+    # Create and run
+    scenario = _COUNTERFACTUAL_LAB.create_scenario(
+        case_id=case_id,
+        intervention=intervention,
+        base_twin_version=twin.version,
+        preconditions=req.preconditions,
+        assumptions=req.assumptions,
+        execution_config=req.execution_config,
+    )
+    result = _COUNTERFACTUAL_LAB.run_scenario(scenario.scenario_id, twin)
+    return result.to_dict()
+
+
+@router.get("/cases/{case_id}/causal/scenarios")
+def list_scenarios(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """List all counterfactual scenarios for a case."""
+    scenarios = _COUNTERFACTUAL_LAB.list_scenarios(case_id)
+    return {
+        "case_id": case_id,
+        "scenarios": [s.to_dict() for s in scenarios],
+        "total_count": len(scenarios),
+    }
+
+
+@router.get("/cases/{case_id}/causal/scenarios/{scenario_id}")
+def get_scenario(
+    case_id: str,
+    scenario_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Get a specific counterfactual scenario."""
+    scenario = _COUNTERFACTUAL_LAB.get_scenario(scenario_id)
+    if scenario is None or scenario.case_id != case_id:
+        raise HTTPException(404, f"Scenario {scenario_id} not found for case {case_id}")
+    return scenario.to_dict()
+
+
+@router.post("/cases/{case_id}/causal/scenarios/{scenario_id}/replay")
+def replay_scenario(
+    case_id: str,
+    scenario_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Replay a counterfactual scenario for reproducibility verification."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    scenario = _COUNTERFACTUAL_LAB.get_scenario(scenario_id)
+    if scenario is None or scenario.case_id != case_id:
+        raise HTTPException(404, f"Scenario {scenario_id} not found for case {case_id}")
+    result = _COUNTERFACTUAL_LAB.replay_scenario(scenario_id, _TWINS[case_id])
+    return result.to_dict()
+
+
+@router.get("/cases/{case_id}/causal/materiality/evidence/{evidence_id}")
+def assess_evidence_materiality(
+    case_id: str,
+    evidence_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Assess the structural materiality of an evidence item."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    if evidence_id not in twin.evidence_refs:
+        raise HTTPException(404, f"Evidence {evidence_id} not found in twin")
+    assessment = _MATERIALITY_CLASSIFIER.assess_evidence(evidence_id, twin)
+    return assessment.to_dict()
+
+
+@router.get("/cases/{case_id}/causal/materiality/claims/{claim_id}")
+def assess_claim_materiality(
+    case_id: str,
+    claim_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Assess the structural materiality of a claim."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    if claim_id not in twin.claims:
+        raise HTTPException(404, f"Claim {claim_id} not found in twin")
+    assessment = _MATERIALITY_CLASSIFIER.assess_claim(claim_id, twin)
+    return assessment.to_dict()
+
+
+@router.post("/cases/{case_id}/causal/should-change")
+def should_change_analysis(
+    case_id: str,
+    req: ShouldChangeRequest,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Verify that material interventions produce expected state changes."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    intervention = _build_intervention(case_id, req.intervention)
+    analyzer = ShouldChangeAnalyzer()
+    result = analyzer.analyze(twin, intervention, req.expected_changed_ids)
+    return result.to_dict()
+
+
+@router.post("/cases/{case_id}/causal/should-not-change")
+def should_not_change_analysis(
+    case_id: str,
+    req: ShouldNotChangeRequest,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Verify that irrelevant perturbations do not affect protected nodes."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    intervention = _build_intervention(case_id, req.intervention)
+    analyzer = ShouldNotChangeAnalyzer()
+    result = analyzer.analyze(twin, intervention, req.protected_node_ids)
+    return result.to_dict()
+
+
+@router.post("/cases/{case_id}/causal/validate")
+def validate_causal_subsystem(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Validate Phase 5 causal subsystem compliance."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+
+    results: dict[str, Any] = {"case_id": case_id}
+
+    # Case isolation
+    safety = CausalSafetyValidator()
+    iso_result = safety.validate_case_isolation(case_id, twin)
+    results["case_isolation"] = iso_result.to_dict()
+
+    # Twin immutability check
+    original_hash = twin.integrity_hash
+    imm_result = safety.validate_twin_immutability(original_hash, twin.integrity_hash)
+    results["twin_immutability"] = imm_result.to_dict()
+
+    # Causal graph validation (if graph exists)
+    if case_id in _CAUSAL_GRAPHS:
+        gv_result = _CAUSAL_GRAPH_VALIDATOR.validate(_CAUSAL_GRAPHS[case_id])
+        results["causal_graph"] = gv_result.to_dict()
+
+    results["overall_valid"] = all(
+        r.get("safe", r.get("valid", True))
+        for r in [results.get("case_isolation", {}), results.get("twin_immutability", {})]
+    )
+
+    return results
+
+
+@router.get("/cases/{case_id}/causal/snapshot")
+def get_causal_snapshot(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Get a full causal analysis snapshot for a case."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+
+    snapshot: dict[str, Any] = {"case_id": case_id}
+
+    if case_id in _CAUSAL_GRAPHS:
+        snapshot["causal_graph"] = _CAUSAL_GRAPHS[case_id].to_dict()
+
+    scenarios = _COUNTERFACTUAL_LAB.list_scenarios(case_id)
+    snapshot["scenarios"] = [s.to_dict() for s in scenarios]
+    snapshot["scenario_count"] = len(scenarios)
+
+    return snapshot
 
 
 __all__ = [
