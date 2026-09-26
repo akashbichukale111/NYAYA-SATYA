@@ -69,7 +69,7 @@ class JudicialReviewDossier:
 
     dossier_id: str
     case_id: str
-    twin_integrity_hash: str
+    twin_integrity_hash: str = ""
     version: int = 1
     # 24 Canonical Sections
     sec01_case_identity: dict[str, Any] = field(default_factory=dict)
@@ -96,20 +96,38 @@ class JudicialReviewDossier:
     sec22_human_review_obligations: list[DossierEntry] = field(default_factory=list)
     sec23_governance_audit: list[DossierEntry] = field(default_factory=list)
     sec24_cryptographic_fingerprints: dict[str, str] = field(default_factory=dict)
+    previous_fingerprint: str | None = None
     created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 
     @property
     def fingerprint(self) -> str:
-        """Deterministic cryptographic fingerprint over the entire dossier."""
-        summary = {
-            "dossier_id": self.dossier_id,
+        """Deterministic semantic fingerprint based exclusively on analytical content.
+
+        Excludes non-deterministic creation timestamps and transient IDs.
+        """
+        sections_payload: dict[str, Any] = {
             "case_id": self.case_id,
             "twin_hash": self.twin_integrity_hash,
-            "sec01": self.sec01_case_identity,
-            "sec20": self.sec20_readiness_delta,
-            "sec24": self.sec24_cryptographic_fingerprints,
+            "sec01_case_identity": self.sec01_case_identity,
+            "sec20_readiness_delta": self.sec20_readiness_delta,
         }
-        dumped = json.dumps(summary, sort_keys=True, separators=(",", ":"))
+        for idx in range(2, 24):
+            if idx == 20:
+                continue
+            field_name = f"sec{idx:02d}_{self._get_section_name(idx)}"
+            items = getattr(self, field_name, [])
+            sections_payload[field_name] = [
+                {
+                    "entry_id": item.entry_id,
+                    "cat": item.category.value,
+                    "title": item.title,
+                    "desc": item.description,
+                    "status": item.status,
+                    "prov": item.provenance_hash,
+                }
+                for item in items
+            ]
+        dumped = json.dumps(sections_payload, sort_keys=True, separators=(",", ":"))
         return hashlib.sha256(dumped.encode("utf-8")).hexdigest()
 
     def to_dict(self) -> dict[str, Any]:
@@ -119,6 +137,7 @@ class JudicialReviewDossier:
             "twin_integrity_hash": self.twin_integrity_hash,
             "version": self.version,
             "fingerprint": self.fingerprint,
+            "previous_fingerprint": self.previous_fingerprint,
             "created_at": self.created_at.isoformat(),
             "sec01_case_identity": self.sec01_case_identity,
             "sec20_readiness_delta": self.sec20_readiness_delta,

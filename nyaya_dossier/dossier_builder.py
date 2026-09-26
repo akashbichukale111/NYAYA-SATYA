@@ -9,7 +9,12 @@ import uuid
 from typing import Any
 
 from nyaya_adversarial.contracts.result import AdversarialGauntletReport
-from nyaya_causal.contracts.counterfactual import BlastRadiusReport
+from nyaya_dossier.human_checklist import (
+    HumanReviewChecklist,
+    ReviewItem,
+    ReviewSeverity,
+    ReviewStatus,
+)
 from nyaya_dossier.dossier_model import (
     DossierEntry,
     DossierItemCategory,
@@ -37,6 +42,8 @@ class DossierBuilder:
         immunity: RepairImmunityAssessment | None = None,
         stability: StabilityReport | None = None,
         readiness_delta: CaseReadinessDelta | None = None,
+        version: int | None = None,
+        previous_fingerprint: str | None = None,
     ) -> JudicialReviewDossier:
         """Compile a fully referenced dossier for Human Legal Gate review."""
         case_id = twin.case_id
@@ -46,7 +53,8 @@ class DossierBuilder:
             dossier_id=dossier_id,
             case_id=case_id,
             twin_integrity_hash=twin.integrity_hash,
-            version=twin.version,
+            version=version or twin.version,
+            previous_fingerprint=previous_fingerprint,
         )
 
         # 1. Case Identity
@@ -249,3 +257,62 @@ class DossierBuilder:
         }
 
         return dossier
+
+    def build_human_checklist(
+        self,
+        dossier: JudicialReviewDossier,
+        twin: CaseDigitalTwin,
+        *,
+        pending_repairs: list[RepairCandidate] | None = None,
+    ) -> HumanReviewChecklist:
+        """Construct the dedicated HumanReviewChecklist from dossier and twin findings."""
+        items: list[ReviewItem] = []
+
+        # 1. Contradictions -> CRITICAL
+        for idx, c in enumerate(twin.contradictions):
+            cid = getattr(c, "candidate_id", f"c_{idx}")
+            items.append(
+                ReviewItem(
+                    review_id=f"REV_CONTRA_{cid}",
+                    severity=ReviewSeverity.CRITICAL,
+                    source="unresolved_contradiction",
+                    explanation=f"Contradiction identified on case {twin.case_id}: {getattr(c, 'explanation', str(c))}",
+                    recommended_action="Conduct judicial inquiry or examine competing evidence sources to resolve conflict.",
+                    status=ReviewStatus.OPEN,
+                )
+            )
+
+        # 2. Unsupported Claims -> HIGH
+        for cid, claim in twin.claims.items():
+            if not claim.supporting_evidence_ids:
+                items.append(
+                    ReviewItem(
+                        review_id=f"REV_UNSUP_{cid}",
+                        severity=ReviewSeverity.HIGH,
+                        source="unsupported_claim",
+                        explanation=f"Claim {cid} ('{claim.statement}') lacks direct supporting evidence.",
+                        recommended_action="Require supporting documentary/oral evidence or strike assertion.",
+                        status=ReviewStatus.OPEN,
+                    )
+                )
+
+        # 3. Pending Repairs -> PENDING_HUMAN_DECISION
+        if pending_repairs:
+            for rep in pending_repairs:
+                items.append(
+                    ReviewItem(
+                        review_id=f"REV_REP_{rep.repair_id}",
+                        severity=ReviewSeverity.HIGH,
+                        source="repair_gate",
+                        explanation=f"Proposed repair {rep.repair_id} ({rep.change_type.value}) awaits human gate authorization.",
+                        recommended_action="Approve, reject, or modify proposed repair.",
+                        evidence_refs=list(rep.evidence_refs),
+                        status=ReviewStatus.PENDING_HUMAN_DECISION,
+                    )
+                )
+
+        return HumanReviewChecklist(
+            case_id=twin.case_id,
+            dossier_id=dossier.dossier_id,
+            items=items,
+        )

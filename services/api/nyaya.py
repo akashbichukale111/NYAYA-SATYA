@@ -177,7 +177,29 @@ from nyaya_repair.validation.legal_grounding_validator import LegalGroundingVali
 from nyaya_repair.validation.repair_validator import RepairValidator
 from nyaya_repair.validation.vulnerability_validator import VulnerabilityValidator
 
+# Phase 7: Dossier 2.0 and Proven Impact imports
+from nyaya_dossier.dossier_diff import DossierComparator, DossierDiff
+from nyaya_dossier.dossier_version import DossierVersionRecord, DossierVersionStore
+from nyaya_dossier.human_checklist import (
+    HumanReviewChecklist,
+    ReviewItem,
+    ReviewSeverity,
+    ReviewStatus,
+)
+from nyaya_impact.collection.event_collector import EventCollector
+from nyaya_impact.contracts.impact_baseline import ComparativeTrialResult
+from nyaya_impact.contracts.impact_event import ImpactEvent, ImpactEventType
+from nyaya_impact.contracts.impact_metric import ImpactMetric, MetricCategory, MetricClassification
+from nyaya_impact.contracts.impact_report import ProvenImpactReport
+from nyaya_impact.experiments.benchmark_suite import BenchmarkScenarioResult, SyntheticBenchmarkSuite
+from nyaya_impact.experiments.experiment_runner import ExperimentRunner
+from nyaya_impact.reporting.evidence_exporter import EvidenceExporter
+from nyaya_impact.reporting.impact_report import ImpactReportCompiler
+from nyaya_impact.reporting.impact_summary import ExecutiveKPIs, ImpactSummaryGenerator
+from nyaya_impact.validation.impact_safety_validator import ImpactSafetyValidator
+
 router = APIRouter(prefix="/api/nyaya", tags=["nyaya-satya"])
+
 
 # In-memory repositories for proposals and runtime instances
 _PROPOSALS: dict[str, ReasoningProposal] = {}
@@ -219,10 +241,23 @@ _READINESS_SNAPSHOTS: dict[str, CaseReadinessSnapshot] = {}
 _READINESS_DELTAS: dict[str, list[CaseReadinessDelta]] = {}
 _DOSSIER_BUILDER = DossierBuilder()
 _DOSSIERS: dict[str, JudicialReviewDossier] = {}
+_DOSSIER_BY_VERSION: dict[str, dict[int, JudicialReviewDossier]] = {}
+_DOSSIER_VERSION_STORE = DossierVersionStore()
+_DOSSIER_COMPARATOR = DossierComparator()
 _REATTACK_ENGINE = ReAttackEngine()
 _REPAIR_APPLIER = RepairApplier()
 _REPAIR_EVALUATOR = RepairEvaluator()
 _REPAIR_VALIDATOR = RepairValidator()
+
+# Phase 7: Proven Impact repositories
+_IMPACT_COLLECTOR = EventCollector()
+_BENCHMARK_SUITE = SyntheticBenchmarkSuite()
+_EXPERIMENT_RUNNER = ExperimentRunner()
+_IMPACT_COMPILER = ImpactReportCompiler()
+_IMPACT_SUMMARY_GEN = ImpactSummaryGenerator()
+_EVIDENCE_EXPORTER = EvidenceExporter(compiler=_IMPACT_COMPILER)
+_IMPACT_SAFETY_VALIDATOR = ImpactSafetyValidator()
+_IMPACT_REPORTS: dict[str, ProvenImpactReport] = {}
 
 
 def reset_nyaya_api_state() -> None:
@@ -240,11 +275,16 @@ def reset_nyaya_api_state() -> None:
     _READINESS_SNAPSHOTS.clear()
     _READINESS_DELTAS.clear()
     _DOSSIERS.clear()
+    _DOSSIER_BY_VERSION.clear()
+    _DOSSIER_VERSION_STORE.reset_for_test()
+    _IMPACT_COLLECTOR.reset_for_test()
+    _IMPACT_REPORTS.clear()
     _HUMAN_GATE.reset_for_test()
     _GUARD.reset_for_test()
     get_audit_store().reset_for_test()
     get_evidence_registry().reset_for_test()
     reset_rate_limits()
+
 
 
 # Pydantic schemas for request bodies
@@ -2244,6 +2284,10 @@ def build_judicial_dossier(
     deltas = _READINESS_DELTAS.get(case_id, [])
     latest_delta = deltas[-1] if deltas else None
 
+    history = _DOSSIER_VERSION_STORE.get_history(case_id)
+    version_num = len(history) + 1
+    prev_fp = history[-1].current_fingerprint if history else None
+
     dossier = _DOSSIER_BUILDER.build_dossier(
         twin,
         gauntlet_report=gauntlet,
@@ -2252,9 +2296,22 @@ def build_judicial_dossier(
         immunity=latest_immunity,
         stability=stability,
         readiness_delta=latest_delta,
+        version=version_num,
+        previous_fingerprint=prev_fp,
     )
 
     _DOSSIERS[case_id] = dossier
+    if case_id not in _DOSSIER_BY_VERSION:
+        _DOSSIER_BY_VERSION[case_id] = {}
+    _DOSSIER_BY_VERSION[case_id][version_num] = dossier
+
+    _DOSSIER_VERSION_STORE.record_version(
+        case_id=case_id,
+        current_fingerprint=dossier.fingerprint,
+        change_summary=f"Dossier build version {version_num}",
+        actor_id=caller.principal,
+    )
+
     return dossier.to_dict()
 
 
@@ -2303,9 +2360,296 @@ def export_dossier_json(
     }
 
 
+# ============================================================
+# Phase 7: Dossier 2.0 Versioning, Diff, and Human Checklist
+# ============================================================
+
+class DossierDiffRequest(BaseModel):
+    version_a: int
+    version_b: int
+
+
+class ImpactEventPayload(BaseModel):
+    event_type: str
+    payload: dict[str, Any] = Field(default_factory=dict)
+    session_id: str | None = None
+    workflow_phase: str | None = None
+    actor_type: str = "SYSTEM"
+
+
+class RunExperimentRequest(BaseModel):
+    case_id: str
+
+
+class VerifyExportPayload(BaseModel):
+    json_export: str
+
+
+@router.get("/cases/{case_id}/dossier/versions")
+def list_dossier_versions(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> list[dict[str, Any]]:
+    """List historical dossier versions for a case."""
+    history = _DOSSIER_VERSION_STORE.get_history(case_id)
+    return [h.to_dict() for h in history]
+
+
+@router.get("/cases/{case_id}/dossier/versions/{version_num}")
+def get_dossier_by_version(
+    case_id: str,
+    version_num: int,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Retrieve a specific historical version of the dossier."""
+    case_versions = _DOSSIER_BY_VERSION.get(case_id, {})
+    dossier = case_versions.get(version_num)
+    if not dossier:
+        raise HTTPException(404, f"Dossier version {version_num} for case {case_id} not found")
+    return dossier.to_dict()
+
+
+@router.post("/cases/{case_id}/dossier/diff")
+def diff_dossier_versions(
+    case_id: str,
+    req: DossierDiffRequest,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Calculate deterministic structural diff between two dossier versions."""
+    case_versions = _DOSSIER_BY_VERSION.get(case_id, {})
+    d_a = case_versions.get(req.version_a)
+    d_b = case_versions.get(req.version_b)
+    if not d_a:
+        raise HTTPException(404, f"Dossier version {req.version_a} not found")
+    if not d_b:
+        raise HTTPException(404, f"Dossier version {req.version_b} not found")
+
+    diff = _DOSSIER_COMPARATOR.compare(d_a, d_b)
+    return diff.to_dict()
+
+
+@router.get("/cases/{case_id}/dossier/checklist")
+def get_human_review_checklist(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Generate human jurist review checklist from the latest dossier and case twin."""
+    if case_id not in _DOSSIERS or case_id not in _TWINS:
+        raise HTTPException(404, f"Dossier or Twin for case {case_id} not found")
+    dossier = _DOSSIERS[case_id]
+    twin = _TWINS[case_id]
+    checklist = _DOSSIER_BUILDER.build_human_checklist(dossier, twin)
+    return checklist.to_dict()
+
+
+# ============================================================
+# Phase 7: Proven Impact API Endpoints
+# ============================================================
+
+@router.post("/cases/{case_id}/impact/events", status_code=201)
+def record_impact_event(
+    case_id: str,
+    req: ImpactEventPayload,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Record an immutable, privacy-minimized structural workflow event."""
+    try:
+        e_type = ImpactEventType(req.event_type)
+    except ValueError:
+        raise HTTPException(400, f"Invalid event_type: {req.event_type}")
+
+    event = ImpactEvent(
+        event_id=f"EVT_{uuid.uuid4().hex[:8]}",
+        case_id=case_id,
+        event_type=e_type,
+        phase=req.workflow_phase or "GENERAL",
+        metadata=req.payload,
+    )
+
+    safety = _IMPACT_SAFETY_VALIDATOR.validate_event(event)
+    if not safety.is_safe:
+        raise HTTPException(400, f"Safety or privacy violation: {safety.violations}")
+
+    _IMPACT_COLLECTOR.record_event(event)
+    return event.to_dict()
+
+
+@router.get("/cases/{case_id}/impact/events")
+def list_impact_events(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> list[dict[str, Any]]:
+    """List structural impact events for a case."""
+    events = _IMPACT_COLLECTOR.get_events_for_case(case_id)
+    return [e.to_dict() for e in events]
+
+
+@router.post("/experiments/run")
+def run_comparative_experiment(
+    req: RunExperimentRequest,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Execute a comparative trial (manual baseline vs NYAYA-SATYA pipeline) on a case twin."""
+    if req.case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {req.case_id} not found")
+    twin = _TWINS[req.case_id]
+    trial_res = _EXPERIMENT_RUNNER.run_comparative_trial(twin)
+    return trial_res.to_dict()
+
+
+@router.post("/experiments/benchmark")
+def run_synthetic_benchmarks(
+    caller: Principal = Depends(require_principal),
+) -> list[dict[str, Any]]:
+    """Execute the canonical 12-scenario synthetic benchmark suite."""
+    results = _BENCHMARK_SUITE.run_all_benchmarks()
+    return [r.to_dict() for r in results]
+
+
+@router.post("/cases/{case_id}/impact/report")
+def compile_case_impact_report(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Compile an auditable 14-section Proven Impact Report for a case."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+
+    trial = _EXPERIMENT_RUNNER.run_comparative_trial(twin)
+    benchmarks = _BENCHMARK_SUITE.run_all_benchmarks()
+
+    metrics = [
+        ImpactMetric(
+            metric_id=f"M_CONTRA_{case_id}",
+            name="Contradictions Automatically Surfaced",
+            category=MetricCategory.EVIDENCE_ANALYSIS,
+            classification=MetricClassification.OBSERVED,
+            value=float(trial.treatment.contradictions_automatically_surfaced),
+            unit="count",
+            description="Contradictions automatically identified by adversarial gauntlet",
+            source_provenance_hash=twin.integrity_hash,
+        ),
+        ImpactMetric(
+            metric_id=f"M_UNSUP_{case_id}",
+            name="Unsupported Claims Caught",
+            category=MetricCategory.EVIDENCE_ANALYSIS,
+            classification=MetricClassification.OBSERVED,
+            value=float(trial.treatment.unsupported_claims_caught),
+            unit="count",
+            description="Claims without supporting evidence caught by twin analysis",
+            source_provenance_hash=twin.integrity_hash,
+        ),
+        ImpactMetric(
+            metric_id=f"M_PROV_{case_id}",
+            name="Provenance Coverage Ratio",
+            category=MetricCategory.EVIDENCE_PROCESSING,
+            classification=MetricClassification.OBSERVED,
+            value=float(trial.treatment.provenance_coverage_ratio),
+            unit="ratio",
+            description="Proportion of evidence items with verified cryptographic provenance",
+            source_provenance_hash=twin.integrity_hash,
+        ),
+        ImpactMetric(
+            metric_id=f"M_LATENCY_{case_id}",
+            name="Automated Pipeline Latency",
+            category=MetricCategory.WORKFLOW,
+            classification=MetricClassification.OBSERVED,
+            value=float(trial.treatment.automated_processing_time_seconds),
+            unit="seconds",
+            description="Execution latency of automated verification checks",
+            source_provenance_hash=twin.integrity_hash,
+        ),
+    ]
+
+    report = _IMPACT_COMPILER.compile(
+        case_or_dataset_id=case_id,
+        metrics=metrics,
+        comparative_trial=trial,
+        benchmarks=benchmarks,
+    )
+
+    safety = _IMPACT_SAFETY_VALIDATOR.validate_report(report)
+    if not safety.is_safe:
+        raise HTTPException(400, f"Safety violation in report: {safety.violations}")
+
+    _IMPACT_REPORTS[case_id] = report
+    return report.to_dict()
+
+
+@router.get("/cases/{case_id}/impact/report/latest")
+def get_latest_impact_report(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Retrieve latest compiled Proven Impact Report for a case."""
+    if case_id not in _IMPACT_REPORTS:
+        raise HTTPException(404, f"Impact report for {case_id} not found. Run /impact/report first.")
+    return _IMPACT_REPORTS[case_id].to_dict()
+
+
+@router.get("/cases/{case_id}/impact/report/export/json")
+def export_impact_report_json(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Export the latest impact report as cryptographically signed JSON envelope."""
+    if case_id not in _IMPACT_REPORTS:
+        raise HTTPException(404, f"Impact report for {case_id} not found. Run /impact/report first.")
+    report = _IMPACT_REPORTS[case_id]
+    export_content = _EVIDENCE_EXPORTER.export_json(report)
+    return {
+        "case_id": case_id,
+        "format": "json",
+        "export": export_content,
+        "fingerprint": report.fingerprint,
+    }
+
+
+@router.get("/cases/{case_id}/impact/report/export/markdown")
+def export_impact_report_markdown(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Export the latest impact report as structured Markdown with audit footer."""
+    if case_id not in _IMPACT_REPORTS:
+        raise HTTPException(404, f"Impact report for {case_id} not found. Run /impact/report first.")
+    report = _IMPACT_REPORTS[case_id]
+    md_content = _EVIDENCE_EXPORTER.export_markdown(report)
+    return {
+        "case_id": case_id,
+        "format": "markdown",
+        "export": md_content,
+        "fingerprint": report.fingerprint,
+    }
+
+
+@router.get("/cases/{case_id}/impact/summary")
+def get_case_impact_summary(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Generate high-level Executive KPIs from the latest case impact report."""
+    if case_id not in _IMPACT_REPORTS:
+        raise HTTPException(404, f"Impact report for {case_id} not found. Run /impact/report first.")
+    summary = _IMPACT_SUMMARY_GEN.summarize(_IMPACT_REPORTS[case_id])
+    return summary.to_dict()
+
+
+@router.post("/experiments/verify")
+def verify_impact_export(
+    payload: VerifyExportPayload,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Verify cryptographic checksum and integrity of an exported JSON report envelope."""
+    is_valid = _EVIDENCE_EXPORTER.verify_json_export(payload.json_export)
+    return {"is_valid": is_valid}
+
+
 __all__ = [
     "reset_nyaya_api_state",
     "router",
 ]
+
 
 

@@ -119,7 +119,49 @@ class DossierFormatter:
             "---",
             "### Cryptographic Fingerprint Verification",
             f"- **Twin Integrity Hash**: `{dossier.sec24_cryptographic_fingerprints.get('twin_integrity_hash', '')}`",
-            f"- **Dossier SHA-256 Fingerprint**: `{dossier.sec24_cryptographic_fingerprints.get('dossier_fingerprint', '')}`",
+            f"- **Dossier SHA-256 Fingerprint**: `{dossier.fingerprint}`",
         ])
 
+        return "\n".join(lines)
+
+    @staticmethod
+    def format_checklist_markdown(checklist: Any) -> str:
+        """Format HumanReviewChecklist into human-readable Markdown."""
+        lines = [
+            f"# HUMAN REVIEW CHECKLIST: Case {checklist.case_id}",
+            f"**Dossier**: `{checklist.dossier_id}`",
+            f"**Total Review Items**: {checklist.total_count} (Pending: {checklist.pending_count}, Critical: {checklist.critical_count})",
+            "",
+            "> **LEGAL NOTICE**: All items below require independent human advocate/judge review.",
+            "",
+        ]
+        for item in checklist.items:
+            lines.extend([
+                f"### [{item.severity.value}] {item.review_id} ({item.status.value})",
+                f"- **Source**: {item.source}",
+                f"- **Explanation**: {item.explanation}",
+                f"- **Recommended Action**: {item.recommended_action}",
+            ])
+            if item.evidence_refs:
+                lines.append(f"- **Evidence References**: {', '.join(item.evidence_refs)}")
+            if item.resolution_notes:
+                lines.append(f"- **Resolution Notes**: {item.resolution_notes} *(by {item.assigned_to})*")
+            lines.append("")
+        return "\n".join(lines)
+
+    @staticmethod
+    def format_diff_markdown(diff: Any) -> str:
+        """Format DossierDiff into human-readable Markdown."""
+        lines = [
+            f"# DOSSIER STRUCTURAL DIFF: Case {diff.case_id}",
+            f"**Comparing**: `{diff.dossier_a_id}` (v{diff.version_a}) vs `{diff.dossier_b_id}` (v{diff.version_b})",
+            f"**Summary**: {diff.summary}",
+            "",
+            "| Section | Added | Removed | Changed | Unchanged |",
+            "|---|---|---|---|---|",
+        ]
+        for sec_name, sdiff in diff.section_diffs.items():
+            lines.append(
+                f"| {sec_name} | {len(sdiff.added_ids)} | {len(sdiff.removed_ids)} | {len(sdiff.changed_ids)} | {len(sdiff.unchanged_ids)} |"
+            )
         return "\n".join(lines)
