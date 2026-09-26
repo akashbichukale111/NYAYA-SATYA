@@ -7,6 +7,7 @@ requiring an authenticated human principal.
 
 from __future__ import annotations
 
+import uuid
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -129,6 +130,53 @@ from nyaya_causal.validation.graph_validator import CausalGraphValidator
 from nyaya_causal.validation.intervention_validator import InterventionValidator
 from nyaya_causal.validation.safety_validator import CausalSafetyValidator
 
+# Phase 6: Auto-Healer, Re-Attack, Perturbation, Readiness & Dossier imports
+from nyaya_dossier.dossier_builder import DossierBuilder
+from nyaya_dossier.dossier_model import JudicialReviewDossier
+from nyaya_dossier.export_formatter import DossierFormatter
+from nyaya_perturbation.perturbation_engine import LegalPerturbationLab
+from nyaya_perturbation.perturbation_scenario import (
+    PerturbationOutcome,
+    PerturbationResultType,
+    PerturbationScenario,
+    PerturbationType,
+)
+from nyaya_perturbation.stability_analyzer import StabilityAnalyzer, StabilityReport
+from nyaya_readiness.calculator import ReadinessCalculator
+from nyaya_readiness.readiness_delta import CaseReadinessDelta
+from nyaya_readiness.readiness_snapshot import CaseReadinessSnapshot
+from nyaya_reattack.attack_comparator import AttackComparator, AttackComparisonReport
+from nyaya_reattack.independent_attacker import IndependentAttacker
+from nyaya_reattack.reattack_engine import ReAttackEngine
+from nyaya_reattack.regression_detector import RegressionDetector, RegressionReport
+from nyaya_reattack.repair_immunity import (
+    RepairImmunityAssessment,
+    RepairImmunityEvaluator,
+    RepairImmunityStatus,
+)
+from nyaya_repair.contracts.repair import LegalAuthorityRef, LegalGroundingStatus
+from nyaya_repair.contracts.repair_candidate import (
+    RepairCandidate,
+    RepairCandidateStatus,
+    RepairChangeType,
+)
+from nyaya_repair.contracts.repair_result import SimulatedRepairReport
+from nyaya_repair.contracts.repair_utility import RepairUtilityVector
+from nyaya_repair.engine.convergence_governor import ConvergenceGovernor, ConvergenceState
+from nyaya_repair.engine.repair_applier import RepairApplier
+from nyaya_repair.engine.repair_evaluator import RepairEvaluator
+from nyaya_repair.engine.repair_generator import RepairGenerator
+from nyaya_repair.engine.repair_planner import RepairPlanner
+from nyaya_repair.integration.adversarial_adapter import AdversarialRepairAdapter
+from nyaya_repair.integration.causal_adapter import CausalRepairAdapter
+from nyaya_repair.integration.tarka_adapter import TarkaRepairAdapter
+from nyaya_repair.integration.unwind_adapter import UnwindRepairAdapter
+from nyaya_repair.validation.collateral_impact_validator import CollateralImpactValidator
+from nyaya_repair.validation.evidence_support_validator import EvidenceSupportValidator
+from nyaya_repair.validation.legal_grounding_validator import LegalGroundingValidator
+from nyaya_repair.validation.repair_validator import RepairValidator
+from nyaya_repair.validation.vulnerability_validator import VulnerabilityValidator
+
 router = APIRouter(prefix="/api/nyaya", tags=["nyaya-satya"])
 
 # In-memory repositories for proposals and runtime instances
@@ -161,6 +209,21 @@ _CAUSAL_GRAPH_VALIDATOR = CausalGraphValidator()
 _INTERVENTION_VALIDATOR = InterventionValidator()
 _COUNTERFACTUAL_VALIDATOR = CounterfactualValidator()
 
+# Phase 6: Repair, Re-Attack, Perturbation, Readiness & Dossier repositories
+_REPAIR_CANDIDATES: dict[str, dict[str, RepairCandidate]] = {}
+_SIMULATED_REPAIRS: dict[str, dict[str, SimulatedRepairReport]] = {}
+_REPAIR_IMMUNITIES: dict[str, dict[str, RepairImmunityAssessment]] = {}
+_PERTURBATION_LAB = LegalPerturbationLab()
+_READINESS_CALCULATOR = ReadinessCalculator()
+_READINESS_SNAPSHOTS: dict[str, CaseReadinessSnapshot] = {}
+_READINESS_DELTAS: dict[str, list[CaseReadinessDelta]] = {}
+_DOSSIER_BUILDER = DossierBuilder()
+_DOSSIERS: dict[str, JudicialReviewDossier] = {}
+_REATTACK_ENGINE = ReAttackEngine()
+_REPAIR_APPLIER = RepairApplier()
+_REPAIR_EVALUATOR = RepairEvaluator()
+_REPAIR_VALIDATOR = RepairValidator()
+
 
 def reset_nyaya_api_state() -> None:
     """Test hook to reset API in-memory repositories."""
@@ -170,6 +233,13 @@ def reset_nyaya_api_state() -> None:
     _ASSUMPTION_REGISTRIES.clear()
     _CAUSAL_GRAPHS.clear()
     _COUNTERFACTUAL_LAB.reset_for_test()
+    _REPAIR_CANDIDATES.clear()
+    _SIMULATED_REPAIRS.clear()
+    _REPAIR_IMMUNITIES.clear()
+    _PERTURBATION_LAB.reset_for_test()
+    _READINESS_SNAPSHOTS.clear()
+    _READINESS_DELTAS.clear()
+    _DOSSIERS.clear()
     _HUMAN_GATE.reset_for_test()
     _GUARD.reset_for_test()
     get_audit_store().reset_for_test()
@@ -1760,6 +1830,477 @@ def get_causal_snapshot(
     snapshot["scenario_count"] = len(scenarios)
 
     return snapshot
+
+
+# ============================================================
+# Phase 6: Auto-Healer, Re-Attack, Perturbation, Readiness & Dossier Endpoints
+# ============================================================
+
+
+class GenerateRepairsRequest(BaseModel):
+    finding_ids: list[str] | None = None
+
+
+class ValidateRepairRequest(BaseModel):
+    repair_id: str
+
+
+class SimulateRepairRequest(BaseModel):
+    repair_id: str
+
+
+class RunReAttackRequest(BaseModel):
+    repair_id: str
+
+
+class RunPerturbationRequest(BaseModel):
+    perturbation_type: str  # SHOULD_CHANGE or SHOULD_NOT_CHANGE
+    target_node_id: str
+    target_node_type: str  # EVIDENCE, CLAIM, EVENT, ENTITY
+    operation: str  # REMOVE, MODIFY, CORRUPT_TIMESTAMP
+    expected_affected_nodes: list[str] = Field(default_factory=list)
+    protected_nodes: list[str] = Field(default_factory=list)
+    rationale: str = ""
+    parameters: dict[str, Any] = Field(default_factory=dict)
+
+
+class ComputeReadinessDeltaRequest(BaseModel):
+    repair_id: str
+
+
+@router.post("/cases/{case_id}/repair/generate")
+def generate_repairs(
+    case_id: str,
+    req: GenerateRepairsRequest = GenerateRepairsRequest(),
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Generate evidence-grounded repair candidates for identified vulnerabilities."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+
+    if case_id not in _ADVERSARIAL_REPORTS:
+        # Run adversarial gauntlet if report not present
+        assump_reg = _ASSUMPTION_REGISTRIES.get(case_id, AssumptionRegistry(case_id=case_id))
+        gauntlet = AdversarialGauntlet(twin, assumption_registry=assump_reg)
+        _ADVERSARIAL_REPORTS[case_id] = gauntlet.run_gauntlet()
+
+    gauntlet_report = _ADVERSARIAL_REPORTS[case_id]
+    adapter = AdversarialRepairAdapter(twin)
+
+    findings = gauntlet_report.findings
+    if req.finding_ids:
+        findings = [f for f in findings if f.finding_id in req.finding_ids]
+
+    candidates = adapter.extract_repairs_from_findings(findings)
+    planner = RepairPlanner()
+    prioritized = planner.prioritize_repairs(candidates)
+
+    if case_id not in _REPAIR_CANDIDATES:
+        _REPAIR_CANDIDATES[case_id] = {}
+    for r in prioritized:
+        _REPAIR_CANDIDATES[case_id][r.repair_id] = r
+
+    return {
+        "case_id": case_id,
+        "total_generated": len(prioritized),
+        "candidates": [r.to_dict() for r in prioritized],
+    }
+
+
+@router.get("/cases/{case_id}/repair/candidates")
+def list_repair_candidates(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """List generated repair candidates for a case."""
+    repairs = _REPAIR_CANDIDATES.get(case_id, {})
+    return {
+        "case_id": case_id,
+        "candidates": [r.to_dict() for r in repairs.values()],
+        "count": len(repairs),
+    }
+
+
+@router.get("/cases/{case_id}/repair/candidates/{repair_id}")
+def get_repair_candidate(
+    case_id: str,
+    repair_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Get a specific repair candidate."""
+    repairs = _REPAIR_CANDIDATES.get(case_id, {})
+    if repair_id not in repairs:
+        raise HTTPException(404, f"Repair candidate {repair_id} not found for case {case_id}")
+    return repairs[repair_id].to_dict()
+
+
+@router.post("/cases/{case_id}/repair/validate")
+def validate_repair(
+    case_id: str,
+    req: ValidateRepairRequest,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Validate a repair candidate against safety, non-adjudication, and grounding rules."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    repairs = _REPAIR_CANDIDATES.get(case_id, {})
+    if req.repair_id not in repairs:
+        raise HTTPException(404, f"Repair candidate {req.repair_id} not found")
+
+    repair = repairs[req.repair_id]
+    validator = RepairValidator()
+    result = validator.validate(repair, twin)
+
+    ev_validator = EvidenceSupportValidator()
+    ev_result = ev_validator.validate_evidence(repair, twin)
+
+    legal_validator = LegalGroundingValidator()
+    legal_result = legal_validator.validate_authorities(repair)
+
+    is_overall_valid = result.is_valid and ev_result.is_valid and legal_result.is_valid
+    if is_overall_valid:
+        repair.status = RepairCandidateStatus.VALIDATED
+
+    return {
+        "repair_id": repair.repair_id,
+        "is_valid": is_overall_valid,
+        "structural_validation": result.to_dict(),
+        "evidence_validation": ev_result.to_dict(),
+        "legal_grounding_validation": legal_result.to_dict(),
+    }
+
+
+@router.post("/cases/{case_id}/repair/simulate")
+def simulate_repair(
+    case_id: str,
+    req: SimulateRepairRequest,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Simulate a repair candidate on a cloned twin and compute utility."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+    repairs = _REPAIR_CANDIDATES.get(case_id, {})
+    if req.repair_id not in repairs:
+        raise HTTPException(404, f"Repair candidate {req.repair_id} not found")
+
+    repair = repairs[req.repair_id]
+    pre_hash = twin.integrity_hash
+
+    # Apply repair to clone
+    applier = RepairApplier()
+    repaired_twin, exec_result = applier.apply_repair(twin, repair)
+    post_hash = repaired_twin.integrity_hash
+
+    # Evaluate utility vector
+    evaluator = RepairEvaluator()
+    utility = evaluator.evaluate(repair, twin, repaired_twin)
+
+    # Blast radius via causal adapter
+    causal_adapter = CausalRepairAdapter()
+    blast_report = causal_adapter.recalculate_blast_radius(twin, repair)
+
+    report_id = f"SIMREP_{uuid.uuid4().hex[:8]}"
+    sim_report = SimulatedRepairReport(
+        report_id=report_id,
+        case_id=case_id,
+        repair_candidate=repair,
+        pre_repair_hash=pre_hash,
+        post_repair_hash=post_hash,
+        execution_result=exec_result,
+        utility_vector=utility,
+        blast_radius=blast_report.to_dict(),
+        is_acceptable=utility.is_acceptable(),
+    )
+
+    repair.status = RepairCandidateStatus.SIMULATED
+    if case_id not in _SIMULATED_REPAIRS:
+        _SIMULATED_REPAIRS[case_id] = {}
+    _SIMULATED_REPAIRS[case_id][repair.repair_id] = sim_report
+
+    return sim_report.to_dict()
+
+
+@router.post("/cases/{case_id}/repair/utility")
+def evaluate_repair_utility(
+    case_id: str,
+    req: SimulateRepairRequest,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Compute the multi-dimensional Repair Utility Vector for a simulated repair."""
+    sims = _SIMULATED_REPAIRS.get(case_id, {})
+    if req.repair_id not in sims:
+        raise HTTPException(404, f"Simulated report for repair {req.repair_id} not found. Run /simulate first.")
+    report = sims[req.repair_id]
+    return report.utility_vector.to_dict()
+
+
+@router.post("/cases/{case_id}/reattack/run")
+def run_reattack(
+    case_id: str,
+    req: RunReAttackRequest,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Run independent re-attack scenarios against the post-repair state."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+
+    sims = _SIMULATED_REPAIRS.get(case_id, {})
+    if req.repair_id not in sims:
+        raise HTTPException(404, f"Simulated report for repair {req.repair_id} not found. Run /simulate first.")
+    sim_report = sims[req.repair_id]
+
+    # Re-apply repair to a fresh simulation clone for re-attack
+    applier = RepairApplier()
+    repaired_twin, _ = applier.apply_repair(twin, sim_report.repair_candidate)
+
+    reattack_engine = ReAttackEngine()
+    report = reattack_engine.execute_reattack(repaired_twin, sim_report.repair_candidate)
+
+    # Compare with pre-repair findings
+    pre_findings = _ADVERSARIAL_REPORTS[case_id].findings if case_id in _ADVERSARIAL_REPORTS else []
+    comparator = AttackComparator()
+    comparison = comparator.compare(pre_findings, report.findings, target_vulnerability_id=sim_report.repair_candidate.target_vulnerability_id)
+
+    reg_detector = RegressionDetector()
+    regression = reg_detector.detect_regressions(comparison, report.findings)
+
+    immunity_evaluator = RepairImmunityEvaluator()
+    immunity = immunity_evaluator.evaluate_immunity(sim_report.repair_candidate, comparison, regression)
+
+    if case_id not in _REPAIR_IMMUNITIES:
+        _REPAIR_IMMUNITIES[case_id] = {}
+    _REPAIR_IMMUNITIES[case_id][req.repair_id] = immunity
+
+    sim_report.re_attack_summary = {
+        "report_id": report.report_id,
+        "total_attacks": report.total_attacks_executed,
+        "findings_count": len(report.findings),
+    }
+    sim_report.immunity_status = immunity.status.value
+
+    return {
+        "repair_id": req.repair_id,
+        "reattack_report": report.to_dict(),
+        "comparison": comparison.to_dict(),
+        "regression": regression.to_dict(),
+        "immunity": immunity.to_dict(),
+    }
+
+
+@router.post("/cases/{case_id}/reattack/compare")
+def compare_reattack(
+    case_id: str,
+    req: RunReAttackRequest,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Compare pre-repair vs post-repair adversarial findings."""
+    immunities = _REPAIR_IMMUNITIES.get(case_id, {})
+    if req.repair_id not in immunities:
+        raise HTTPException(404, f"Re-attack analysis for repair {req.repair_id} not found. Run /reattack/run first.")
+    return immunities[req.repair_id].to_dict()
+
+
+@router.get("/cases/{case_id}/reattack/immunity/{repair_id}")
+def get_repair_immunity(
+    case_id: str,
+    repair_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Get the repair immunity assessment for a repair."""
+    immunities = _REPAIR_IMMUNITIES.get(case_id, {})
+    if repair_id not in immunities:
+        raise HTTPException(404, f"Immunity assessment for repair {repair_id} not found")
+    return immunities[repair_id].to_dict()
+
+
+@router.post("/cases/{case_id}/perturbation/run")
+def run_perturbation_scenario(
+    case_id: str,
+    req: RunPerturbationRequest,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Run a controlled SHOULD_CHANGE or SHOULD_NOT_CHANGE perturbation experiment."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+
+    scenario = PerturbationScenario(
+        scenario_id=f"PERT_{uuid.uuid4().hex[:8]}",
+        case_id=case_id,
+        perturbation_type=PerturbationType(req.perturbation_type),
+        target_node_id=req.target_node_id,
+        target_node_type=req.target_node_type,
+        operation=req.operation,
+        expected_affected_nodes=req.expected_affected_nodes,
+        protected_nodes=req.protected_nodes,
+        rationale=req.rationale,
+        parameters=req.parameters,
+    )
+
+    outcome = _PERTURBATION_LAB.run_scenario(twin, scenario)
+    return outcome.to_dict()
+
+
+@router.get("/cases/{case_id}/perturbation/outcomes")
+def list_perturbation_outcomes(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """List all perturbation outcomes for a case."""
+    outcomes = _PERTURBATION_LAB.list_outcomes(case_id)
+    return {
+        "case_id": case_id,
+        "outcomes": [o.to_dict() for o in outcomes],
+        "count": len(outcomes),
+    }
+
+
+@router.get("/cases/{case_id}/perturbation/stability")
+def get_perturbation_stability(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Get the aggregate reasoning stability report from perturbation testing."""
+    outcomes = _PERTURBATION_LAB.list_outcomes(case_id)
+    analyzer = StabilityAnalyzer()
+    report = analyzer.analyze_stability(case_id, outcomes)
+    return report.to_dict()
+
+
+@router.get("/cases/{case_id}/readiness/snapshot")
+def get_readiness_snapshot(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Compute and retrieve a structural case readiness snapshot."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+
+    snapshot = _READINESS_CALCULATOR.compute_snapshot(twin)
+    _READINESS_SNAPSHOTS[case_id] = snapshot
+    return snapshot.to_dict()
+
+
+@router.post("/cases/{case_id}/readiness/delta")
+def compute_readiness_delta(
+    case_id: str,
+    req: ComputeReadinessDeltaRequest,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Compute the structural readiness delta before and after a simulated repair."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+
+    sims = _SIMULATED_REPAIRS.get(case_id, {})
+    if req.repair_id not in sims:
+        raise HTTPException(404, f"Simulated report for repair {req.repair_id} not found. Run /simulate first.")
+    sim_report = sims[req.repair_id]
+
+    # Re-apply to clone for post snapshot
+    applier = RepairApplier()
+    repaired_twin, _ = applier.apply_repair(twin, sim_report.repair_candidate)
+
+    pre_snap = _READINESS_CALCULATOR.compute_snapshot(twin)
+    post_snap = _READINESS_CALCULATOR.compute_snapshot(
+        repaired_twin,
+        repair_immunity_status=sim_report.immunity_status,
+    )
+
+    delta = _READINESS_CALCULATOR.compute_delta(req.repair_id, pre_snap, post_snap)
+    if case_id not in _READINESS_DELTAS:
+        _READINESS_DELTAS[case_id] = []
+    _READINESS_DELTAS[case_id].append(delta)
+
+    return delta.to_dict()
+
+
+@router.post("/cases/{case_id}/dossier/build")
+def build_judicial_dossier(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Build the comprehensive 24-section auditable Judicial Review Dossier."""
+    if case_id not in _TWINS:
+        raise HTTPException(404, f"Case Digital Twin for {case_id} not found")
+    twin = _TWINS[case_id]
+
+    gauntlet = _ADVERSARIAL_REPORTS.get(case_id)
+    sims = _SIMULATED_REPAIRS.get(case_id, {})
+    latest_sim = list(sims.values())[-1] if sims else None
+    latest_repair = latest_sim.repair_candidate if latest_sim else None
+
+    immunities = _REPAIR_IMMUNITIES.get(case_id, {})
+    latest_immunity = list(immunities.values())[-1] if immunities else None
+
+    outcomes = _PERTURBATION_LAB.list_outcomes(case_id)
+    stability = StabilityAnalyzer().analyze_stability(case_id, outcomes) if outcomes else None
+
+    deltas = _READINESS_DELTAS.get(case_id, [])
+    latest_delta = deltas[-1] if deltas else None
+
+    dossier = _DOSSIER_BUILDER.build_dossier(
+        twin,
+        gauntlet_report=gauntlet,
+        repair=latest_repair,
+        sim_report=latest_sim,
+        immunity=latest_immunity,
+        stability=stability,
+        readiness_delta=latest_delta,
+    )
+
+    _DOSSIERS[case_id] = dossier
+    return dossier.to_dict()
+
+
+@router.get("/cases/{case_id}/dossier/latest")
+def get_latest_dossier(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Get the latest compiled Judicial Review Dossier."""
+    if case_id not in _DOSSIERS:
+        raise HTTPException(404, f"Judicial Review Dossier for {case_id} not found. Run /dossier/build first.")
+    return _DOSSIERS[case_id].to_dict()
+
+
+@router.get("/cases/{case_id}/dossier/export/markdown")
+def export_dossier_markdown(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Export the latest dossier as structured Markdown."""
+    if case_id not in _DOSSIERS:
+        raise HTTPException(404, f"Judicial Review Dossier for {case_id} not found. Run /dossier/build first.")
+    md_content = DossierFormatter.to_markdown(_DOSSIERS[case_id])
+    return {
+        "case_id": case_id,
+        "dossier_id": _DOSSIERS[case_id].dossier_id,
+        "format": "markdown",
+        "content": md_content,
+    }
+
+
+@router.get("/cases/{case_id}/dossier/export/json")
+def export_dossier_json(
+    case_id: str,
+    caller: Principal = Depends(require_principal),
+) -> dict[str, Any]:
+    """Export the latest dossier as JSON string."""
+    if case_id not in _DOSSIERS:
+        raise HTTPException(404, f"Judicial Review Dossier for {case_id} not found. Run /dossier/build first.")
+    json_str = DossierFormatter.to_json(_DOSSIERS[case_id])
+    return {
+        "case_id": case_id,
+        "dossier_id": _DOSSIERS[case_id].dossier_id,
+        "format": "json",
+        "content": json_str,
+    }
 
 
 __all__ = [
