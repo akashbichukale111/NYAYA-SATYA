@@ -42,10 +42,11 @@ Phase 9 represents the final productization milestone of **NYAYA-SATYA: Adversar
 | **GitHub Repository** | `https://github.com/akashbichukale111/NYAYA-SATYA` | **VERIFIED** | Canonical public source repository |
 | **Main Hero Screenshot** | `docs/assets/nyaya-satya-main-screen.png` | **VERIFIED** | High-resolution UI interface |
 | **Hackathon Demo Script** | `docs/demo/final-demo-script.md` | **VERIFIED** | 2–3 minute demonstration guide |
-| **Public Deployment** | `Pending final public deployment` | **ACCURATE** | Strictly avoids unverified or stale URLs |
-| **API Health Probe** | `http://127.0.0.1:8080/health` | **VERIFIED** | Local / Staging liveness probe endpoint |
-| **API Readiness Probe** | `http://127.0.0.1:8080/ready` | **VERIFIED** | Subsystem readiness evaluation |
-| **API Documentation** | `http://127.0.0.1:8080/docs` | **VERIFIED** | Interactive OpenAPI / Swagger UI |
+| **Temporary Public Demo** | `https://soccer-compilation-milan-june.trycloudflare.com` | **VERIFIED LIVE** | Live public demo endpoint (Cloudflare edge) |
+| **API Health Probe** | `https://soccer-compilation-milan-june.trycloudflare.com/health` | **VERIFIED (200 OK)** | Live container liveness probe endpoint |
+| **API Readiness Probe** | `https://soccer-compilation-milan-june.trycloudflare.com/ready` | **VERIFIED (200 OK)** | Subsystem readiness evaluation |
+| **API Documentation** | `https://soccer-compilation-milan-june.trycloudflare.com/docs` | **VERIFIED (200 OK)** | Interactive OpenAPI / Swagger UI |
+| **Google/NVIDIA Cloud** | `Pending Final Deployment Pass` | **PENDING** | Reserved for final multi-region rollout |
 
 ---
 

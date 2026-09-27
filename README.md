@@ -12,12 +12,14 @@ NYAYA-SATYA is an auditable adversarial evidence and case-reasoning system desig
 
 ---
 
-## 🚀 Demo & Links
+## 🚀 Demo & Live Links
 
 - **GitHub Repository**: [https://github.com/akashbichukale111/NYAYA-SATYA](https://github.com/akashbichukale111/NYAYA-SATYA)
-- **Live Demo**: `Deployment URL: Pending final public deployment`
-- **API Health**: `http://127.0.0.1:8080/health` *(Local / Staging: Pending public DNS mapping)*
-- **API Documentation**: `http://127.0.0.1:8080/docs` *(Local / Staging: Pending public DNS mapping)*
+- **Temporary Public Demo**: [https://soccer-compilation-milan-june.trycloudflare.com](https://soccer-compilation-milan-june.trycloudflare.com) *(Active Cloudflare edge deployment for review)*
+- **API Health**: [https://soccer-compilation-milan-june.trycloudflare.com/health](https://soccer-compilation-milan-june.trycloudflare.com/health)
+- **API Documentation**: [https://soccer-compilation-milan-june.trycloudflare.com/docs](https://soccer-compilation-milan-june.trycloudflare.com/docs)
+- **System Readiness**: [https://soccer-compilation-milan-june.trycloudflare.com/ready](https://soccer-compilation-milan-june.trycloudflare.com/ready)
+- **System Version**: [https://soccer-compilation-milan-june.trycloudflare.com/version](https://soccer-compilation-milan-june.trycloudflare.com/version)
 - **Demo Script**: [2–3 Minute Hackathon Demo Guide](docs/demo/final-demo-script.md)
 
 ---

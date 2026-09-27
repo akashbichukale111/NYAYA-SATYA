@@ -116,16 +116,15 @@
 
 ## Reproducible Demonstration CLI Commands
 
-To replicate this exact demonstration locally:
+Live Public Demo URL: `https://soccer-compilation-milan-june.trycloudflare.com`
+
+To replicate this demonstration over the live public Cloudflare edge:
 
 ```bash
-# 1. Start the API server
-uvicorn services.api.main:app --host 127.0.0.1 --port 8080
-
-# 2. Check health & readiness probes
-curl -s http://127.0.0.1:8080/health
-curl -s http://127.0.0.1:8080/ready
-curl -s http://127.0.0.1:8080/version
+# 1. Check live public health & readiness probes
+curl -s https://soccer-compilation-milan-june.trycloudflare.com/health
+curl -s https://soccer-compilation-milan-june.trycloudflare.com/ready
+curl -s https://soccer-compilation-milan-june.trycloudflare.com/version
 
 # 3. Ingest Exhibit E17 (Dispatch date 12 March)
 curl -X POST http://127.0.0.1:8080/api/nyaya/evidence/upload \
