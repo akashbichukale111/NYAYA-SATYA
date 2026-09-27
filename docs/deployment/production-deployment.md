@@ -1,7 +1,7 @@
 # NYAYA-SATYA — Production Deployment Guide
 
 ## 1. Architecture Overview
-NYAYA-SATYA is packaged as a lightweight, secure containerized application deployed to Google Cloud Run (or any OCI-compliant container orchestration platform such as Kubernetes or AWS ECS).
+NYAYA-SATYA is packaged as a lightweight, secure containerized application deployed to Google Cloud Run (heavier orchestrators like GKE / Kubernetes are deliberately NOT USED).
 
 ```
                         [ HTTPS / TLS Termination ]

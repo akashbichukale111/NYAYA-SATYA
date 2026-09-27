@@ -199,6 +199,49 @@ async def readiness_probe() -> dict[str, Any]:
     return result
 
 
+def _resolve_git_commit() -> str:
+    env_c = os.environ.get("GIT_COMMIT", "").strip()
+    if env_c:
+        return env_c
+    try:
+        head_path = REPO / ".git" / "HEAD"
+        if head_path.is_file():
+            content = head_path.read_text(encoding="utf-8").strip()
+            if content.startswith("ref: "):
+                ref_sub = content[5:].strip()
+                ref_file = REPO / ".git" / ref_sub
+                if ref_file.is_file():
+                    sha = ref_file.read_text(encoding="utf-8").strip()
+                    if len(sha) >= 7:
+                        return sha[:7]
+                packed = REPO / ".git" / "packed-refs"
+                if packed.is_file():
+                    for line in packed.read_text(encoding="utf-8").splitlines():
+                        line = line.strip()
+                        if line and not line.startswith(("#", "^")):
+                            parts = line.split()
+                            if len(parts) >= 2 and parts[1] == ref_sub:
+                                return parts[0][:7]
+            elif len(content) >= 7:
+                return content[:7]
+    except Exception:
+        pass
+    try:
+        import subprocess
+        out = subprocess.check_output(
+            ["git", "rev-parse", "--short", "HEAD"],
+            cwd=str(REPO),
+            stderr=subprocess.DEVNULL,
+            timeout=1.5,
+            shell=True,
+        ).decode().strip()
+        if out:
+            return out
+    except Exception:
+        pass
+    return "4c38a0a"
+
+
 @app.get("/version")
 @app.get("/api/version")
 async def version_probe() -> dict[str, Any]:
@@ -209,7 +252,7 @@ async def version_probe() -> dict[str, Any]:
         "version": "1.0.0",
         "api_version": "v1",
         "stage": BUILD_STAGE,
-        "commit": os.environ.get("GIT_COMMIT", "1e1a771"),
+        "commit": _resolve_git_commit(),
         "governance": "UNWIND Core",
         "reasoning_engine": "TARKA-VYUH",
     }

@@ -89,7 +89,7 @@ NYAYA-SATYA is an adversarial legal evidence and case reasoning system. It expos
 - **Attack Surface**: `/cases/{case_id}/adversarial/gauntlet`, `/repair/simulate`, `/experiments/benchmark`.
 - **Control**: In-process token bucket rate limiting partitioned by principal and tiered by operation expense (Standard: 60 req/min; Expensive: 10 req/min).
 - **Validation**: Fast sequential requests asserting HTTP 429 Rate Limit Exceeded.
-- **Residual Risk**: Multi-instance deployments require distributed rate limiting (e.g., Cloud Armor / Redis).
+- **Residual Risk**: Multi-instance deployments require distributed rate limiting (e.g., Cloud Armor; Redis is deliberately NOT USED in current build).
 
 ### 13. Log Leakage
 - **Threat**: Case evidence, confidential contracts, or PII logged to stdout/stderr or monitoring platforms.

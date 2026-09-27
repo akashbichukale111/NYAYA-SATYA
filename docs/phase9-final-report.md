@@ -103,7 +103,7 @@ Phase 9 represents the final productization milestone of **NYAYA-SATYA: Adversar
 ---
 
 ### 9. Known Limitations & Residual Risks
-1. **Distributed Rate Limiting**: Multi-pod Cloud Run deployments require Redis-backed distributed token buckets.
+1. **Distributed Rate Limiting**: Multi-pod Cloud Run deployments require distributed token buckets (Redis is deliberately NOT USED in this build; in-memory sliding window enforced).
 2. **Scanned Raster OCR Sandboxing**: Native PDF and plain-text extraction run safely; heavy raster OCR requires isolated worker sidecars.
 3. **Statutory Jurisdictions**: Default causal schemas target commercial contract disputes; broader statutory litigation requires extended ontology definitions.
 

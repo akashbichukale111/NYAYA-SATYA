@@ -420,7 +420,7 @@ NYAYA-SATYA/
 
 In adherence to scientific rigor, the following engineering limitations are acknowledged:
 
-1. **Distributed Rate Limiting**: The current rate limiter relies on an in-memory sliding window per container process. Multi-replica cloud deployments require an external token bucket (e.g., Redis) for global coordination.
+1. **Distributed Rate Limiting**: The current rate limiter relies on an in-memory sliding window per container process (external distributed state stores like Redis are deliberately NOT USED in this build; coordination is per container). Multi-replica cloud deployments would require an external token bucket.
 2. **Heavy Scanned OCR Sandboxing**: Basic text extraction handles native digital PDFs and standard plain-text exhibits. Scanned raster documents requiring heavy OCR should be executed within a sandboxed sidecar to prevent memory exhaustion.
 3. **Statutory Domain Scope**: Current causal graph schemas are optimized for civil, commercial, and contract disputes; complex multijurisdictional constitutional litigation requires extended ontology definitions.
 
