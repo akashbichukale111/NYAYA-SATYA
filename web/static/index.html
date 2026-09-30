@@ -3,953 +3,995 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NYAYA-SATYA — Adversarial Evidence & Case Reasoning System</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%2307090e'/%3E%3Cpath d='M8 1L2 5v4c0 3.5 2.5 6 6 6s6-2.5 6-6V5L8 1z' fill='%2338bdf8'/%3E%3Cpath d='M8 4v7M5.5 7.5L8 4l2.5 3.5' stroke='%2307090e' stroke-width='1.2' fill='none'/%3E%3C/svg%3E" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
-  <link rel="stylesheet" href="/static/style.css?v=10" />
+  <title>NYAYA-SATYA — Global Legal Case & Evidence Intelligence Platform</title>
+  <link rel="stylesheet" href="/static/style.css?v=11" />
 </head>
 <body class="nyaya-theme">
 
-  <!-- SUBTLE GLOBAL AMBIENT SYSTEM PULSE -->
+  <!-- GLOBAL AMBIENT LINES -->
   <div class="global-pulse-line top" aria-hidden="true"></div>
   <div class="global-pulse-line bottom" aria-hidden="true"></div>
 
-  <!-- BACKGROUND EVIDENCE CONSTELLATION CANVAS -->
+  <!-- BACKGROUND CONSTELLATION CANVAS -->
   <canvas id="nyaya-constellation-canvas" aria-hidden="true"></canvas>
 
-  <!-- TOP COMMAND BAR // LIVING TELEMETRY CORE -->
-  <header class="top-command-bar">
-    <div class="brand-block">
-      <div class="brand-logo pulse-cyan-subtle">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 2L3 7v6c0 5.5 3.8 9.5 9 10 5.2-.5 9-4.5 9-10V7l-9-5z" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" />
-          <path d="M12 7v8M8.5 11l3.5-4 3.5 4" stroke="#38bdf8" />
-        </svg>
-      </div>
-      <div class="brand-text">
-        <span class="brand-title">NYAYA-SATYA</span>
-        <span class="brand-subtitle">ADVERSARIAL EVIDENCE & CASE REASONING SYSTEM</span>
-      </div>
+  <!-- TOP PRODUCT HEADER -->
+  <header class="top-nav-bar">
+    <div class="nav-left">
+      <a href="#home" class="brand-link" id="brand-home-link" title="Return to Home">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L3 7v6c0 5.5 3.8 9.5 9 10 5.2-.5 9-4.5 9-10V7l-9-5z" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" />
+            <path d="M12 7v8M8.5 11l3.5-4 3.5 4" stroke="#38bdf8" />
+          </svg>
+        </div>
+        <div class="brand-headings">
+          <span class="brand-name">NYAYA-SATYA</span>
+          <span class="brand-tag">ADVERSARIAL LEGAL CASE INTELLIGENCE</span>
+        </div>
+      </a>
+
+      <!-- PRIMARY NAVIGATION -->
+      <nav class="main-nav-links" aria-label="Main Navigation">
+        <a href="#home" class="nav-item active" data-nav="home">Home</a>
+        <a href="#my-cases" class="nav-item" data-nav="my-cases">My Cases</a>
+        <a href="#citizen" class="nav-item" data-nav="citizen">Citizen Mode</a>
+        <a href="#activity" class="nav-item" data-nav="activity">Activity</a>
+        <a href="#dossier" class="nav-item" data-nav="dossier">Dossier</a>
+      </nav>
     </div>
 
-    <!-- ACTIVE CASE INDICATOR -->
-    <div class="case-indicator-pill">
-      <span class="status-pulse-dot cyan"></span>
-      <span class="case-label">CASE:</span>
-      <span id="header-case-id" class="case-name mono">CASE_SYNTHETIC_DEMO_2026</span>
-      <span class="badge badge-synthetic">SYNTHETIC DEMO</span>
-    </div>
-
-    <!-- LIVING TELEMETRY STATUS CHIPS -->
-    <div class="system-status-group">
-      <!-- API Online + Heartbeat waveform -->
-      <div class="telemetry-chip" title="FastAPI Kernel Status · Continuous Health Liveness">
-        <div class="chip-status-row">
-          <span class="chip-dot green"></span>
-          <span class="chip-label">API:</span>
-          <span id="status-api-val" class="chip-val mono">ONLINE</span>
-        </div>
-        <!-- Tiny animated SVG heartbeat waveform -->
-        <svg class="heartbeat-wave" viewBox="0 0 40 10" width="34" height="10">
-          <path d="M0 5 L12 5 L15 1 L18 9 L21 5 L40 5" fill="none" stroke="#10b981" stroke-width="1.2" stroke-linecap="round" />
-        </svg>
+    <div class="nav-right">
+      <!-- LANGUAGE SWITCHER -->
+      <div class="lang-selector" title="Select Interface Language">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <span class="lang-divider">|</span>
+        <button class="lang-btn" data-lang="mr">मराठी</button>
+        <span class="lang-divider">|</span>
+        <button class="lang-btn" data-lang="hi">हिन्दी</button>
       </div>
 
-      <!-- Evidence Registry Chip -->
-      <div class="telemetry-chip" title="Evidence Registry · SHA-256 Ingestion Active">
-        <div class="chip-status-row">
-          <span class="chip-dot cyan"></span>
-          <span class="chip-label">EVIDENCE:</span>
-          <span id="status-evidence-val" class="chip-val mono">REGISTERED</span>
-        </div>
-        <div class="scanning-mini-bar cyan-scan"></div>
+      <!-- ROLE SELECTOR -->
+      <div class="role-selector-pill" title="Active Role Permissions">
+        <span class="role-label">ROLE:</span>
+        <select id="user-role-select" class="role-dropdown">
+          <option value="ADVOCATE" selected>Advocate / Lawyer</option>
+          <option value="CITIZEN">Citizen</option>
+          <option value="LEGAL_AID">Legal Aid Lawyer</option>
+          <option value="PARALEGAL">Paralegal / Case Worker</option>
+          <option value="RESEARCHER">Legal Researcher</option>
+          <option value="STUDENT">Law Student</option>
+          <option value="NGO">NGO / Legal Aid Admin</option>
+          <option value="SENIOR_REVIEWER">Senior Legal Reviewer</option>
+          <option value="ADMIN">Organization Admin</option>
+        </select>
       </div>
 
-      <!-- TARKA-VYUH Reasoning Chip -->
-      <div class="telemetry-chip" title="TARKA-VYUH Adversarial Reasoning Core">
-        <div class="chip-status-row">
-          <span class="chip-dot purple"></span>
-          <span class="chip-label">TARKA:</span>
-          <span id="status-tarka-val" class="chip-val mono">ACTIVE</span>
-        </div>
-        <div class="scanning-mini-bar purple-scan"></div>
+      <!-- ACTIVE CASE PILL -->
+      <div class="active-case-pill" title="Currently Selected Case Context">
+        <span class="status-pulse-dot cyan"></span>
+        <span class="case-label">CASE:</span>
+        <select id="active-case-select" class="case-dropdown mono">
+          <option value="CASE-102" selected>CASE-102 (Commercial Supply Breach)</option>
+          <option value="CASE-087">CASE-087 (Patent Claim Construction)</option>
+          <option value="CASE-091">CASE-091 (Software SLA Warranty)</option>
+        </select>
       </div>
 
-      <!-- UNWIND Core Governance Chip -->
-      <div class="telemetry-chip" title="UNWIND Core · Finite State Governance Active">
-        <div class="chip-status-row">
-          <span class="chip-dot blue"></span>
-          <span class="chip-label">UNWIND:</span>
-          <span id="status-unwind-val" class="chip-val mono">GOVERNED</span>
-        </div>
-        <div class="governance-lock-icon" title="Terminal State Locking Active">🔒</div>
+      <!-- SYSTEM STATUS BADGE -->
+      <div class="telemetry-badge" title="Backend Kernel Health & Liveness">
+        <span class="status-pulse-dot green"></span>
+        <span id="telemetry-status-text" class="telemetry-text mono">ONLINE</span>
       </div>
-    </div>
 
-    <!-- TOP RIGHT CONTROLS -->
-    <div class="header-actions">
-      <div class="sync-indicator-pill mono" id="live-sync-pill" title="Heartbeat Polling Interval">
-        <span class="sync-dot"></span> <span id="sync-text">SYNCED</span>
-      </div>
-      <button type="button" class="btn btn-outline" id="btn-palette" title="Quick Command Palette (Ctrl+K)">
-        <kbd>Ctrl+K</kbd>
-      </button>
-      <button type="button" class="btn btn-purple" id="btn-run-gauntlet-top" title="Trigger full adversarial stress test">
-        <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor">
-          <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
-          <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A4.985 4.985 0 0 1 8 2c2.76 0 5 2.24 5 5 0 .38-.043.751-.123 1.107a.5.5 0 0 1-.977-.214c.066-.29.1-.59.1-.893 0-2.21-1.79-4-4-4zm-4.9 8.107A4.985 4.985 0 0 0 8 14c2.76 0 5-2.24 5-5 0-.38-.043-.751-.123-1.107a.5.5 0 1 0-.977.214c.066.29.1.59.1.893 0 2.21-1.79 4-4 4-1.552 0-2.94-.707-3.857-1.818a.5.5 0 1 0-.771.636z"/>
-        </svg>
-        <span>RUN ATTACK</span>
-      </button>
-      <button type="button" class="btn btn-cyan" id="btn-export-dossier" title="Generate and view judicial dossier">
-        <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor">
-          <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-          <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-        </svg>
-        <span>DOSSIER 2.0</span>
+      <!-- COMMAND PALETTE TRIGGER -->
+      <button id="cmd-palette-btn" class="cmd-trigger-btn" title="Command Palette (Ctrl+K)">
+        <span class="cmd-key">Ctrl+K</span>
       </button>
     </div>
   </header>
 
-  <!-- MAIN SCROLLABLE MISSION COCKPIT -->
-  <main class="cockpit-container">
+  <!-- MAIN APP CONTAINER (ROUTED VIEWS) -->
+  <main class="app-viewport">
 
-    <!-- 1. CINEMATIC HERO REGION WITH REASONING SEQUENCE -->
-    <section class="hero-region glass-panel" id="sec-hero">
-      <div class="hero-top-row">
+    <!-- ============================================================== -->
+    <!-- VIEW 1: PRODUCT HOME (#home) -->
+    <!-- ============================================================== -->
+    <section id="view-home" class="workspace-view active">
+      <div class="home-hero">
         <div class="hero-badge-row">
-          <span class="badge badge-purple">TARKA-VYUH ADVERSARIAL REASONING</span>
-          <span class="badge badge-blue">UNWIND CORE GOVERNANCE</span>
-          <span class="badge badge-amber">HUMAN LEGAL GATE</span>
+          <span class="pill-badge primary">GLOBAL LEGAL CASE INTELLIGENCE</span>
+          <span class="pill-badge neutral">ONE EVIDENCE GRAPH · ANY JURISDICTION</span>
+          <span class="pill-badge amber">HUMAN-CONTROLLED LEGAL ACTION</span>
         </div>
-        <div class="epistemic-status-tag mono">
-          <span class="dot-amber"></span> EPISTEMIC CLASSIFICATION: SYNTHETIC BENCHMARK
-        </div>
-      </div>
-
-      <div class="hero-content">
-        <!-- Cinematic Headline with Dynamic Text Morph -->
-        <h1 class="hero-headline">
-          <span class="static-prefix">Don't trust the draft.</span>
-          <span id="hero-cycle-text" class="dynamic-cycle state-attack">Attack it.</span>
+        <h1 class="hero-title">
+          Built for one case. <span class="gradient-text">Architected for every jurisdiction.</span>
         </h1>
-        <p class="hero-statement">
-          NYAYA-SATYA is an auditable adversarial evidence reasoning system designed to actively stress-test fragmented case records, expose temporal and factual contradictions, compute causal blast-radius, synthesize evidence-bounded repairs, independently re-attack those repairs, and compile a provenance-linked review dossier under strict human governance.
+        <p class="hero-subtitle">
+          "Don't trust the draft. Attack it. Repair it. Attack the repair."
         </p>
-      </div>
 
-      <!-- NON-ADJUDICATION PRINCIPLE BANNER -->
-      <div class="hero-notice-banner">
-        <span class="notice-icon">⚖️</span>
-        <div class="notice-body">
-          <div class="notice-title">OPERATIONAL NON-ADJUDICATION PRINCIPLE</div>
-          <div class="notice-text">
-            AI proposes, stresses, and simulates. UNWIND Core governs lifecycle transitions. The <strong>Human Legal Gate retains sole consequential authority</strong>. No judicial verdicts, liability ratings, or guilt probabilities are predicted.
+        <!-- NON-ADJUDICATION PRINCIPLE CALLOUT -->
+        <div class="non-adjudication-callout">
+          <div class="callout-icon">⚖️</div>
+          <div class="callout-body">
+            <strong>OPERATIONAL NON-ADJUDICATION PRINCIPLE:</strong>
+            AI proposes, stress-tests, and simulates. UNWIND Core governs lifecycle transitions. The <strong>Human Legal Gate retains sole consequential authority</strong>. No judicial verdicts, liability ratings, or guilt probabilities are predicted.
           </div>
         </div>
       </div>
 
-      <!-- ANIMATED REASONING PIPELINE WITH TRAVELING SIGNAL PACKET -->
-      <div class="pipeline-wrapper">
-        <div class="pipeline-header-row">
-          <span class="mono sec-micro-label">END-TO-END ADVERSARIAL REASONING PIPELINE</span>
-          <span class="mono signal-status" id="pipeline-signal-status">SIGNAL PACKET: ACTIVE FLOW</span>
+      <!-- PRIMARY ACTION SECTION: "What do you want to do?" -->
+      <div class="section-container">
+        <div class="section-header">
+          <h2 class="section-title">What do you want to do?</h2>
+          <span class="section-desc">Select a dedicated workspace to manage evidence, stress-test reasoning, or prepare your case.</span>
         </div>
-        <div class="pipeline-stepper" id="pipeline-stepper">
-          <!-- Animated traveling light packet -->
-          <div class="pipeline-traveling-packet" id="traveling-packet"></div>
 
-          <div class="stepper-node" data-target="sec-evidence" data-step="0">
-            <span class="node-num mono">01</span>
-            <span class="node-title">EVIDENCE</span>
-            <span class="node-sub">Ingest & Hash</span>
-            <div class="node-tooltip">MIME validation, SHA-256 sealing, path quarantine</div>
+        <div class="primary-action-grid">
+          <!-- CARD 1: + New Case -->
+          <a href="#new-case" class="action-card primary-accent">
+            <div class="card-icon-wrap">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12h14" stroke="#38bdf8" />
+              </svg>
+            </div>
+            <h3 class="card-title">+ New Case</h3>
+            <p class="card-text">Intake legal dispute, configure multi-tier jurisdiction, and ingest evidence exhibits.</p>
+            <span class="card-action-link">Start Intake &rarr;</span>
+          </a>
+
+          <!-- CARD 2: My Cases -->
+          <a href="#my-cases" class="action-card">
+            <div class="card-icon-wrap">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 6h16M4 12h16M4 18h10" stroke="#38bdf8" />
+              </svg>
+            </div>
+            <h3 class="card-title">My Cases</h3>
+            <p class="card-text">Explore active case portfolio, open issue tallies, review statuses, and dossiers.</p>
+            <span class="card-action-link">View Portfolio &rarr;</span>
+          </a>
+
+          <!-- CARD 3: Evidence -->
+          <a href="#evidence" class="action-card">
+            <div class="card-icon-wrap">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="#38bdf8" />
+                <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="#38bdf8" />
+              </svg>
+            </div>
+            <h3 class="card-title">Evidence Workspace</h3>
+            <p class="card-text">Inspect SHA-256 hashes, exact page/paragraph citations, and provenance DNA.</p>
+            <span class="card-action-link">Open Evidence &rarr;</span>
+          </a>
+
+          <!-- CARD 4: Case Twin -->
+          <a href="#twin" class="action-card">
+            <div class="card-icon-wrap">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="5" r="3" stroke="#38bdf8" />
+                <circle cx="6" cy="18" r="3" stroke="#38bdf8" />
+                <circle cx="18" cy="18" r="3" stroke="#38bdf8" />
+                <path d="M12 8v4M7.5 16.5l3.5-3.5M16.5 16.5l-3.5-3.5" stroke="#38bdf8" />
+              </svg>
+            </div>
+            <h3 class="card-title">Case Digital Twin</h3>
+            <p class="card-text">Explore the 3-layer graph: Physical reality, Evidence record, and Legal reasoning.</p>
+            <span class="card-action-link">View Graph &rarr;</span>
+          </a>
+
+          <!-- CARD 5: Attack Case -->
+          <a href="#attack" class="action-card danger-accent">
+            <div class="card-icon-wrap">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2l3 7h7l-5.5 4.5 2 7.5-6.5-4.5-6.5 4.5 2-7.5-5.5-4.5h7z" stroke="#ef4444" />
+              </svg>
+            </div>
+            <h3 class="card-title">Attack Case</h3>
+            <p class="card-text">Execute TARKA-VYUH adversarial gauntlet to expose contradictions and Jenga fragility.</p>
+            <span class="card-action-link">Run Gauntlet &rarr;</span>
+          </a>
+
+          <!-- CARD 6: Case Health -->
+          <a href="#health" class="action-card">
+            <div class="card-icon-wrap">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="#10b981" />
+              </svg>
+            </div>
+            <h3 class="card-title">Case Health</h3>
+            <p class="card-text">Audit evidence coverage, provenance completeness, and open contradiction severity.</p>
+            <span class="card-action-link">Check Health &rarr;</span>
+          </a>
+
+          <!-- CARD 7: Dossier -->
+          <a href="#dossier" class="action-card">
+            <div class="card-icon-wrap">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="#a855f7" />
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="#a855f7" />
+              </svg>
+            </div>
+            <h3 class="card-title">Dossier 2.0</h3>
+            <p class="card-text">Compile comprehensive evidence synthesis, structural diff, and export JSON / Markdown.</p>
+            <span class="card-action-link">Open Dossier &rarr;</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- DEEP REASONING CAPABILITIES SHORTCUT BAR -->
+      <div class="secondary-tools-shelf">
+        <span class="shelf-label">REASONING INSTRUMENTS:</span>
+        <div class="shelf-links">
+          <a href="#bottleneck" class="shelf-btn"><span class="btn-dot amber"></span> Bottleneck & Triage</a>
+          <a href="#deadlines" class="shelf-btn"><span class="btn-dot cyan"></span> Deadline Guardian</a>
+          <a href="#impact" class="shelf-btn"><span class="btn-dot purple"></span> Impact Simulator</a>
+          <a href="#counterfactual" class="shelf-btn"><span class="btn-dot blue"></span> Time Machine</a>
+          <a href="#repair" class="shelf-btn"><span class="btn-dot green"></span> Repair Workbench</a>
+          <a href="#reattack" class="shelf-btn"><span class="btn-dot red"></span> Re-Attack Shield</a>
+          <a href="#governance" class="shelf-btn"><span class="btn-dot blue"></span> UNWIND Governance</a>
+        </div>
+      </div>
+
+      <!-- RECENT CASES SECTION -->
+      <div class="section-container">
+        <div class="section-header">
+          <h2 class="section-title">Recent Cases</h2>
+          <a href="#my-cases" class="header-link">View all 12 cases &rarr;</a>
+        </div>
+
+        <div class="recent-cases-list">
+          <!-- CASE 1 -->
+          <div class="case-card-compact">
+            <div class="case-meta">
+              <span class="case-id mono">CASE-102</span>
+              <span class="badge badge-warning">Review Required</span>
+              <span class="jurisdiction-tag">Pune, India (Commercial)</span>
+            </div>
+            <h4 class="case-subject">Commercial Supply Contract Breach & Liquidated Damages</h4>
+            <div class="case-stats-row">
+              <span class="stat-pill"><strong class="text-amber">7</strong> open issues</span>
+              <span class="stat-pill"><strong>4</strong> exhibits (E17, E22, E30, E31)</span>
+              <span class="stat-pill"><strong class="text-red">1</strong> contradiction</span>
+              <span class="stat-pill">Deadline: <strong>14 days</strong></span>
+            </div>
+            <div class="case-actions">
+              <button class="btn btn-secondary btn-sm" onclick="App.selectCase('CASE-102', 'twin')">Case Twin</button>
+              <button class="btn btn-primary btn-sm" onclick="App.selectCase('CASE-102', 'attack')">Attack Case</button>
+              <button class="btn btn-outline btn-sm" onclick="App.selectCase('CASE-102', 'dossier')">Dossier</button>
+            </div>
           </div>
-          <div class="stepper-arrow">→</div>
 
-          <div class="stepper-node" data-target="sec-twin" data-step="1">
-            <span class="node-num mono">02</span>
-            <span class="node-title">DIGITAL TWIN</span>
-            <span class="node-sub">3-Layer Graph</span>
-            <div class="node-tooltip">Physical, Evidentiary & Legal bipartite ontology</div>
+          <!-- CASE 2 -->
+          <div class="case-card-compact">
+            <div class="case-meta">
+              <span class="case-id mono">CASE-087</span>
+              <span class="badge badge-success">Attack Completed</span>
+              <span class="jurisdiction-tag">N.D. California, US</span>
+            </div>
+            <h4 class="case-subject">Distributed Sensor Network Patent Claim Construction</h4>
+            <div class="case-stats-row">
+              <span class="stat-pill"><strong class="text-amber">2</strong> vulnerabilities</span>
+              <span class="stat-pill"><strong>8</strong> claims analyzed</span>
+              <span class="stat-pill"><strong class="text-green">0</strong> open contradictions</span>
+              <span class="stat-pill">Audit: <strong>Locked</strong></span>
+            </div>
+            <div class="case-actions">
+              <button class="btn btn-secondary btn-sm" onclick="App.selectCase('CASE-087', 'twin')">Case Twin</button>
+              <button class="btn btn-secondary btn-sm" onclick="App.selectCase('CASE-087', 'repair')">Workbench</button>
+              <button class="btn btn-outline btn-sm" onclick="App.selectCase('CASE-087', 'dossier')">Dossier</button>
+            </div>
           </div>
-          <div class="stepper-arrow">→</div>
 
-          <div class="stepper-node" data-target="sec-adversarial" data-step="2">
-            <span class="node-num mono">03</span>
-            <span class="node-title">TARKA-VYUH</span>
-            <span class="node-sub">Attack Gauntlet</span>
-            <div class="node-tooltip">Gauntlet, Jenga fragility & contradiction scan</div>
-          </div>
-          <div class="stepper-arrow">→</div>
-
-          <div class="stepper-node" data-target="sec-causal" data-step="3">
-            <span class="node-num mono">04</span>
-            <span class="node-title">CAUSAL LAB</span>
-            <span class="node-sub">Blast Radius</span>
-            <div class="node-tooltip">DAG counterfactuals & twin comparison</div>
-          </div>
-          <div class="stepper-arrow">→</div>
-
-          <div class="stepper-node" data-target="sec-repair" data-step="4">
-            <span class="node-num mono">05</span>
-            <span class="node-title">AUTO-HEALER</span>
-            <span class="node-sub">Repair Synthesis</span>
-            <div class="node-tooltip">Utility vector optimization & evidence grounding</div>
-          </div>
-          <div class="stepper-arrow">→</div>
-
-          <div class="stepper-node" data-target="sec-reattack" data-step="5">
-            <span class="node-num mono">06</span>
-            <span class="node-title">RE-ATTACK</span>
-            <span class="node-sub">Immunity Shield</span>
-            <div class="node-tooltip">Memory-isolated adversarial validation</div>
-          </div>
-          <div class="stepper-arrow">→</div>
-
-          <div class="stepper-node" data-target="sec-governance" data-step="6">
-            <span class="node-num mono">07</span>
-            <span class="node-title">HUMAN GATE</span>
-            <span class="node-sub">UNWIND Core</span>
-            <div class="node-tooltip">Exclusive human authority & proposal seal</div>
-          </div>
-          <div class="stepper-arrow">→</div>
-
-          <div class="stepper-node" data-target="sec-dossier" data-step="7">
-            <span class="node-num mono">08</span>
-            <span class="node-title">DOSSIER 2.0</span>
-            <span class="node-sub">Audit Record</span>
-            <div class="node-tooltip">Deterministic judicial review report</div>
+          <!-- CASE 3 -->
+          <div class="case-card-compact">
+            <div class="case-meta">
+              <span class="case-id mono">CASE-091</span>
+              <span class="badge badge-info">Evidence Ingested</span>
+              <span class="jurisdiction-tag">London, UK (Commercial)</span>
+            </div>
+            <h4 class="case-subject">Enterprise Software SLA Warranty Claim & Downtime Verification</h4>
+            <div class="case-stats-row">
+              <span class="stat-pill"><strong>3</strong> exhibits registered</span>
+              <span class="stat-pill"><strong class="text-green">SHA-256</strong> verified</span>
+              <span class="stat-pill">Triage: <strong>Medium</strong></span>
+            </div>
+            <div class="case-actions">
+              <button class="btn btn-secondary btn-sm" onclick="App.selectCase('CASE-091', 'evidence')">Evidence</button>
+              <button class="btn btn-primary btn-sm" onclick="App.selectCase('CASE-091', 'attack')">Attack Case</button>
+            </div>
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- LIVE SYSTEM ACTIVITY STREAM -->
-    <section class="activity-stream-section glass-panel">
-      <div class="activity-stream-head">
-        <div class="activity-head-left">
-          <span class="live-pulse-ring"></span>
-          <span class="mono sec-micro-label">LIVE SYSTEM ACTIVITY STREAM</span>
+      <!-- LIVE ACTIVITY FEED PREVIEW -->
+      <div class="section-container">
+        <div class="section-header">
+          <h2 class="section-title">Live System Activity</h2>
           <span class="badge badge-synthetic">SYNTHETIC DEMONSTRATION ACTIVITY</span>
         </div>
-        <span class="mono text-muted text-xs">EVENT BUS: REASONING PIPELINE v1.2</span>
-      </div>
-      <div class="activity-feed" id="activity-feed">
-        <!-- Dynamically animated activity rows -->
-        <div class="activity-row"><span class="a-time mono">09:41:12</span><span class="a-tag cyan mono">INGEST</span><span class="a-msg">Evidence registry initialized · 4 exhibits SHA-256 sealed</span></div>
-        <div class="activity-row"><span class="a-time mono">09:41:13</span><span class="a-tag red mono">CONFLICT</span><span class="a-msg">Temporal contradiction flagged between E17 (12 Mar) and E22 (14 Mar) [-48.0h delta]</span></div>
-        <div class="activity-row"><span class="a-time mono">09:41:14</span><span class="a-tag purple mono">TWIN</span><span class="a-msg">Case Digital Twin snapshot compiled · 3 layers, 14 nodes, 19 edges</span></div>
-        <div class="activity-row"><span class="a-time mono">09:41:15</span><span class="a-tag red mono">GAUNTLET</span><span class="a-msg">TARKA-VYUH attack executed · CLM-30 liquidated damages ($450k) collapsed</span></div>
-        <div class="activity-row"><span class="a-time mono">09:41:16</span><span class="a-tag amber mono">CAUSAL</span><span class="a-msg">Causal blast-radius evaluated · Contract formation stable (Clause 1.1 invariant)</span></div>
-        <div class="activity-row"><span class="a-time mono">09:41:17</span><span class="a-tag green mono">REPAIR</span><span class="a-msg">Auto-Healer synthesized Candidate REP-2026-08 grounded in carrier docket E22</span></div>
-        <div class="activity-row"><span class="a-time mono">09:41:18</span><span class="a-tag cyan mono">RE-ATTACK</span><span class="a-msg">Isolated re-attack completed · Immunity Score 0.92 (Zero regression detected)</span></div>
-        <div class="activity-row active-now"><span class="a-time mono">09:41:19</span><span class="a-tag blue mono">GATE</span><span class="a-msg">UNWIND Core transition to ASK_HUMAN · System paused awaiting human practitioner signature</span></div>
-      </div>
-    </section>
-
-    <!-- 2. FORENSIC EVIDENCE INTELLIGENCE & PROVENANCE DNA -->
-    <section class="cockpit-section" id="sec-evidence">
-      <div class="section-header">
-        <div class="header-left">
-          <span class="section-tag cyan">STAGE 01 // FORENSIC INGESTION</span>
-          <h2 class="section-title">EVIDENCE INTELLIGENCE & PROVENANCE DNA</h2>
-        </div>
-        <div class="header-right">
-          <span class="evidence-stats-pill mono">4 REGISTERED EXHIBITS · 0 PII LEAKS · SHA-256 SEALED</span>
-        </div>
-      </div>
-
-      <div class="evidence-grid">
-        <!-- Exhibit Card E17 -->
-        <article class="evidence-card card-contradicted forensic-card" data-id="E17">
-          <div class="card-scanner-beam"></div>
-          <div class="card-top">
-            <span class="exhibit-id cyan mono">EXHIBIT E17</span>
-            <span class="badge badge-red pulse-red">CONTRADICTED</span>
-          </div>
-          <h3 class="card-title">Vendor Warehouse Shipment Memo</h3>
-          <p class="card-quote">"Consignment dispatched from factory warehouse on 12 March 2026."</p>
-          <div class="card-meta mono">
-            <div><span class="lbl">HASH:</span> <span class="val">e17a4b92c815...</span></div>
-            <div><span class="lbl">ANCHORED:</span> <span class="val">CLM-17 (Dispatch Date)</span></div>
-            <div><span class="lbl">STATUS:</span> <span class="val text-red">Temporal Contradiction (-48h vs E22)</span></div>
-          </div>
-          <button type="button" class="btn btn-xs btn-outline drawer-trigger" data-target="E17">INSPECT PROVENANCE DNA →</button>
-        </article>
-
-        <!-- Exhibit Card E22 -->
-        <article class="evidence-card card-corroborated forensic-card" data-id="E22">
-          <div class="card-scanner-beam"></div>
-          <div class="card-top">
-            <span class="exhibit-id cyan mono">EXHIBIT E22</span>
-            <span class="badge badge-green pulse-green">CORROBORATED</span>
-          </div>
-          <h3 class="card-title">Freight Terminal Acceptance Docket</h3>
-          <p class="card-quote">"Consignment accepted at freight terminal on 14 March 2026 at 09:30."</p>
-          <div class="card-meta mono">
-            <div><span class="lbl">HASH:</span> <span class="val">e22c9f18b341...</span></div>
-            <div><span class="lbl">ANCHORED:</span> <span class="val">CLM-22 (Carrier Custody)</span></div>
-            <div><span class="lbl">STATUS:</span> <span class="val text-green">Independently Verified</span></div>
-          </div>
-          <button type="button" class="btn btn-xs btn-outline drawer-trigger" data-target="E22">INSPECT PROVENANCE DNA →</button>
-        </article>
-
-        <!-- Exhibit Card E30 -->
-        <article class="evidence-card card-loadbearing forensic-card" data-id="E30">
-          <div class="card-scanner-beam"></div>
-          <div class="card-top">
-            <span class="exhibit-id cyan mono">EXHIBIT E30</span>
-            <span class="badge badge-amber pulse-amber">LOAD-BEARING</span>
-          </div>
-          <h3 class="card-title">Commercial Supply Contract Clause 4.2</h3>
-          <p class="card-quote">"Delivery strictly mandated within 48 hours of warehouse dispatch."</p>
-          <div class="card-meta mono">
-            <div><span class="lbl">HASH:</span> <span class="val">e30d12a78f14...</span></div>
-            <div><span class="lbl">ANCHORED:</span> <span class="val">CLM-30 (Liquidated Damages)</span></div>
-            <div><span class="lbl">STATUS:</span> <span class="val text-amber">High Causal Sensitivity</span></div>
-          </div>
-          <button type="button" class="btn btn-xs btn-outline drawer-trigger" data-target="E30">INSPECT PROVENANCE DNA →</button>
-        </article>
-
-        <!-- Exhibit Card E31 -->
-        <article class="evidence-card card-corroborating forensic-card" data-id="E31">
-          <div class="card-scanner-beam"></div>
-          <div class="card-top">
-            <span class="exhibit-id cyan mono">EXHIBIT E31</span>
-            <span class="badge badge-cyan pulse-cyan">REPAIR SUPPORT</span>
-          </div>
-          <h3 class="card-title">Notice of Acceptance & Demurrage Notice</h3>
-          <p class="card-quote">"Contemporaneous notice served upon carrier delivery receipt."</p>
-          <div class="card-meta mono">
-            <div><span class="lbl">HASH:</span> <span class="val">e31a88b49182...</span></div>
-            <div><span class="lbl">ANCHORED:</span> <span class="val">CLM-31 (Notice Complied)</span></div>
-            <div><span class="lbl">STATUS:</span> <span class="val text-cyan">Survives Re-Attack</span></div>
-          </div>
-          <button type="button" class="btn btn-xs btn-outline drawer-trigger" data-target="E31">INSPECT PROVENANCE DNA →</button>
-        </article>
-      </div>
-    </section>
-
-    <!-- 3. DIGITAL TWIN 2.5D 3-LAYER VISUALIZATION -->
-    <section class="cockpit-section" id="sec-twin">
-      <div class="section-header">
-        <div class="header-left">
-          <span class="section-tag purple">STAGE 02 // BIPARTITE GRAPH ONTOLOGY</span>
-          <h2 class="section-title">CASE DIGITAL TWIN — 2.5D MULTI-LAYER GRAPH</h2>
-        </div>
-        <div class="header-right">
-          <span class="twin-fingerprint mono" id="twin-fingerprint">TWIN FINGERPRINT: 6276e0... · SNAPSHOT v1.2</span>
-        </div>
-      </div>
-
-      <div class="twin-workspace glass-panel">
-        <div class="layer-labels-bar">
-          <div class="layer-pill layer-physical" data-layer="1">
-            <span class="dot"></span> 1. PHYSICAL / FACTUAL WORLD
-          </div>
-          <div class="layer-pill layer-evidence" data-layer="2">
-            <span class="dot"></span> 2. EVIDENCE WORLD
-          </div>
-          <div class="layer-pill layer-legal" data-layer="3">
-            <span class="dot"></span> 3. LEGAL REASONING WORLD
-          </div>
-        </div>
-
-        <!-- 2.5D INTERACTIVE SVG TWIN GRAPH WITH NEIGHBORHOOD ISOLATION -->
-        <div class="twin-canvas-container" id="twin-graph-box">
-          <svg id="twin-svg" viewBox="0 0 1000 420" preserveAspectRatio="xMidYMid meet">
-            <defs>
-              <marker id="arrow-supports" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-                <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981"/>
-              </marker>
-              <marker id="arrow-contradicts" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-                <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444"/>
-              </marker>
-              <marker id="arrow-depends" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-                <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8"/>
-              </marker>
-              <!-- Ambient graph glow filter -->
-              <filter id="glow-cyan" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="3" result="blur" />
-                <feComposite in="SourceGraphic" in2="blur" operator="over" />
-              </filter>
-            </defs>
-
-            <!-- Edge Connections -->
-            <g class="graph-edges" id="twin-edges-group">
-              <line class="edge edge-contradict pulse-red" data-from="E17" data-to="E22" x1="220" y1="210" x2="480" y2="210" marker-end="url(#arrow-contradicts)"/>
-              <line class="edge edge-support" data-from="E17" data-to="CLM-17" x1="220" y1="210" x2="220" y2="340" marker-end="url(#arrow-supports)"/>
-              <line class="edge edge-support" data-from="E22" data-to="CLM-22" x1="480" y1="210" x2="480" y2="340" marker-end="url(#arrow-supports)"/>
-              <line class="edge edge-derived" data-from="EVT-DISPATCH" data-to="E17" x1="220" y1="80" x2="220" y2="210" />
-              <line class="edge edge-derived" data-from="EVT-TRANSFER" data-to="E22" x1="480" y1="80" x2="480" y2="210" />
-              <line class="edge edge-depends" data-from="CLM-17" data-to="CLM-30" x1="220" y1="340" x2="740" y2="340" marker-end="url(#arrow-depends)"/>
-              <line class="edge edge-support" data-from="E30" data-to="CLM-30" x1="740" y1="210" x2="740" y2="340" marker-end="url(#arrow-supports)"/>
-            </g>
-
-            <!-- Nodes Layer 1: Physical Events -->
-            <g class="graph-nodes layer-1-nodes" id="layer-1-group">
-              <g class="node-group" data-node="EVT-DISPATCH" transform="translate(220, 80)">
-                <circle r="18" class="node-circle node-physical" />
-                <text y="5" class="node-label">EVT: Dispatch</text>
-                <text y="28" class="node-sublabel">12 Mar 2026</text>
-              </g>
-              <g class="node-group" data-node="EVT-TRANSFER" transform="translate(480, 80)">
-                <circle r="18" class="node-circle node-physical" />
-                <text y="5" class="node-label">EVT: Freight Hub</text>
-                <text y="28" class="node-sublabel">14 Mar 2026</text>
-              </g>
-              <g class="node-group" data-node="EVT-DELIVERY" transform="translate(740, 80)">
-                <circle r="18" class="node-circle node-physical" />
-                <text y="5" class="node-label">EVT: Delivery</text>
-                <text y="28" class="node-sublabel">16 Mar 2026</text>
-              </g>
-            </g>
-
-            <!-- Nodes Layer 2: Evidence Records -->
-            <g class="graph-nodes layer-2-nodes" id="layer-2-group">
-              <g class="node-group" data-node="E17" transform="translate(220, 210)">
-                <rect width="90" height="42" x="-45" y="-21" rx="6" class="node-rect node-evidence conflicted" />
-                <text y="-2" class="node-label">Exhibit E17</text>
-                <text y="14" class="node-sublabel text-red">CONTRADICTED</text>
-              </g>
-              <g class="node-group" data-node="E22" transform="translate(480, 210)">
-                <rect width="90" height="42" x="-45" y="-21" rx="6" class="node-rect node-evidence verified" />
-                <text y="-2" class="node-label">Exhibit E22</text>
-                <text y="14" class="node-sublabel text-green">CORROBORATED</text>
-              </g>
-              <g class="node-group" data-node="E30" transform="translate(740, 210)">
-                <rect width="90" height="42" x="-45" y="-21" rx="6" class="node-rect node-evidence loadbearing" />
-                <text y="-2" class="node-label">Exhibit E30</text>
-                <text y="14" class="node-sublabel text-amber">CLAUSE 4.2</text>
-              </g>
-            </g>
-
-            <!-- Nodes Layer 3: Legal Claims -->
-            <g class="graph-nodes layer-3-nodes" id="layer-3-group">
-              <g class="node-group" data-node="CLM-17" transform="translate(220, 340)">
-                <polygon points="0,-22 24,0 0,22 -24,0" class="node-diamond node-claim fragile" />
-                <text y="-4" class="node-label">CLM-17</text>
-                <text y="12" class="node-sublabel">Dispatch Date</text>
-              </g>
-              <g class="node-group" data-node="CLM-22" transform="translate(480, 340)">
-                <polygon points="0,-22 24,0 0,22 -24,0" class="node-diamond node-claim valid" />
-                <text y="-4" class="node-label">CLM-22</text>
-                <text y="12" class="node-sublabel">Transit Log</text>
-              </g>
-              <g class="node-group" data-node="CLM-30" transform="translate(740, 340)">
-                <polygon points="0,-22 24,0 0,22 -24,0" class="node-diamond node-claim collapse" />
-                <text y="-4" class="node-label">CLM-30</text>
-                <text y="12" class="node-sublabel">Delay Breach ($450k)</text>
-              </g>
-            </g>
-          </svg>
-        </div>
-
-        <div class="twin-legend-row">
-          <span><span class="legend-box green"></span> SUPPORTS</span>
-          <span><span class="legend-box red"></span> CONTRADICTS</span>
-          <span><span class="legend-box cyan"></span> DEPENDS_ON</span>
-          <span class="mono text-muted">Hover any node to isolate dependency neighborhood · Click to inspect</span>
+        <div id="home-activity-stream" class="activity-timeline-feed">
+          <!-- Populated by App.renderActivityFeed() -->
         </div>
       </div>
     </section>
 
-    <!-- 4. TARKA-VYUH ADVERSARIAL ARENA & ATTACK SIMULATION -->
-    <section class="cockpit-section" id="sec-adversarial">
-      <div class="section-header">
-        <div class="header-left">
-          <span class="section-tag red">STAGE 03 // ADVERSARIAL STRESS-TEST</span>
-          <h2 class="section-title">TARKA-VYUH ADVERSARIAL REASONING ARENA</h2>
+    <!-- ============================================================== -->
+    <!-- VIEW 2: + NEW CASE INTAKE (#new-case) -->
+    <!-- ============================================================== -->
+    <section id="view-new-case" class="workspace-view">
+      <div class="workspace-header">
+        <div class="breadcrumb-trail">
+          <a href="#home">Home</a> &gt; <span class="current">New Case Intake</span>
         </div>
-        <div class="header-right">
-          <button type="button" class="btn btn-purple" id="btn-trigger-attack-simulation">
-            <span class="play-icon">⚡</span>
-            <span id="attack-sim-btn-text">RUN ADVERSARIAL ATTACK</span>
+        <h2 class="workspace-title">+ New Case Intake & Evidence Registration</h2>
+        <p class="workspace-desc">Configure dispute parameters, multi-tier jurisdiction, and ingest evidence with cryptographic integrity.</p>
+      </div>
+
+      <div class="intake-wizard-layout">
+        <!-- STEP 1: Case Details & Jurisdiction -->
+        <div class="panel-card intake-step-panel">
+          <div class="step-badge">STEP 1: CASE PARTICULARS & JURISDICTION</div>
+          <form id="new-case-form" onsubmit="App.handleCreateCase(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="intake-case-name">Case Name / Caption</label>
+                <input type="text" id="intake-case-name" class="form-input" placeholder="e.g. Apex Dynamics Ltd. vs Zenith Logistics Ltd." required value="Apex Dynamics Ltd. vs Zenith Logistics Ltd." />
+              </div>
+              <div class="form-group">
+                <label for="intake-case-id">Case Identifier (Unique)</label>
+                <input type="text" id="intake-case-id" class="form-input mono" placeholder="e.g. CASE-103" required value="CASE-103" />
+              </div>
+            </div>
+
+            <div class="form-row three-col">
+              <div class="form-group">
+                <label for="intake-country">Country</label>
+                <select id="intake-country" class="form-input" onchange="App.handleCountryChange(this.value)">
+                  <option value="India" selected>India</option>
+                  <option value="United States">United States</option>
+                  <option value="United Kingdom">United Kingdom</option>
+                  <option value="Singapore">Singapore</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="intake-state">State / Region</label>
+                <select id="intake-state" class="form-input">
+                  <option value="Maharashtra" selected>Maharashtra</option>
+                  <option value="Delhi">Delhi</option>
+                  <option value="Karnataka">Karnataka</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="intake-forum">Court / Forum</label>
+                <input type="text" id="intake-forum" class="form-input" value="District Commercial Court, Pune" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="intake-matter-type">Matter Type / Cause of Action</label>
+                <select id="intake-matter-type" class="form-input">
+                  <option value="Commercial Contract Breach" selected>Commercial Contract Breach (Specific Performance & Damages)</option>
+                  <option value="Employment & Wage Dispute">Employment & Wage Dispute</option>
+                  <option value="Intellectual Property Infringement">Intellectual Property Infringement</option>
+                  <option value="Tenancy & Property Dispute">Tenancy & Property Dispute</option>
+                  <option value="Consumer Protection">Consumer Protection</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="intake-language">Primary Working Language</label>
+                <select id="intake-language" class="form-input">
+                  <option value="English" selected>English</option>
+                  <option value="Marathi">Marathi (मराठी)</option>
+                  <option value="Hindi">Hindi (हिन्दी)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="intake-description">Case Background & Brief Summary</label>
+              <textarea id="intake-description" class="form-textarea" rows="3" placeholder="Provide background summary of the dispute, key transactions, and dates...">Dispute regarding Section 14 Notice of Default issued on 12 March 2026. Plaintiff claims liquidated damages under Clause 8.2; Defendant asserts non-receipt of delivery notice prior to contract termination.</textarea>
+            </div>
+
+            <div class="source-hierarchy-notice">
+              <div class="notice-title">STATUTORY SOURCE HIERARCHY ENFORCED:</div>
+              <ol class="hierarchy-list">
+                <li>Tier 1: Central & State Acts, Official Gazette publications</li>
+                <li>Tier 2: Supreme Court & High Court Precedents (authenticated law reports)</li>
+                <li>Tier 3: Procedural Rules & Commercial Division Practice Directions</li>
+              </ol>
+              <span class="hierarchy-note">Unauthenticated third-party web content is excluded from authoritative reasoning.</span>
+            </div>
+          </form>
+        </div>
+
+        <!-- STEP 2 & 3: Evidence Upload & Processing Pipeline -->
+        <div class="panel-card intake-step-panel">
+          <div class="step-badge">STEP 2: EVIDENCE EXHIBIT UPLOAD</div>
+          <div class="dropzone-area" id="evidence-dropzone" onclick="App.triggerUploadClick()">
+            <div class="dropzone-icon">📁</div>
+            <div class="dropzone-title">Drag & drop case exhibits or browse files</div>
+            <div class="dropzone-sub">Supported formats: PDF, DOCX, TXT, JSON, CSV, PNG, JPG (Max 20 MB / exhibit)</div>
+            <input type="file" id="evidence-file-input" style="display:none;" multiple onchange="App.handleFileSelection(event)" />
+            <button type="button" class="btn btn-outline btn-sm">Select Files</button>
+          </div>
+
+          <!-- Staged files list -->
+          <div class="staged-files-container">
+            <h4 class="staged-heading">Staged Exhibits for Case Intake:</h4>
+            <div id="staged-files-list" class="staged-list">
+              <div class="staged-file-item">
+                <span class="file-icon">📄</span>
+                <span class="file-name mono">Exhibit_E17_Contract_Notice.pdf</span>
+                <span class="file-size mono">1.4 MB</span>
+                <span class="file-status-tag green">READY</span>
+              </div>
+              <div class="staged-file-item">
+                <span class="file-icon">📄</span>
+                <span class="file-name mono">Exhibit_E22_Server_Access_Logs.csv</span>
+                <span class="file-size mono">840 KB</span>
+                <span class="file-status-tag green">READY</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Processing Stage Pipeline -->
+          <div class="processing-pipeline-box">
+            <div class="pipeline-title">INGESTION & AUDIT PIPELINE:</div>
+            <div class="pipeline-stepper" id="intake-pipeline-stepper">
+              <div class="pipeline-step done"><span class="step-dot"></span> Ingestion</div>
+              <div class="pipeline-step done"><span class="step-dot"></span> Security Scan</div>
+              <div class="pipeline-step done"><span class="step-dot"></span> SHA-256 Hash</div>
+              <div class="pipeline-step done"><span class="step-dot"></span> Provenance DNA</div>
+              <div class="pipeline-step active"><span class="step-dot"></span> Twin Extraction</div>
+            </div>
+          </div>
+
+          <div class="wizard-actions">
+            <button type="button" class="btn btn-primary" onclick="App.executeCaseIntake()">Create Case & Ingest Evidence &rarr;</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- VIEW 3: MY CASES PORTFOLIO (#my-cases) -->
+    <!-- ============================================================== -->
+    <section id="view-my-cases" class="workspace-view">
+      <div class="workspace-header">
+        <div class="breadcrumb-trail">
+          <a href="#home">Home</a> &gt; <span class="current">My Cases</span>
+        </div>
+        <div class="header-with-action">
+          <div>
+            <h2 class="workspace-title">Case Portfolio</h2>
+            <p class="workspace-desc">Manage all active and archived legal case files, review progress, and inspect dossiers.</p>
+          </div>
+          <a href="#new-case" class="btn btn-primary btn-sm">+ New Case</a>
+        </div>
+      </div>
+
+      <div class="filter-toolbar">
+        <div class="search-box">
+          <input type="text" class="form-input" placeholder="Search case ID, caption, party, or keyword..." id="cases-search-input" onkeyup="App.filterCases(this.value)" />
+        </div>
+        <div class="filter-pills">
+          <button class="filter-btn active" onclick="App.filterCasesByTag('ALL')">All (4)</button>
+          <button class="filter-btn" onclick="App.filterCasesByTag('REVIEW_REQUIRED')">Review Required (2)</button>
+          <button class="filter-btn" onclick="App.filterCasesByTag('ATTACK_COMPLETED')">Attack Completed (1)</button>
+          <button class="filter-btn" onclick="App.filterCasesByTag('EVIDENCE_INGESTED')">Ingested (1)</button>
+        </div>
+      </div>
+
+      <div class="cases-portfolio-grid" id="portfolio-cases-grid">
+        <!-- Rendered by App.renderPortfolioCases() -->
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- VIEW 4: EVIDENCE WORKSPACE (#evidence) -->
+    <!-- ============================================================== -->
+    <section id="view-evidence" class="workspace-view">
+      <div class="workspace-header">
+        <div class="breadcrumb-trail">
+          <a href="#home">Home</a> &gt; <span class="current">Evidence Workspace</span>
+        </div>
+        <div class="header-with-action">
+          <div>
+            <h2 class="workspace-title">Evidence Intelligence Workspace</h2>
+            <p class="workspace-desc">Cryptographically verified evidence records, source/page citations, and provenance DNA.</p>
+          </div>
+          <span class="badge badge-synthetic">SYNTHETIC EVIDENCE REPOSITORY</span>
+        </div>
+      </div>
+
+      <div class="evidence-workspace-grid">
+        <!-- EVIDENCE LIST -->
+        <div class="panel-card evidence-table-panel">
+          <div class="panel-toolbar">
+            <h3 class="panel-heading">Ingested Exhibits & Registry</h3>
+            <span class="record-count mono">4 EXHIBITS REGISTERED</span>
+          </div>
+          <div class="table-scroll-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Exhibit Name</th>
+                  <th>Source / Category</th>
+                  <th>Date</th>
+                  <th>Integrity (SHA-256)</th>
+                  <th>Exact Citation</th>
+                  <th>Contradictions</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="evidence-table-body">
+                <!-- Populated by App.renderEvidenceTable() -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- EVIDENCE DETAIL INSPECTION DRAWER / CARD -->
+        <div class="panel-card evidence-detail-panel" id="evidence-detail-card">
+          <h3 class="panel-heading">Forensic Exhibit Inspection</h3>
+          <div id="evidence-inspector-content">
+            <div class="inspector-placeholder">
+              Select an exhibit from the table to inspect cryptographic hash, exact page/paragraph references, and provenance DNA.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- VIEW 5: CASE DIGITAL TWIN (#twin) -->
+    <!-- ============================================================== -->
+    <section id="view-twin" class="workspace-view">
+      <div class="workspace-header">
+        <div class="breadcrumb-trail">
+          <a href="#home">Home</a> &gt; <span class="current">Case Digital Twin</span>
+        </div>
+        <div class="header-with-action">
+          <div>
+            <h2 class="workspace-title">Case Digital Twin (3-Layer Graph)</h2>
+            <p class="workspace-desc">Multi-layer representation mapping physical timeline events, documentary exhibits, and legal claims.</p>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="App.runTwinValidation()">Validate Twin Topology</button>
+        </div>
+      </div>
+
+      <div class="twin-workspace-layout">
+        <!-- 3-LAYER VISUALIZER -->
+        <div class="panel-card twin-graph-card">
+          <div class="graph-legend-bar">
+            <span class="legend-item"><span class="legend-dot green"></span> Layer 1: Physical Reality (Timeline Events)</span>
+            <span class="legend-item"><span class="legend-dot cyan"></span> Layer 2: Evidence World (Documents & Telemetry)</span>
+            <span class="legend-item"><span class="legend-dot purple"></span> Layer 3: Legal Reasoning (Claims & Obligations)</span>
+          </div>
+
+          <!-- Interactive 2.5D SVG Graph Canvas -->
+          <div class="twin-svg-container">
+            <svg id="digital-twin-svg" viewBox="0 0 900 480" width="100%" height="480">
+              <!-- Rendered by App.renderDigitalTwinGraph() -->
+            </svg>
+          </div>
+        </div>
+
+        <!-- CLAIM INSPECTOR SIDEBAR -->
+        <div class="panel-card twin-claim-inspector">
+          <h3 class="panel-heading">Claim Node Inspector</h3>
+          <div id="twin-node-details">
+            <div class="inspector-placeholder">
+              Click on any claim or evidence node in the graph above to inspect prerequisites, conflicting exhibits, and downstream blast-radius.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- VIEW 6: ATTACK CASE (TARKA-VYUH) (#attack) -->
+    <!-- ============================================================== -->
+    <section id="view-attack" class="workspace-view">
+      <div class="workspace-header">
+        <div class="breadcrumb-trail">
+          <a href="#home">Home</a> &gt; <span class="current">Attack Case</span>
+        </div>
+        <div class="header-with-action">
+          <div>
+            <h2 class="workspace-title">TARKA-VYUH Adversarial Attack Engine</h2>
+            <p class="workspace-desc">Rigorous adversarial stress-testing exposing temporal contradictions, missing dependencies, and structural fragility.</p>
+          </div>
+          <button id="run-attack-btn" class="btn btn-danger" onclick="App.runAdversarialAttack()">
+            <span class="btn-icon">⚡</span> RUN ADVERSARIAL GAUNTLET
           </button>
         </div>
       </div>
 
-      <div class="adversarial-layout">
-        <!-- ARENA MAIN BOARD -->
-        <div class="arena-board glass-panel" id="adversarial-arena-board">
-          <div class="arena-tri-column">
-            <!-- Left: Case Claims -->
-            <div class="arena-col">
-              <span class="col-head mono">CASE CLAIMS UNDER CHALLENGE</span>
-              <div class="claim-item active-target" id="claim-box-17">
-                <div class="claim-badge mono">CLM-17</div>
-                <div class="claim-text">"Consignment was dispatched from warehouse on 12 March 2026."</div>
-                <div class="claim-grounding text-amber">Grounded solely in unverified manifest (E17)</div>
-              </div>
-              <div class="claim-item fragile-target" id="claim-box-30">
-                <div class="claim-badge mono">CLM-30</div>
-                <div class="claim-text">"Respondent is liable for $450,000 liquidated damages under Clause 4.2."</div>
-                <div class="claim-grounding text-red">High structural dependency on CLM-17 validity</div>
-              </div>
-            </div>
-
-            <!-- Center: Active Attack Vectors -->
-            <div class="arena-col center-col">
-              <span class="col-head mono">ACTIVE ATTACK VECTOR</span>
-              <div class="attack-vector-box pulse-red" id="active-attack-box">
-                <div class="vector-icon">⚡</div>
-                <div class="vector-name">TEMPORAL INCONSISTENCY</div>
-                <div class="vector-desc">
-                  Chronological contradiction between Exhibit E17 (12 March) and Exhibit E22 (14 March). Carrier terminal acceptance date precludes 12 March dispatch claim.
-                </div>
-                <div class="vector-meta mono">
-                  <div>DELTA: <strong>48.0 Hours</strong></div>
-                  <div>SEVERITY: <strong class="text-red">CRITICAL</strong></div>
-                  <div>SURVIVABILITY: <strong>0.14 (FAIL)</strong></div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Right: Adversarial Findings -->
-            <div class="arena-col">
-              <span class="col-head mono">ADVERSARIAL FINDINGS</span>
-              <div class="finding-box fracture-glitch" id="finding-box-main">
-                <div class="finding-tag red">FINDING #ADV-2026-01</div>
-                <div class="finding-title">Primary Breach Ground Collapsed</div>
-                <p class="finding-body">
-                  If respondent proves acceptance was 14 March, Clause 4.2 delivery window cannot be established as breached. Claim for $450,000 liquidated damages is ungrounded without carrier intermediate logs.
-                </p>
-                <div class="finding-footer mono">
-                  <span>RECOMMENDATION:</span> <span class="text-cyan">ROUTE TO REPAIR WORKBENCH</span>
-                </div>
-              </div>
-            </div>
+      <div class="attack-dashboard-layout">
+        <!-- GAUNTLET SUMMARY METRICS -->
+        <div class="metrics-trio-row">
+          <div class="metric-card danger">
+            <span class="metric-label">CRITICAL VULNERABILITIES</span>
+            <span class="metric-num mono" id="attack-vuln-count">1</span>
+            <span class="metric-sub">Dependency Failure Risk</span>
+          </div>
+          <div class="metric-card warning">
+            <span class="metric-label">EVIDENCE CONTRADICTIONS</span>
+            <span class="metric-num mono" id="attack-conflicts-count">2</span>
+            <span class="metric-sub">Exhibits in direct dispute</span>
+          </div>
+          <div class="metric-card info">
+            <span class="metric-label">MISSING PREREQUISITES (VoI)</span>
+            <span class="metric-num mono" id="attack-missing-count">3</span>
+            <span class="metric-sub">Unverified timeline points</span>
           </div>
         </div>
 
-        <!-- JENGA STRUCTURAL FRAGILITY PANEL -->
-        <div class="jenga-panel glass-panel">
-          <div class="panel-head">
-            <span class="mono">JENGA STRUCTURAL DEPENDENCY STACK</span>
-            <span class="badge badge-amber">COLLAPSE RISK: HIGH</span>
-          </div>
-
-          <div class="jenga-stack" id="jenga-stack">
-            <!-- Top Block: Liquidated Damages -->
-            <div class="jenga-block block-top vulnerable" id="block-damages" title="Click to test dependency strain">
-              <span class="block-title">Top: Liquidated Damages Claim ($450,000)</span>
-              <span class="block-sub mono">RESTS ON DISPATCH DATE INTEGRITY</span>
-            </div>
-            <!-- Mid Block: Dispatch Date -->
-            <div class="jenga-block block-mid fractured" id="block-dispatch" title="Click to simulate removing this assumption">
-              <span class="block-title">Mid: Dispatch Date Assumption (12 March)</span>
-              <span class="block-sub mono">⚠️ 48-HOUR CONTRADICTION (E17 vs E22)</span>
-            </div>
-            <!-- Base Block: Contract Validity -->
-            <div class="jenga-block block-base solid" id="block-contract">
-              <span class="block-title">Base: Commercial Supply Agreement Formation</span>
-              <span class="block-sub mono">SOLID · CORROBORATED BY BOTH PARTIES</span>
+        <!-- FINDINGS LIST & JENGA FRAGILITY GAUGE -->
+        <div class="attack-split-layout">
+          <!-- Findings Column -->
+          <div class="panel-card findings-list-panel">
+            <h3 class="panel-heading">Adversarial Findings & Exploit Scenarios</h3>
+            <div id="adversarial-findings-list" class="findings-scroll-list">
+              <!-- Rendered by App.renderAdversarialFindings() -->
             </div>
           </div>
 
-          <div class="jenga-explanation mono">
-            <span class="text-amber">STRUCTURAL ANALYSIS:</span> Removing or conceding the dispatch date assumption collapses the top liquidated damages claim, but leaves the underlying contract formation intact.
+          <!-- Jenga Fragility Column -->
+          <div class="panel-card jenga-panel">
+            <h3 class="panel-heading">Jenga Structural Fragility Stack</h3>
+            <p class="panel-intro">Visualizing reasoning stability. If a foundational claim collapses under adversarial stress, downstream claims fail.</p>
+            <div id="jenga-stack-container" class="jenga-stack">
+              <!-- Rendered by App.renderJengaStack() -->
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 5. CAUSAL BLAST-RADIUS & COUNTERFACTUAL TIME MACHINE -->
-    <section class="cockpit-section" id="sec-causal">
-      <div class="section-header">
-        <div class="header-left">
-          <span class="section-tag cyan">STAGE 04 // COUNTERFACTUAL LAB</span>
-          <h2 class="section-title">CAUSAL BLAST-RADIUS & COUNTERFACTUAL LAB</h2>
+    <!-- ============================================================== -->
+    <!-- VIEW 7: CASE BOTTLENECK & TRIAGE (#bottleneck) -->
+    <!-- ============================================================== -->
+    <section id="view-bottleneck" class="workspace-view">
+      <div class="workspace-header">
+        <div class="breadcrumb-trail">
+          <a href="#home">Home</a> &gt; <span class="current">Bottleneck Analysis & Triage</span>
         </div>
-        <div class="header-right">
-          <span class="badge badge-outline mono">SIMULATION ONLY — NOT AN ADJUDICATION</span>
-        </div>
+        <h2 class="workspace-title">Why Is My Case Stuck? (Bottleneck & Triage Analysis)</h2>
+        <p class="workspace-desc">Surfacing evidentiary logjams, pending human gates, and triage urgency to prevent prolonged review delays.</p>
       </div>
 
-      <div class="causal-workspace glass-panel">
-        <!-- Interactive Counterfactual Timeline Slider -->
-        <div class="counterfactual-time-bar">
-          <div class="time-label-block">
-            <span class="mono sec-micro-label">COUNTERFACTUAL TIME MACHINE:</span>
-            <span class="time-readout mono" id="time-readout">SCENARIO: INTERVENTION (14 MARCH ACCEPTANCE)</span>
-          </div>
-          <div class="timeline-slider-row">
-            <span class="mono text-xs">PAST (12 March Baseline)</span>
-            <input type="range" min="0" max="1" step="1" value="1" class="time-slider" id="counterfactual-slider" />
-            <span class="mono text-xs">PRESENT (14 March Perturbation)</span>
+      <div class="bottleneck-workspace-grid">
+        <!-- Bottlenecks panel -->
+        <div class="panel-card">
+          <h3 class="panel-heading">Detected Evidentiary & Procedural Bottlenecks</h3>
+          <div id="bottlenecks-list" class="bottlenecks-feed">
+            <!-- Populated by App.renderBottlenecks() -->
           </div>
         </div>
 
-        <div class="causal-diff-grid">
-          <!-- Column 1: Should Change -->
-          <div class="diff-card diff-should-change" id="card-should-change">
-            <div class="diff-head text-red">
-              <span class="icon">⚡</span>
-              <span class="title">SHOULD-CHANGE (COLLATERAL IMPACT)</span>
-            </div>
-            <ul class="diff-list">
-              <li>
-                <strong>CLM-30 (Liquidated Damages):</strong>
-                <span class="status-tag text-red">COLLAPSED</span>
-                <p>Contractual 48h breach window cannot be proven without manifest corroboration.</p>
-              </li>
-              <li>
-                <strong>Procedural Notice Period:</strong>
-                <span class="status-tag text-amber">MODIFIED</span>
-                <p>Statutory default notice triggers from 14 March instead of 12 March.</p>
-              </li>
+        <!-- Triage priority panel -->
+        <div class="panel-card">
+          <h3 class="panel-heading">Legal Triage Priority Index</h3>
+          <div id="triage-card-content">
+            <!-- Populated by App.renderTriage() -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- VIEW 8: DEADLINE GUARDIAN (#deadlines) -->
+    <!-- ============================================================== -->
+    <section id="view-deadlines" class="workspace-view">
+      <div class="workspace-header">
+        <div class="breadcrumb-trail">
+          <a href="#home">Home</a> &gt; <span class="current">Deadline Guardian</span>
+        </div>
+        <h2 class="workspace-title">Source-Backed Deadline Guardian</h2>
+        <p class="workspace-desc">Tracking statutory limitation periods, procedural filing dates, and contractual milestones with verifiable provenance.</p>
+      </div>
+
+      <div class="panel-card">
+        <div class="table-scroll-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Dispute / Action</th>
+                <th>Deadline Date</th>
+                <th>Days Remaining</th>
+                <th>Statutory / Contractual Source</th>
+                <th>Exact Citation</th>
+                <th>Verification Status</th>
+              </tr>
+            </thead>
+            <tbody id="deadlines-table-body">
+              <!-- Populated by App.renderDeadlines() -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- VIEW 9: IMPACT SIMULATOR (BLAST RADIUS) (#impact) -->
+    <!-- ============================================================== -->
+    <section id="view-impact" class="workspace-view">
+      <div class="workspace-header">
+        <div class="breadcrumb-trail">
+          <a href="#home">Home</a> &gt; <span class="current">Impact Simulator</span>
+        </div>
+        <h2 class="workspace-title">Causal Blast-Radius & Materiality Simulator</h2>
+        <p class="workspace-desc">Simulate perturbation: "What happens to the legal case if Exhibit E17 is excluded or invalidated?"</p>
+      </div>
+
+      <div class="panel-card">
+        <div class="simulator-controls">
+          <span class="control-label">Perturbation Target:</span>
+          <select id="simulator-target-select" class="form-input mono" onchange="App.handleSimulatorTargetChange(this.value)">
+            <option value="E17" selected>Exhibit E17 (Notice of Default - 12 March 2026)</option>
+            <option value="E22">Exhibit E22 (Server Telemetry & Access Logs)</option>
+            <option value="CLM-30">Claim CLM-30 (Liquidated Damages Under Clause 8.2)</option>
+          </select>
+          <button class="btn btn-primary btn-sm" onclick="App.runBlastSimulation()">Simulate Invalidation Impact</button>
+        </div>
+
+        <div id="simulator-results-panel" class="simulator-results-grid">
+          <!-- Populated by App.renderBlastSimulation() -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- VIEW 10: COUNTERFACTUAL TIME MACHINE (#counterfactual) -->
+    <!-- ============================================================== -->
+    <section id="view-counterfactual" class="workspace-view">
+      <div class="workspace-header">
+        <div class="breadcrumb-trail">
+          <a href="#home">Home</a> &gt; <span class="current">Counterfactual Time Machine</span>
+        </div>
+        <h2 class="workspace-title">Counterfactual Temporal Reasoning Lab</h2>
+        <p class="workspace-desc">Testing hypotheses: "Should the outcome change if delivery occurred on 14 March instead of 12 March?"</p>
+      </div>
+
+      <div class="panel-card">
+        <div class="counterfactual-slider-wrap">
+          <label for="time-machine-slider" class="slider-label">Simulate Timeline Event Shift (Days from Baseline):</label>
+          <input type="range" id="time-machine-slider" min="-7" max="7" value="0" class="time-slider" oninput="App.handleTimeSlider(this.value)" />
+          <div class="slider-ticks">
+            <span>-7 Days (Early Delivery)</span>
+            <span class="mono" id="slider-val-display">0 Days (Baseline: 12 Mar 2026)</span>
+            <span>+7 Days (Late Delivery)</span>
+          </div>
+        </div>
+
+        <div class="counterfactual-columns">
+          <div class="cf-box should-change">
+            <h4 class="cf-heading green">✓ SHOULD CHANGE (Legally Dependent)</h4>
+            <ul id="cf-should-change-list" class="cf-list">
+              <!-- Populated by App.renderCounterfactuals() -->
             </ul>
           </div>
-
-          <!-- Column 2: Should Not Change -->
-          <div class="diff-card diff-should-not-change">
-            <div class="diff-head text-green">
-              <span class="icon">🛡️</span>
-              <span class="title">SHOULD-NOT-CHANGE (INVARIANT STABILITY)</span>
-            </div>
-            <ul class="diff-list">
-              <li>
-                <strong>Contract Formation (Clause 1.1):</strong>
-                <span class="status-tag text-green">STABLE</span>
-                <p>Mutual assent and consideration unaffected by shipping date perturbation.</p>
-              </li>
-              <li>
-                <strong>Goods Acceptance & Delivery:</strong>
-                <span class="status-tag text-green">STABLE</span>
-                <p>Physical handover occurred; only delay attribution is perturbed.</p>
-              </li>
+          <div class="cf-box should-not-change">
+            <h4 class="cf-heading blue">✕ SHOULD NOT CHANGE (Legally Invariant)</h4>
+            <ul id="cf-should-not-change-list" class="cf-list">
+              <!-- Populated by App.renderCounterfactuals() -->
             </ul>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 6. AUTO-HEALER REPAIR & INDEPENDENT RE-ATTACK SHIELD -->
-    <section class="cockpit-section" id="sec-repair">
-      <div class="section-header">
-        <div class="header-left">
-          <span class="section-tag purple">STAGE 05 & 06 // AUTO-HEALER & RE-ATTACK</span>
-          <h2 class="section-title">REPAIR WORKBENCH & INDEPENDENT RE-ATTACK CHAMBER</h2>
+    <!-- ============================================================== -->
+    <!-- VIEW 11: REPAIR WORKBENCH (#repair) -->
+    <!-- ============================================================== -->
+    <section id="view-repair" class="workspace-view">
+      <div class="workspace-header">
+        <div class="breadcrumb-trail">
+          <a href="#home">Home</a> &gt; <span class="current">Repair Workbench</span>
         </div>
-        <div class="header-right">
-          <span class="badge badge-amber mono">HUMAN APPROVAL REQUIRED</span>
-        </div>
+        <h2 class="workspace-title">Auto-Healer Evidence-Grounded Repair Workbench</h2>
+        <p class="workspace-desc">Synthesize evidence-grounded repair candidates that resolve contradictions with zero collateral damage.</p>
       </div>
 
-      <div class="repair-layout">
-        <!-- Repair Workbench -->
-        <div class="repair-workbench glass-panel">
-          <div class="panel-head">
-            <span class="mono">PROPOSED REPAIR CANDIDATE // REP-2026-08</span>
-            <span class="badge badge-cyan">EVIDENCE-GROUNDED</span>
-          </div>
-
-          <div class="repair-diff-table">
-            <div class="diff-row diff-before">
-              <span class="diff-tag text-red mono">BEFORE (FRAGILE):</span>
-              <p>Assert unconditional liquidated damages for failure to deliver within 48h of 12 March dispatch.</p>
-            </div>
-            <div class="diff-arrow-row mono">↓ AUTO-HEALER REPAIR SYNTHESIS ↓</div>
-            <div class="diff-row diff-after">
-              <span class="diff-tag text-green mono">PROPOSED REPAIR:</span>
-              <p>Re-frame claim to demurrage and post-acceptance inspection delay supported by Exhibit E22 and Exhibit E31 notice, conceding departure timing while preserving compensatory claim.</p>
-            </div>
-          </div>
-
-          <div class="utility-vector-grid mono">
-            <div class="util-item">
-              <span class="util-lbl">EVIDENCE GROUNDING</span>
-              <span class="util-val text-green">0.94 / 1.0</span>
-            </div>
-            <div class="util-item">
-              <span class="util-lbl">CONSISTENCY</span>
-              <span class="util-val text-green">0.98 / 1.0</span>
-            </div>
-            <div class="util-item">
-              <span class="util-lbl">CLAIM PRESERVATION</span>
-              <span class="util-val text-cyan">0.88 / 1.0</span>
-            </div>
-            <div class="util-item">
-              <span class="util-lbl">NEW VULNERABILITIES</span>
-              <span class="util-val text-green">0 DETECTED</span>
-            </div>
-          </div>
-
-          <div class="repair-warning-banner">
-            <span class="mono text-amber">GOVERNANCE ENFORCEMENT:</span> This repair proposal cannot be automatically applied to the active case draft. It is held in state <code>ASK_HUMAN</code> pending human legal gate authorization.
-          </div>
-        </div>
-
-        <!-- Independent Re-Attack Chamber -->
-        <div class="reattack-chamber glass-panel" id="sec-reattack">
-          <div class="panel-head">
-            <span class="mono">INDEPENDENT RE-ATTACK ENGINE</span>
-            <span class="badge badge-green">IMMUNITY VERIFIED</span>
-          </div>
-
-          <div class="shield-container" id="shield-container">
-            <div class="shield-graphic pulse-green" id="shield-graphic">
-              <svg viewBox="0 0 24 24" width="64" height="64" fill="none" stroke="currentColor">
-                <path d="M12 2L4 5v6c0 5 3.5 9.5 8 11 4.5-1.5 8-6 8-11V5l-8-3z" fill="rgba(16, 185, 129, 0.15)" stroke="#10b981" stroke-width="2"/>
-                <path d="M9 12l2 2 4-4" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="shield-text">
-              <h3 class="shield-title">REPAIR IMMUNITY: SURVIVED</h3>
-              <p class="shield-body">
-                An isolated zero-memory re-attack instance tested the repair against notice requirement Clause 4.3. The repair was successfully defended using Exhibit E31 contemporaneous notice.
-              </p>
-              <div class="shield-metrics mono">
-                <div>IMMUNITY RATING: <strong class="text-green">0.92 (HIGH)</strong></div>
-                <div>REGRESSION DETECTED: <strong class="text-green">NO</strong></div>
-              </div>
-            </div>
-          </div>
+      <div class="panel-card">
+        <div id="repair-candidates-container">
+          <!-- Populated by App.renderRepairCandidates() -->
         </div>
       </div>
     </section>
 
-    <!-- 7. UNWIND CORE GOVERNANCE & HUMAN LEGAL GATE -->
-    <section class="cockpit-section" id="sec-governance">
-      <div class="section-header">
-        <div class="header-left">
-          <span class="section-tag blue">STAGE 07 // UNWIND GOVERNANCE</span>
-          <h2 class="section-title">UNWIND CORE GOVERNANCE & HUMAN LEGAL GATE</h2>
+    <!-- ============================================================== -->
+    <!-- VIEW 12: INDEPENDENT RE-ATTACK (#reattack) -->
+    <!-- ============================================================== -->
+    <section id="view-reattack" class="workspace-view">
+      <div class="workspace-header">
+        <div class="breadcrumb-trail">
+          <a href="#home">Home</a> &gt; <span class="current">Independent Re-Attack</span>
         </div>
-        <div class="header-right">
-          <span class="status-pill-amber mono">HUMAN DECISION REQUIRED</span>
-        </div>
+        <h2 class="workspace-title">Independent Re-Attack & Immunity Shield</h2>
+        <p class="workspace-desc">"Don't trust the repair. Attack the repair." Rigorous re-attack confirming zero regressions.</p>
       </div>
 
-      <div class="governance-grid">
-        <!-- UNWIND Core State Machine -->
-        <div class="fsm-card glass-panel">
-          <div class="panel-head">
-            <span class="mono">UNWIND CORE STATE MACHINE</span>
-            <span class="mono text-muted">TERMINAL STATE LOCKING ACTIVE</span>
-          </div>
-
-          <div class="fsm-stepper">
-            <div class="fsm-step passed">
-              <span class="step-dot">✓</span>
-              <span class="step-name mono">PROPOSED</span>
-            </div>
-            <div class="fsm-line active"></div>
-            <div class="fsm-step passed">
-              <span class="step-dot">✓</span>
-              <span class="step-name mono">GOVERNANCE REVIEW</span>
-            </div>
-            <div class="fsm-line active"></div>
-            <div class="fsm-step current pulse-amber" id="step-ask-human">
-              <span class="step-dot">●</span>
-              <span class="step-name mono">ASK HUMAN</span>
-            </div>
-            <div class="fsm-line" id="line-approved"></div>
-            <div class="fsm-step pending" id="step-approved">
-              <span class="step-dot">○</span>
-              <span class="step-name mono">HUMAN APPROVED</span>
-            </div>
-            <div class="fsm-line"></div>
-            <div class="fsm-step pending">
-              <span class="step-dot">○</span>
-              <span class="step-name mono">EXECUTED</span>
-            </div>
-          </div>
-
-          <div class="fsm-rule-box mono">
-            <div><span class="text-cyan">GOVERNANCE MANDATE:</span> AI proposes. Governance controls. Human decides.</div>
-            <div><span class="text-cyan">AUTOMATED AGENT LOCKOUT:</span> Autonomous service bots are strictly barred from approving transitions.</div>
-            <div><span class="text-cyan">PROPOSAL IMMUTABILITY:</span> SHA-256 seal <code>8f3e2b...</code> verified against post-approval tampering.</div>
-          </div>
-        </div>
-
-        <!-- Human Legal Gate Action Box -->
-        <div class="human-gate-card glass-panel" id="human-gate-box">
-          <div class="panel-head">
-            <span class="mono">HUMAN LEGAL GATE // SOLE AUTHORITY</span>
-            <span class="badge badge-amber">REVIEWER CREDENTIALED</span>
-          </div>
-
-          <div class="gate-form-area">
-            <div class="gate-meta-row mono">
-              <div>REVIEWER: <strong>human::senior_counsel</strong></div>
-              <div>PROPOSAL: <strong>REP-2026-08</strong></div>
-              <div>HASH SEAL: <strong>e3b0c44298fc1c...</strong></div>
-            </div>
-
-            <p class="gate-prompt">
-              Authorize repair proposal REP-2026-08 to update case claims from unqualified dispatch breach to substantiated demurrage claim:
-            </p>
-
-            <div class="gate-actions-row">
-              <button type="button" class="btn btn-green" id="btn-human-approve">
-                <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor">
-                  <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022z"/>
-                </svg>
-                <span>AUTHORIZE REPAIR (Human Gate)</span>
-              </button>
-              <button type="button" class="btn btn-outline" id="btn-human-reject">
-                <span>REJECT PROPOSAL</span>
-              </button>
-              <button type="button" class="btn btn-outline" id="btn-human-defer">
-                <span>REQUEST FURTHER EVIDENCE</span>
-              </button>
-            </div>
-
-            <div id="gate-action-result" class="gate-result mono" hidden></div>
-          </div>
+      <div class="panel-card">
+        <div id="reattack-shield-container">
+          <!-- Populated by App.renderReAttackShield() -->
         </div>
       </div>
     </section>
 
-    <!-- 8. JUDICIAL REVIEW DOSSIER 2.0 & PROVEN IMPACT -->
-    <section class="cockpit-section" id="sec-dossier">
-      <div class="section-header">
-        <div class="header-left">
-          <span class="section-tag cyan">STAGE 08 // AUDITABLE OUTPUT</span>
-          <h2 class="section-title">JUDICIAL REVIEW DOSSIER 2.0 & PROVEN IMPACT</h2>
+    <!-- ============================================================== -->
+    <!-- VIEW 13: UNWIND GOVERNANCE & HUMAN GATE (#governance) -->
+    <!-- ============================================================== -->
+    <section id="view-governance" class="workspace-view">
+      <div class="workspace-header">
+        <div class="breadcrumb-trail">
+          <a href="#home">Home</a> &gt; <span class="current">UNWIND Governance</span>
         </div>
-        <div class="header-right">
-          <button type="button" class="btn btn-sm btn-cyan" id="btn-view-dossier-full">VIEW FULL DOSSIER</button>
+        <h2 class="workspace-title">UNWIND Core Governance & Human Legal Gate</h2>
+        <p class="workspace-desc">Deterministic lifecycle governance. All consequential mutations require verified human authorization.</p>
+      </div>
+
+      <div class="panel-card">
+        <div class="governance-state-display">
+          <div class="state-step done">PROPOSED</div>
+          <div class="state-arrow">&rarr;</div>
+          <div class="state-step done">GOVERNANCE REVIEW</div>
+          <div class="state-arrow">&rarr;</div>
+          <div class="state-step active pulse-amber">HUMAN LEGAL GATE</div>
+          <div class="state-arrow">&rarr;</div>
+          <div class="state-step locked">GOVERNED EXECUTION</div>
+        </div>
+
+        <div class="human-gate-action-box">
+          <h3 class="gate-heading">Human Legal Review Required</h3>
+          <p class="gate-desc">
+            Proposal <span class="mono bold text-cyan">PROP-REP-01</span> modifies Claim CLM-30 grounding to rely on Corroborating Dispatch Certificate Exhibit E31.
+          </p>
+          <div class="gate-button-row">
+            <button class="btn btn-success" onclick="App.handleGateDecision('APPROVE')">✓ AUTHORIZE & EXECUTE</button>
+            <button class="btn btn-danger" onclick="App.handleGateDecision('REJECT')">✕ REJECT PROPOSAL</button>
+            <button class="btn btn-outline" onclick="App.handleGateDecision('MODIFY')">✎ REQUEST MODIFICATION</button>
+          </div>
+          <div id="gate-audit-receipt" class="audit-receipt-panel" style="display:none;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- VIEW 14: DOSSIER 2.0 (#dossier) -->
+    <!-- ============================================================== -->
+    <section id="view-dossier" class="workspace-view">
+      <div class="workspace-header">
+        <div class="breadcrumb-trail">
+          <a href="#home">Home</a> &gt; <span class="current">Judicial Review Dossier</span>
+        </div>
+        <div class="header-with-action">
+          <div>
+            <h2 class="workspace-title">Judicial Review Dossier 2.0</h2>
+            <p class="workspace-desc">Immutable case synthesis, structural diff history, human review checklist, and verified exports.</p>
+          </div>
+          <div class="export-btn-group">
+            <button class="btn btn-secondary btn-sm" onclick="App.downloadDossierJson()">Download JSON</button>
+            <button class="btn btn-primary btn-sm" onclick="App.downloadDossierMarkdown()">Download Markdown</button>
+          </div>
         </div>
       </div>
 
-      <div class="dossier-impact-grid">
-        <!-- Dossier Preview -->
-        <div class="dossier-preview-card glass-panel">
-          <div class="panel-head">
-            <span class="mono">DOSSIER REPORT // DOS-SYNTHETIC-2026-01</span>
-            <span class="badge badge-green">FINGERPRINT VERIFIED</span>
-          </div>
-          <div class="dossier-tree-preview mono">
-            <div class="dossier-item">├─ 1. Case Identity & Parties (VendorCorp vs BuyerLtd)</div>
-            <div class="dossier-item">├─ 2. Evidence Register (E17, E22, E30, E31 - SHA-256 Verified)</div>
-            <div class="dossier-item">├─ 3. Contradiction Register (48h Temporal Gap Identified)</div>
-            <div class="dossier-item">├─ 4. Causal Blast-Radius (Clause 4.2 Sensitivity Analysis)</div>
-            <div class="dossier-item">├─ 5. Auto-Healer Repair Candidate (REP-2026-08 Grounded)</div>
-            <div class="dossier-item">├─ 6. Independent Re-Attack Report (Immunity 0.92 Defended)</div>
-            <div class="dossier-item">└─ 7. Human Review Checklist (State: ASK_HUMAN Sealed)</div>
-          </div>
-          <div class="dossier-export-actions">
-            <button type="button" class="btn btn-sm btn-outline" id="btn-dl-json">EXPORT JSON</button>
-            <button type="button" class="btn btn-sm btn-outline" id="btn-dl-md">EXPORT MARKDOWN</button>
-          </div>
+      <div class="panel-card">
+        <div id="dossier-content-viewer">
+          <!-- Populated by App.renderDossierViewer() -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- VIEW 15: CASE HEALTH (#health) -->
+    <!-- ============================================================== -->
+    <section id="view-health" class="workspace-view">
+      <div class="workspace-header">
+        <div class="breadcrumb-trail">
+          <a href="#home">Home</a> &gt; <span class="current">Case Health</span>
+        </div>
+        <h2 class="workspace-title">Evidentiary Health & Integrity Audit</h2>
+        <p class="workspace-desc">Comprehensive evidentiary scorecard without fabricated outcome probabilities.</p>
+      </div>
+
+      <div class="health-scorecard-grid" id="health-scorecard-container">
+        <!-- Populated by App.renderCaseHealth() -->
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- VIEW 16: CITIZEN MODE (#citizen) -->
+    <!-- ============================================================== -->
+    <section id="view-citizen" class="workspace-view">
+      <div class="workspace-header">
+        <div class="breadcrumb-trail">
+          <a href="#home">Home</a> &gt; <span class="current">Citizen Mode</span>
+        </div>
+        <h2 class="workspace-title">Access-to-Justice: Citizen Legal Problem Assistant</h2>
+        <p class="workspace-desc">Describe your legal problem in plain language (English, मराठी, हिन्दी). We will help you understand the legal structure, required documents, and verified legal aid.</p>
+      </div>
+
+      <div class="panel-card citizen-intake-card">
+        <label for="citizen-problem-input" class="citizen-input-label">What is your legal issue?</label>
+        <textarea id="citizen-problem-input" class="form-textarea" rows="4" placeholder="e.g. My employer has not paid my salary for three months. What documents do I need to collect? Or: घरमालकाने अनामत रक्कम (deposit) परत केलेली नाही."></textarea>
+
+        <div class="citizen-prompts-row">
+          <span class="prompt-chip" onclick="App.setCitizenPrompt('My employer has not paid my salary for three months despite written reminders.')">Employment / Unpaid Salary</span>
+          <span class="prompt-chip" onclick="App.setCitizenPrompt('घरमालकाने भाडेकरार संपल्यानंतरही ५०,००० अनामत रक्कम परत करण्यास नकार दिला आहे.')">घरमालक / अनामत रक्कम (Marathi)</span>
+          <span class="prompt-chip" onclick="App.setCitizenPrompt('ई-कॉमर्स कंपनीने सदोष लॅपटॉप दिला आणि परतावा (refund) देण्यास नकार दिला.')">खराब वस्तू / परतावा (Hindi)</span>
         </div>
 
-        <!-- Proven Impact Honesty Box -->
-        <div class="impact-honesty-card glass-panel">
-          <div class="panel-head">
-            <span class="mono">PROVEN IMPACT // EPISTEMIC HONESTY</span>
-            <span class="badge badge-synthetic">STATUS: NO REAL DEPLOYMENT YET</span>
-          </div>
-          <div class="impact-stats-grid mono">
-            <div class="stat-box">
-              <span class="s-val">0</span>
-              <span class="s-lbl">REAL USERS</span>
-            </div>
-            <div class="stat-box">
-              <span class="s-val">0</span>
-              <span class="s-lbl">REAL CASES</span>
-            </div>
-            <div class="stat-box">
-              <span class="s-val">0.0</span>
-              <span class="s-lbl">HOURS SAVED</span>
-            </div>
-            <div class="stat-box">
-              <span class="s-val text-green">1,485</span>
-              <span class="s-lbl">REGRESSION TESTS PASS</span>
-            </div>
-          </div>
-          <div class="impact-statement mono">
-            <p>
-              <strong>EPISTEMIC POLICY:</strong> NYAYA-SATYA strictly prohibits manufacturing fake production metrics or fabricating courtroom outcomes. All available benchmarks are classified as <code>SYNTHETIC</code>.
-            </p>
-          </div>
+        <div class="citizen-action-bar">
+          <button class="btn btn-primary" onclick="App.submitCitizenProblem()">Analyze Legal Problem & Get Document Checklist &rarr;</button>
+        </div>
+
+        <div id="citizen-analysis-results" class="citizen-results-box" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- VIEW 17: ACTIVITY TIMELINE (#activity) -->
+    <!-- ============================================================== -->
+    <section id="view-activity" class="workspace-view">
+      <div class="workspace-header">
+        <div class="breadcrumb-trail">
+          <a href="#home">Home</a> &gt; <span class="current">Activity Timeline</span>
+        </div>
+        <h2 class="workspace-title">Audit Log & Chronological Activity Stream</h2>
+        <p class="workspace-desc">Verifiable record of every evidence ingestion, adversarial attack, repair proposal, and governance decision.</p>
+      </div>
+
+      <div class="panel-card">
+        <div id="full-activity-timeline" class="activity-timeline-feed">
+          <!-- Populated by App.renderFullActivityFeed() -->
         </div>
       </div>
     </section>
 
   </main>
 
-  <!-- FORENSIC EVIDENCE DRAWER -->
-  <aside class="forensic-drawer" id="forensic-drawer" aria-hidden="true">
+  <!-- ============================================================== -->
+  <!-- ✦ PERSONAL AI FLOATING ACTION BUTTON (EXACT SPECIFICATION) -->
+  <!-- ============================================================== -->
+  <a id="personal-ai-fab-btn" data-id="personal-ai-floating-btn" class="personal-ai-fab" href="https://frontend-henna-gamma-fhj87crlpp.vercel.app/" target="_blank" rel="noopener noreferrer" title="✦ Personal AI — Open Akash AI in a new browser tab" aria-label="Open Personal AI in a new browser tab">
+    <span class="fab-sparkle" aria-hidden="true">✦</span>
+    <span class="fab-text">✦ Personal AI</span>
+  </a>
+
+  <!-- FORENSIC SLIDE-OVER DRAWER -->
+  <div id="forensic-drawer" class="forensic-drawer" aria-hidden="true">
     <div class="drawer-header">
-      <div class="drawer-title-block">
-        <span class="mono cyan" id="drawer-id-label">EXHIBIT E17</span>
-        <h3 id="drawer-title">Vendor Warehouse Shipment Memo</h3>
-      </div>
-      <button type="button" class="btn-close" id="btn-close-drawer" aria-label="Close drawer">✕</button>
+      <h3 class="drawer-title" id="drawer-title">Forensic Exhibit Inspection</h3>
+      <button class="drawer-close-btn" onclick="App.closeDrawer()" aria-label="Close Inspection Drawer">&times;</button>
     </div>
-
-    <div class="drawer-body">
-      <div class="drawer-section">
-        <span class="sec-label mono">CRYPTOGRAPHIC CHECKSUM</span>
-        <div class="checksum-box mono" id="drawer-hash">
-          e17a4b92c815d73f4094a9712a3d02b85e49f87498c5675c9281a94f0923058a
-        </div>
-      </div>
-
-      <div class="drawer-section">
-        <span class="sec-label mono">PROVENANCE DNA CHAIN</span>
-        <div class="provenance-dna-tree" id="drawer-dna-tree"></div>
-      </div>
-
-      <div class="drawer-section">
-        <span class="sec-label mono">AUTHENTIC EXTRACTED TEXT SPAN</span>
-        <blockquote class="extracted-quote" id="drawer-quote">
-          "Consignment dispatched from factory warehouse on 12 March 2026."
-        </blockquote>
-      </div>
-
-      <div class="drawer-section">
-        <span class="sec-label mono">ANCHORED CLAIMS</span>
-        <div id="drawer-anchored-claims" class="mono text-muted"></div>
-      </div>
+    <div class="drawer-body" id="drawer-body">
+      <!-- Populated dynamically -->
     </div>
-  </aside>
+  </div>
 
-  <!-- FULL DOSSIER MODAL -->
-  <div class="modal-backdrop" id="dossier-modal" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-head">
-        <div>
-          <span class="mono cyan">JUDICIAL REVIEW DOSSIER 2.0</span>
-          <h3>CASE_SYNTHETIC_DEMO_2026</h3>
-        </div>
-        <button type="button" class="btn-close" id="btn-close-modal">✕</button>
+  <!-- COMMAND PALETTE MODAL -->
+  <div id="cmd-palette-modal" class="cmd-palette-modal" aria-hidden="true" style="display:none;">
+    <div class="cmd-palette-dialog">
+      <div class="cmd-input-row">
+        <span class="cmd-search-icon">🔍</span>
+        <input type="text" id="cmd-search-input" class="cmd-input" placeholder="Type a workspace name, exhibit ID, or action..." onkeyup="App.handleCmdSearch(this.value)" />
+        <button class="cmd-close" onclick="App.closeCmdPalette()">&times;</button>
       </div>
-      <div class="modal-body" id="modal-dossier-content"></div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline" id="btn-modal-dl-json">Download JSON</button>
-        <button type="button" class="btn btn-cyan" id="btn-modal-dl-md">Download Markdown</button>
+      <div class="cmd-results" id="cmd-results-list">
+        <!-- Populated dynamically -->
       </div>
     </div>
   </div>
 
-  <!-- COMMAND PALETTE (CTRL+K) -->
-  <div class="palette-backdrop" id="command-palette" aria-hidden="true">
-    <div class="palette-box">
-      <div class="palette-input-row">
-        <span class="palette-icon">⌘</span>
-        <input type="text" id="palette-search" placeholder="Type a command or jump to section..." autocomplete="off" />
-        <kbd class="palette-esc">ESC</kbd>
-      </div>
-      <ul class="palette-results" id="palette-results">
-        <li data-action="goto-evidence"><span>📂 Jump to Evidence Intelligence</span> <kbd>E</kbd></li>
-        <li data-action="goto-twin"><span>🧬 Jump to Case Digital Twin</span> <kbd>T</kbd></li>
-        <li data-action="run-attack"><span>⚔️ Run TARKA-VYUH Attack</span> <kbd>A</kbd></li>
-        <li data-action="goto-causal"><span>⚡ Open Causal Blast-Radius</span> <kbd>C</kbd></li>
-        <li data-action="goto-repair"><span>🔧 Open Repair Workbench</span> <kbd>R</kbd></li>
-        <li data-action="goto-governance"><span>⚖️ Open UNWIND Human Gate</span> <kbd>G</kbd></li>
-        <li data-action="goto-dossier"><span>📄 View Judicial Dossier 2.0</span> <kbd>D</kbd></li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- APPLICATION SCRIPTS -->
-  <script src="/static/app.js?v=10"></script>
+  <!-- SCRIPTS -->
+  <script src="/static/app.js?v=11"></script>
 </body>
 </html>

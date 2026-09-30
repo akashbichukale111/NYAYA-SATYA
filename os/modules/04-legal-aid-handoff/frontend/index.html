@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Legal-Aid Handoff Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1C2B39;
+  --ink-soft:#4A5A68;
+  --paper:#F7F5EF;
+  --paper-raised:#FFFFFF;
+  --line:#DDD7C8;
+  --verified:#3F6B4F;
+  --verified-bg:#E7EEE7;
+  --reported:#5B6E82;
+  --reported-bg:#E8ECF0;
+  --warn:#8A5A20;
+  --warn-bg:#F3E6D3;
+  --conflict:#8C3B32;
+  --conflict-bg:#F3E0DC;
+  --unknown:#736A5A;
+  --unknown-bg:#EEE9DD;
+  --radius:6px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;font-size:14.5px;line-height:1.5}
+h1,h2,h3{font-family:'Source Serif 4',serif;font-weight:600;margin:0 0 .4em 0}
+h1{font-size:1.5rem}
+h2{font-size:1.15rem;color:var(--ink)}
+h3{font-size:0.95rem;text-transform:none;color:var(--ink-soft);font-weight:600}
+code, .mono{font-family:'IBM Plex Mono',monospace;font-size:0.82em}
+a{color:var(--verified)}
+button{font-family:inherit;font-size:0.88rem;cursor:pointer;border-radius:var(--radius);border:1px solid var(--line);background:var(--paper-raised);padding:7px 13px;color:var(--ink)}
+button:hover{border-color:var(--ink-soft)}
+button.primary{background:var(--ink);color:var(--paper-raised);border-color:var(--ink)}
+button.primary:hover{background:#2C3E4F}
+button.danger{color:var(--conflict);border-color:var(--conflict)}
+button:disabled{opacity:.4;cursor:not-allowed}
+input,select,textarea{font-family:inherit;font-size:0.9rem;padding:7px 9px;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper-raised);color:var(--ink);width:100%}
+label{display:block;font-size:0.82rem;color:var(--ink-soft);margin-bottom:4px;font-weight:500}
+.field{margin-bottom:14px}
+
+#app{display:flex;min-height:100vh}
+nav#sidebar{width:220px;flex:none;background:var(--ink);color:#E7E2D4;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+nav#sidebar .brand{padding:0 18px 18px 18px;border-bottom:1px solid #33465A}
+nav#sidebar .brand h1{color:#fff;font-size:1.05rem;margin:0}
+nav#sidebar .brand small{color:#96A5B3;font-size:0.72rem}
+nav#sidebar .tab{display:block;padding:9px 18px;color:#C7CFD6;text-decoration:none;font-size:0.85rem;border-left:3px solid transparent;cursor:pointer}
+nav#sidebar .tab:hover{background:#243646;color:#fff}
+nav#sidebar .tab.active{background:#243646;color:#fff;border-left-color:var(--verified)}
+main{flex:1;padding:26px 34px;max-width:980px}
+
+.topbar{display:flex;align-items:center;gap:12px;margin-bottom:22px;flex-wrap:wrap}
+.topbar select{max-width:340px}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:0.74rem;font-weight:600}
+.b-verified{background:var(--verified-bg);color:var(--verified)}
+.b-reported{background:var(--reported-bg);color:var(--reported)}
+.b-warn{background:var(--warn-bg);color:var(--warn)}
+.b-conflict{background:var(--conflict-bg);color:var(--conflict)}
+.b-unknown{background:var(--unknown-bg);color:var(--unknown)}
+
+.card{background:var(--paper-raised);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.stat{background:var(--paper-raised);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+.stat .n{font-family:'Source Serif 4',serif;font-size:1.7rem;font-weight:600}
+.stat .l{color:var(--ink-soft);font-size:0.8rem}
+
+table{width:100%;border-collapse:collapse;font-size:0.87rem}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
+th{color:var(--ink-soft);font-weight:600;font-size:0.78rem}
+
+.check-pass::before{content:"✓ ";color:var(--verified)}
+.check-fail::before{content:"⚠ ";color:var(--warn)}
+.demo-tag{background:var(--warn-bg);color:var(--warn);padding:2px 7px;border-radius:4px;font-size:0.7rem;font-weight:600;margin-left:8px}
+.sim-tag{background:#EDE7F3;color:#5C4A82;padding:2px 7px;border-radius:4px;font-size:0.7rem;font-weight:600}
+.muted{color:var(--ink-soft)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.divider{border:none;border-top:1px solid var(--line);margin:16px 0}
+.empty{color:var(--ink-soft);font-style:italic;padding:14px 0}
+.note{font-size:0.82rem;color:var(--ink-soft);background:var(--paper);border-left:3px solid var(--line);padding:8px 12px;margin-top:10px}
+ul.plain{list-style:none;padding:0;margin:0}
+ul.plain li{padding:6px 0;border-bottom:1px solid var(--line)}
+ul.plain li:last-child{border-bottom:none}
+</style>
+</head>
+<body>
+<div id="app">
+  <nav id="sidebar">
+    <div class="brand"><h1>Legal-Aid Handoff Engine</h1><small>Carry the case context, not just the case file.</small></div>
+    <div id="tabs"></div>
+  </nav>
+  <main id="main"></main>
+</div>
+
+<script>
+const API = (window.LAHE_API_BASE || "http://127.0.0.1:8000");
+const state = { cases: [], caseId: null, tab: "command-center", handoffId: null };
+
+const TABS = [
+  ["command-center", "Command Center"],
+  ["intake", "Intake"],
+  ["case-context", "Case Context"],
+  ["documents", "Documents"],
+  ["timeline", "Timeline"],
+  ["handoff", "Handoff"],
+  ["context-loss", "Context Loss"],
+  ["privacy", "Privacy"],
+  ["simulate", "Simulate"],
+  ["crash-test", "Crash Test"],
+  ["audit", "Audit"],
+];
+
+async function api(path, opts = {}) {
+  const res = await fetch(API + path, {
+    headers: { "Content-Type": "application/json" },
+    ...opts,
+  });
+  if (!res.ok) {
+    let detail = res.statusText;
+    try { detail = (await res.json()).detail || detail; } catch (e) {}
+    throw new Error(`${res.status}: ${detail}`);
+  }
+  return res.json();
+}
+
+function statusBadge(status) {
+  const map = {
+    VERIFIED: "b-verified", DOCUMENT_SUPPORTED: "b-verified", USER_REPORTED: "b-reported",
+    INFERRED: "b-warn", CONFLICTING: "b-conflict", UNKNOWN: "b-unknown", NOT_PROVIDED: "b-unknown",
+    SUPERSEDED: "b-unknown",
+  };
+  return `<span class="badge ${map[status] || 'b-unknown'}">${status.replace(/_/g," ")}</span>`;
+}
+
+function sensBadge(s) {
+  const map = { PUBLIC: "b-verified", INTERNAL: "b-reported", SENSITIVE: "b-warn", HIGHLY_SENSITIVE: "b-conflict" };
+  return `<span class="badge ${map[s]||'b-unknown'}">${s.replace("_"," ")}</span>`;
+}
+
+function renderSidebar() {
+  const tabsEl = document.getElementById("tabs");
+  tabsEl.innerHTML = TABS.map(([id, label]) =>
+    `<a class="tab ${state.tab===id?'active':''}" onclick="setTab('${id}')">${label}</a>`
+  ).join("");
+}
+
+window.setTab = (id) => { state.tab = id; renderSidebar(); renderMain(); };
+
+async function loadCases() {
+  state.cases = await api("/api/cases");
+  if (!state.caseId && state.cases.length) state.caseId = state.cases[0].id;
+}
+
+async function seedDemo() {
+  await api("/api/demo/seed", { method: "POST" });
+  await loadCases();
+  renderMain();
+}
+
+async function newCase() {
+  const title = prompt("Case title (plain description of the issue):");
+  if (!title) return;
+  const c = await api("/api/cases", { method: "POST", body: JSON.stringify({ title }) });
+  await loadCases();
+  state.caseId = c.id;
+  renderMain();
+}
+
+function topbar() {
+  const options = state.cases.map(c =>
+    `<option value="${c.id}" ${c.id===state.caseId?'selected':''}>${c.title}${c.is_demo? ' [DEMO]':''}</option>`
+  ).join("");
+  return `
+    <div class="topbar">
+      <select id="caseSelect" onchange="onCaseChange(this.value)">${options || '<option>No cases yet</option>'}</select>
+      <button onclick="newCase()">+ New case</button>
+      <button onclick="seedDemo()">Seed demo cases</button>
+    </div>`;
+}
+window.onCaseChange = (id) => { state.caseId = id; state.handoffId = null; renderMain(); };
+
+async function renderMain() {
+  const main = document.getElementById("main");
+  main.innerHTML = `<div class="row"><span class="muted">Loading…</span></div>`;
+  try {
+    await loadCases();
+    let body = topbar();
+    if (state.tab !== "command-center" && !state.caseId) {
+      body += `<div class="card empty">No case selected yet. Create one or seed demo cases above.</div>`;
+      main.innerHTML = body;
+      return;
+    }
+    switch (state.tab) {
+      case "command-center": body += await viewCommandCenter(); break;
+      case "intake": body += await viewIntake(); break;
+      case "case-context": body += await viewCaseContext(); break;
+      case "documents": body += await viewDocuments(); break;
+      case "timeline": body += await viewTimeline(); break;
+      case "handoff": body += await viewHandoff(); break;
+      case "context-loss": body += await viewContextLoss(); break;
+      case "privacy": body += await viewPrivacy(); break;
+      case "simulate": body += await viewSimulate(); break;
+      case "crash-test": body += await viewCrashTest(); break;
+      case "audit": body += await viewAudit(); break;
+    }
+    main.innerHTML = body;
+  } catch (e) {
+    main.innerHTML = topbar() + `<div class="card"><strong>Error:</strong> ${e.message}</div>`;
+  }
+}
+
+// ---------- Command Center ----------
+async function viewCommandCenter() {
+  const cc = await api("/api/command-center");
+  return `
+    <h2>Command Center</h2>
+    <div class="grid">
+      <div class="stat"><div class="n">${cc.active_cases}</div><div class="l">Active cases</div></div>
+      <div class="stat"><div class="n">${cc.pending_handoffs}</div><div class="l">Pending handoffs</div></div>
+      <div class="stat"><div class="n">${cc.clarifications_needed}</div><div class="l">Clarifications needed</div></div>
+      <div class="stat"><div class="n">${cc.context_risks}</div><div class="l">Handoff context risks</div></div>
+      <div class="stat"><div class="n">${cc.unresolved_conflicts}</div><div class="l">Unresolved conflicts</div></div>
+      <div class="stat"><div class="n">${cc.missing_information_cases}</div><div class="l">Cases with gaps</div></div>
+    </div>
+    <div class="card">
+      <h3>Recent handoffs</h3>
+      ${cc.recent_handoffs.length ? `<table><thead><tr><th>Purpose</th><th>Recipient</th><th>State</th><th>Version</th></tr></thead><tbody>
+        ${cc.recent_handoffs.map(h => `<tr><td>${h.purpose}</td><td>${h.recipient_role}</td><td>${statusBadge(h.state)}</td><td>v${h.current_version_number}</td></tr>`).join("")}
+      </tbody></table>` : `<div class="empty">No handoffs yet.</div>`}
+    </div>
+    <div class="card">
+      <h3>Upcoming deadlines</h3>
+      ${cc.upcoming_deadlines.length ? `<ul class="plain">${cc.upcoming_deadlines.map(d=>`<li>${d.description} — <span class="muted">${d.due_date||'no date on file'}</span></li>`).join("")}</ul>` : `<div class="empty">None on file.</div>`}
+    </div>
+  `;
+}
+
+// ---------- Intake ----------
+async function viewIntake() {
+  return `
+    <h2>Citizen Intake</h2>
+    <p class="muted">Plain-language guided intake. Nothing here is presented as a legal conclusion — each answer is stored as USER_REPORTED until a document or reviewer confirms it.</p>
+    <div class="card">
+      <div class="field"><label>1. What happened?</label><textarea id="in_what" rows="3" placeholder="Tell us what happened, in your own words."></textarea></div>
+      <div class="field"><label>2. Who is involved? (comma-separated names)</label><input id="in_who" placeholder="e.g. landlord Mr. Sharma, myself"/></div>
+      <div class="field"><label>3. When did it happen? (date, if known)</label><input id="in_when" type="date"/></div>
+      <div class="field"><label>4. What has happened since?</label><textarea id="in_since" rows="2" placeholder="Anything you've done or that has changed since."></textarea></div>
+      <div class="field"><label>5. Is there a deadline or hearing coming up?</label><input id="in_deadline" placeholder="Describe the deadline or hearing"/></div>
+      <div class="field"><label>Deadline date (if known)</label><input id="in_deadline_date" type="date"/></div>
+      <div class="field"><label>6. What help do you need?</label><input id="in_help" placeholder="What outcome are you hoping for?"/></div>
+      <button class="primary" onclick="submitIntake()">Submit intake</button>
+      <div id="intakeMsg"></div>
+    </div>
+  `;
+}
+window.submitIntake = async () => {
+  const who = document.getElementById("in_who").value.split(",").map(s=>s.trim()).filter(Boolean);
+  const body = {
+    what_happened: document.getElementById("in_what").value || null,
+    who_is_involved: who.length ? who : null,
+    when_it_happened: document.getElementById("in_when").value || null,
+    what_has_happened_since: document.getElementById("in_since").value || null,
+    deadline_or_hearing: document.getElementById("in_deadline").value || null,
+    deadline_date: document.getElementById("in_deadline_date").value || null,
+    requested_help: document.getElementById("in_help").value || null,
+  };
+  await api(`/api/cases/${state.caseId}/intake`, { method: "POST", body: JSON.stringify(body) });
+  document.getElementById("intakeMsg").innerHTML = `<div class="note">Saved. See Case Context for the structured result.</div>`;
+};
+
+// ---------- Case Context ----------
+async function viewCaseContext() {
+  const [facts, timeline, deadlines, questions, conflicts, missing, completeness] = await Promise.all([
+    api(`/api/cases/${state.caseId}/facts`),
+    api(`/api/cases/${state.caseId}/timeline`),
+    api(`/api/cases/${state.caseId}/deadlines`),
+    api(`/api/cases/${state.caseId}/questions`),
+    api(`/api/cases/${state.caseId}/conflicts`),
+    api(`/api/cases/${state.caseId}/missing-information`),
+    api(`/api/cases/${state.caseId}/completeness`),
+  ]);
+  return `
+    <h2>Case Context</h2>
+    <div class="card">
+      <h3>Intake completeness</h3>
+      <div class="grid">
+        ${Object.entries(completeness).map(([k,v]) => `<div class="stat"><div class="n" style="font-size:1rem">${v}</div><div class="l">${k.replace(/_/g," ")}</div></div>`).join("")}
+      </div>
+    </div>
+    <div class="card">
+      <h3>Facts</h3>
+      ${facts.length ? `<table><thead><tr><th>Label</th><th>Statement</th><th>Status</th><th>Sensitivity</th></tr></thead><tbody>
+        ${facts.map(f=>`<tr><td class="mono">${f.label}</td><td>${f.statement}</td><td>${statusBadge(f.status)}</td><td>${sensBadge(f.sensitivity)}</td></tr>`).join("")}
+      </tbody></table>` : `<div class="empty">No facts recorded yet — submit Intake first.</div>`}
+    </div>
+    <div class="card">
+      <h3>Unresolved conflicts <button onclick="recomputeConflicts()">Recompute</button></h3>
+      ${conflicts.filter(c=>!c.resolved).length ? `<ul class="plain">${conflicts.filter(c=>!c.resolved).map(c=>`<li>${statusBadge('CONFLICTING')} <strong>${c.type.replace(/_/g," ")}</strong> — ${c.description}</li>`).join("")}</ul>` : `<div class="empty">No conflicts detected.</div>`}
+    </div>
+    <div class="card">
+      <h3>Missing information</h3>
+      ${missing.length ? `<table><thead><tr><th>Item</th><th>Why needed</th><th>Urgency</th></tr></thead><tbody>
+        ${missing.map(m=>`<tr><td>${m.item}</td><td class="muted">${m.why_needed}</td><td>${statusBadge(m.urgency==='high'?'CONFLICTING':m.urgency==='medium'?'INFERRED':'UNKNOWN')}</td></tr>`).join("")}
+      </tbody></table>` : `<div class="empty">Nothing flagged as missing.</div>`}
+    </div>
+    <div class="card">
+      <h3>Deadlines</h3>
+      ${deadlines.length ? `<ul class="plain">${deadlines.map(d=>`<li>${d.description} — <strong>${d.due_date||'NOT_PROVIDED'}</strong></li>`).join("")}</ul>` : `<div class="empty">None on file.</div>`}
+    </div>
+  `;
+}
+window.recomputeConflicts = async () => { await api(`/api/cases/${state.caseId}/conflicts/recompute`, {method:"POST"}); renderMain(); };
+
+// ---------- Documents ----------
+async function viewDocuments() {
+  const docs = await api(`/api/cases/${state.caseId}/documents`);
+  return `
+    <h2>Documents</h2>
+    <div class="card">
+      <input type="file" id="docFile"/>
+      <button class="primary" onclick="uploadDoc()">Upload</button>
+      <div id="uploadMsg"></div>
+    </div>
+    <div class="card">
+      ${docs.length ? `<table><thead><tr><th>Filename</th><th>Extraction</th><th>OCR status</th><th>Sensitivity</th></tr></thead><tbody>
+        ${docs.map(d=>`<tr><td>${d.filename}</td><td class="mono">${d.extraction_method}</td><td class="mono">${d.ocr_status}</td><td>${sensBadge(d.sensitivity)}</td></tr>`).join("")}
+      </tbody></table>` : `<div class="empty">No documents uploaded yet.</div>`}
+    </div>
+  `;
+}
+window.uploadDoc = async () => {
+  const input = document.getElementById("docFile");
+  if (!input.files.length) return;
+  const fd = new FormData();
+  fd.append("file", input.files[0]);
+  const res = await fetch(`${API}/api/cases/${state.caseId}/documents`, { method: "POST", body: fd });
+  const data = await res.json();
+  document.getElementById("uploadMsg").innerHTML = data.prompt_injection_pattern_detected
+    ? `<div class="note">⚠ Possible prompt-injection pattern detected in this document's text. It will be treated as data only, never as instructions.</div>`
+    : `<div class="note">Uploaded.</div>`;
+  renderMain();
+};
+
+// ---------- Timeline ----------
+async function viewTimeline() {
+  const events = await api(`/api/cases/${state.caseId}/timeline`);
+  return `
+    <h2>Timeline</h2>
+    <div class="card">
+      ${events.length ? `<ul class="plain">${events.map(e=>`<li><span class="mono">${e.date}</span> — ${e.description} ${statusBadge(e.source_type)}</li>`).join("")}</ul>` : `<div class="empty">No timeline events yet.</div>`}
+    </div>
+  `;
+}
+
+// ---------- Handoff ----------
+async function viewHandoff() {
+  const handoffs = await api(`/api/cases/${state.caseId}/handoffs`);
+  if (!state.handoffId && handoffs.length) state.handoffId = handoffs[0].id;
+  let detail = "";
+  if (state.handoffId) {
+    const d = await api(`/api/cases/${state.caseId}/handoffs/${state.handoffId}`);
+    const v = d.versions[d.versions.length - 1];
+    const checks = v.quality_checks || {};
+    detail = `
+      <div class="card">
+        <h3>${d.handoff.purpose} → ${d.handoff.recipient_role} ${statusBadge(d.handoff.state)}</h3>
+        <p class="muted">Version ${v.version_number} of ${d.versions.length}. ${v.acknowledged ? "Acknowledged." : "Awaiting acknowledgement."}</p>
+        <h3>Quality checklist</h3>
+        <ul class="plain">
+          ${Object.entries(checks).filter(([k])=>k!=="overall").map(([k,c])=>`<li class="${c.pass?'check-pass':'check-fail'}">${k.replace(/_/g," ")}: ${c.detail}</li>`).join("")}
+        </ul>
+        <p><strong>Overall: ${checks.overall}</strong></p>
+        ${(v.risk_flags||[]).length ? `<h3>Handoff context risks</h3><ul class="plain">${v.risk_flags.map(r=>`<li>⚠ <strong>${r.risk.replace(/_/g," ")}</strong> — ${r.detail}</li>`).join("")}</ul>` : ""}
+        ${(v.excluded_field_notes||[]).length ? `<h3>Excluded fields (sensitivity scoping)</h3><ul class="plain">${v.excluded_field_notes.map(n=>`<li><span class="mono">${n.field}</span> — ${n.reason}</li>`).join("")}</ul>` : ""}
+        <div class="divider"></div>
+        <div class="row">
+          <button onclick="approveHandoff()">Approve</button>
+          <button onclick="transferHandoff()">Transfer</button>
+          <button onclick="ackHandoff('ACKNOWLEDGE')">Acknowledge</button>
+          <button onclick="ackHandoff('REQUEST_CLARIFICATION')">Request clarification</button>
+        </div>
+        <div id="handoffMsg"></div>
+        <div class="divider"></div>
+        <h3>Open a clarification</h3>
+        <div class="row"><input id="clarQ" placeholder="What does the receiver need to know?"/><button onclick="fileClarification()">Ask</button></div>
+        <div id="clarList"></div>
+      </div>
+    `;
+    await renderClarifications(d);
+  }
+  const handoffOptions = handoffs.map(h => `<option value="${h.id}" ${h.id===state.handoffId?'selected':''}>${h.purpose} → ${h.recipient_role} (v${h.current_version_number})</option>`).join("");
+  return `
+    <h2>Handoff</h2>
+    <div class="card">
+      <h3>Generate a new handoff</h3>
+      <div class="row">
+        <input id="ho_purpose" placeholder="Purpose, e.g. Advocate Review" style="max-width:220px"/>
+        <select id="ho_recipient" style="max-width:180px">
+          <option value="LEGAL_AID_WORKER">Legal Aid Worker</option>
+          <option value="PARALEGAL">Paralegal</option>
+          <option value="ADVOCATE">Advocate</option>
+          <option value="REVIEWER">Reviewer</option>
+        </select>
+        <button class="primary" onclick="createHandoff()">Generate packet</button>
+      </div>
+    </div>
+    ${handoffs.length ? `<div class="card row">
+        <label style="margin:0">Existing handoffs:</label>
+        <select onchange="onHandoffChange(this.value)">${handoffOptions}</select>
+      </div>` : ""}
+    ${detail || `<div class="card empty">No handoffs generated for this case yet.</div>`}
+  `;
+}
+window.onHandoffChange = (id) => { state.handoffId = id; renderMain(); };
+window.createHandoff = async () => {
+  const purpose = document.getElementById("ho_purpose").value || "Initial Legal-Aid Review";
+  const recipient_role = document.getElementById("ho_recipient").value;
+  const r = await api(`/api/cases/${state.caseId}/handoffs`, { method: "POST",
+    body: JSON.stringify({ purpose, recipient_role, sender_role: "LEGAL_AID_WORKER" }) });
+  state.handoffId = r.handoff.id;
+  renderMain();
+};
+window.approveHandoff = async () => {
+  await api(`/api/cases/${state.caseId}/handoffs/${state.handoffId}/approve`, { method: "POST",
+    body: JSON.stringify({ approved_by_role: "LEGAL_AID_WORKER", decision: "APPROVE" }) });
+  renderMain();
+};
+window.transferHandoff = async () => {
+  try {
+    await api(`/api/cases/${state.caseId}/handoffs/${state.handoffId}/transfer`, { method: "POST" });
+  } catch(e) { alert(e.message); }
+  renderMain();
+};
+window.ackHandoff = async (action) => {
+  await api(`/api/cases/${state.caseId}/handoffs/${state.handoffId}/acknowledge`, { method: "POST",
+    body: JSON.stringify({ action }) });
+  renderMain();
+};
+window.fileClarification = async () => {
+  const q = document.getElementById("clarQ").value;
+  if (!q) return;
+  await api(`/api/cases/${state.caseId}/handoffs/${state.handoffId}/clarify`, { method: "POST",
+    body: JSON.stringify({ question: q }) });
+  renderMain();
+};
+async function renderClarifications(d) {
+  const v = d.versions[d.versions.length - 1];
+  // clarifications aren't a dedicated list endpoint; show a note pointing to audit for full trail
+  document.getElementById("clarList") && (document.getElementById("clarList").innerHTML =
+    `<div class="note">Clarification responses generate a new handoff version automatically. See Audit for the full history, or Context Loss to compare versions.</div>`);
+}
+
+// ---------- Context Loss ----------
+async function viewContextLoss() {
+  const handoffs = await api(`/api/cases/${state.caseId}/handoffs`);
+  if (!handoffs.length) return `<h2>Context Loss</h2><div class="card empty">Generate a handoff first.</div>`;
+  if (!state.handoffId) state.handoffId = handoffs[0].id;
+  const loss = await api(`/api/cases/${state.caseId}/handoffs/${state.handoffId}/context-loss`);
+  let diffHtml = "";
+  const h = await api(`/api/cases/${state.caseId}/handoffs/${state.handoffId}`);
+  if (h.versions.length > 1) {
+    const from = h.versions[h.versions.length-2].version_number, to = h.versions[h.versions.length-1].version_number;
+    const diff = await api(`/api/cases/${state.caseId}/handoffs/${state.handoffId}/diff?from_version=${from}&to_version=${to}`);
+    diffHtml = `
+      <div class="card">
+        <h3>Version diff: v${from} → v${to} (Time Machine)</h3>
+        <div class="grid">
+          <div><strong>Facts added</strong><ul class="plain">${diff.facts.added.map(f=>`<li>${f.label}</li>`).join("")||'<li class="empty">none</li>'}</ul></div>
+          <div><strong>Facts removed</strong><ul class="plain">${diff.facts.removed.map(f=>`<li>${f.label}</li>`).join("")||'<li class="empty">none</li>'}</ul></div>
+          <div><strong>Facts preserved</strong><ul class="plain">${diff.facts.preserved.map(f=>`<li>${f.label}</li>`).join("")||'<li class="empty">none</li>'}</ul></div>
+        </div>
+      </div>`;
+  }
+  return `
+    <h2>Context Loss Engine</h2>
+    <div class="card">
+      <h3>Source case context vs. handoff v${loss.handoff_version} ${loss.context_loss_detected ? '<span class="badge b-conflict">CONTEXT LOSS DETECTED</span>' : '<span class="badge b-verified">NO LOSS DETECTED</span>'}</h3>
+      <div class="grid">
+        <div><strong>Facts preserved (${loss.facts.preserved.length}/${loss.facts.total_source})</strong><ul class="plain">${loss.facts.preserved.map(f=>`<li>${f.label}</li>`).join("")||'<li class="empty">none</li>'}</ul></div>
+        <div><strong>Facts lost (${loss.facts.lost.length})</strong><ul class="plain">${loss.facts.lost.map(f=>`<li>${f.label} — <span class="muted">${f.reason}</span></li>`).join("")||'<li class="empty">none</li>'}</ul></div>
+        <div><strong>Documents lost (${loss.documents.lost.length}/${loss.documents.total_source})</strong><ul class="plain">${loss.documents.lost.map(f=>`<li>${f.label}</li>`).join("")||'<li class="empty">none</li>'}</ul></div>
+      </div>
+    </div>
+    ${diffHtml}
+  `;
+}
+
+// ---------- Privacy ----------
+async function viewPrivacy() {
+  const role = state._privacyRole || "PARALEGAL";
+  const data = await api(`/api/cases/${state.caseId}/privacy-explain?role=${role}`);
+  return `
+    <h2>Privacy Simulator</h2>
+    <p class="muted">"Why is this information visible?" — click a role to see the access decision for every field.</p>
+    <div class="card row">
+      <label style="margin:0">Recipient role:</label>
+      <select onchange="setPrivacyRole(this.value)">
+        ${["CITIZEN","PARALEGAL","LEGAL_AID_WORKER","ADVOCATE","REVIEWER","ADMINISTRATOR"].map(r=>`<option value="${r}" ${r===role?'selected':''}>${r.replace(/_/g," ")}</option>`).join("")}
+      </select>
+    </div>
+    <div class="card">
+      <h3>Facts</h3>
+      <table><thead><tr><th>Field</th><th>Sensitivity</th><th>Permission</th><th>Reason</th></tr></thead><tbody>
+        ${data.facts.map(f=>`<tr><td class="mono">${f.field}</td><td>${sensBadge(f.sensitivity)}</td><td>${f.permission==='ALLOWED'?'<span class="badge b-verified">ALLOWED</span>':'<span class="badge b-conflict">RESTRICTED</span>'}</td><td class="muted">${f.reason}</td></tr>`).join("")}
+      </tbody></table>
+    </div>
+    <div class="card">
+      <h3>Documents</h3>
+      <table><thead><tr><th>File</th><th>Sensitivity</th><th>Permission</th></tr></thead><tbody>
+        ${data.documents.map(f=>`<tr><td>${f.field}</td><td>${sensBadge(f.sensitivity)}</td><td>${f.permission==='ALLOWED'?'<span class="badge b-verified">ALLOWED</span>':'<span class="badge b-conflict">RESTRICTED</span>'}</td></tr>`).join("")}
+      </tbody></table>
+    </div>
+  `;
+}
+window.setPrivacyRole = (r) => { state._privacyRole = r; renderMain(); };
+
+// ---------- Simulate ----------
+async function viewSimulate() {
+  const facts = await api(`/api/cases/${state.caseId}/facts`);
+  return `
+    <h2>Context Loss Simulator</h2>
+    <p class="muted">Preview what a receiver would see — nothing here is saved or sent.</p>
+    <div class="card">
+      <div class="field"><label>Recipient role</label>
+        <select id="sim_role">${["CITIZEN","PARALEGAL","LEGAL_AID_WORKER","ADVOCATE"].map(r=>`<option value="${r}">${r.replace(/_/g," ")}</option>`).join("")}</select>
+      </div>
+      <div class="field"><label>Facts to hypothetically remove</label>
+        ${facts.map(f=>`<label style="font-weight:400"><input type="checkbox" class="simfact" value="${f.id}" style="width:auto;display:inline-block;margin-right:6px"/>${f.label}</label>`).join("<br/>") || '<span class="empty">No facts on this case yet.</span>'}
+      </div>
+      <button class="primary" onclick="runSimulation()">Simulate receiver view</button>
+    </div>
+    <div id="simResult"></div>
+  `;
+}
+window.runSimulation = async () => {
+  const role = document.getElementById("sim_role").value;
+  const exclude = Array.from(document.querySelectorAll(".simfact:checked")).map(el=>el.value);
+  const r = await api(`/api/cases/${state.caseId}/simulate`, { method: "POST",
+    body: JSON.stringify({ recipient_role: role, exclude_fact_ids: exclude }) });
+  document.getElementById("simResult").innerHTML = `
+    <div class="card"><span class="sim-tag">SIMULATION</span>
+      <h3 style="margin-top:10px">Receiver (${role}) would see</h3>
+      <ul class="plain">${r.receiver_would_see.facts.map(f=>`<li>${f.label} ${statusBadge(f.status)}</li>`).join("")||'<li class="empty">nothing</li>'}</ul>
+      <h3>Receiver would miss</h3>
+      <ul class="plain">${r.receiver_would_miss.facts.map(f=>`<li>${f.label} — <span class="muted">${f.reason}</span></li>`).join("")||'<li class="empty">nothing</li>'}</ul>
+    </div>`;
+};
+
+// ---------- Crash Test ----------
+async function viewCrashTest() {
+  return `
+    <h2>Handoff Crash Test</h2>
+    <p class="muted">Runs adversarial mutations against the handoff engine and confirms each is caught.</p>
+    <div class="card"><button class="primary" onclick="runCrashTest()">Run crash test</button><div id="crashResult"></div></div>
+  `;
+}
+window.runCrashTest = async () => {
+  const r = await api(`/api/cases/${state.caseId}/crash-test`, { method: "POST" });
+  document.getElementById("crashResult").innerHTML = `
+    <table><thead><tr><th>Mutation</th><th>Expected</th><th>Result</th></tr></thead><tbody>
+      ${r.map(t=>`<tr><td class="mono">${t.mutation}</td><td class="muted">${t.expected}</td><td>${t.result==='PASS'?'<span class="badge b-verified">PASS</span>':'<span class="badge b-conflict">FAIL</span>'}</td></tr>`).join("")}
+    </tbody></table>`;
+};
+
+// ---------- Audit ----------
+async function viewAudit() {
+  const events = await api(`/api/cases/${state.caseId}/audit`);
+  const runs = await api(`/api/cases/${state.caseId}/agent-runs`);
+  return `
+    <h2>Audit Trail</h2>
+    <div class="card">
+      ${events.length ? `<table><thead><tr><th>Time</th><th>Event</th><th>Role</th><th>Result</th></tr></thead><tbody>
+        ${events.map(e=>`<tr><td class="mono muted">${e.created_at.slice(0,19).replace("T"," ")}</td><td>${e.event.replace(/_/g," ")}</td><td>${e.role||""}</td><td>${e.result}</td></tr>`).join("")}
+      </tbody></table>` : `<div class="empty">No audit events yet.</div>`}
+    </div>
+    <div class="card">
+      <h3>Agent runs</h3>
+      ${runs.length ? `<table><thead><tr><th>Agent</th><th>Provider</th><th>Output</th><th>Latency</th></tr></thead><tbody>
+        ${runs.map(r=>`<tr><td>${r.agent_name}</td><td class="mono">${r.provider}</td><td class="muted">${r.output_summary}</td><td>${r.latency_ms}ms</td></tr>`).join("")}
+      </tbody></table>` : `<div class="empty">No agent runs yet.</div>`}
+    </div>
+  `;
+}
+
+renderSidebar();
+renderMain();
+</script>
+</body>
+</html>

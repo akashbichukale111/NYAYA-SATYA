@@ -1,0 +1,53 @@
+version: "3.9"
+
+# Spark Personal OS — local orchestration.
+# Default profile runs DEMO mode (SQLite, no API keys, seeded fictional data).
+# Set DATABASE_URL to the postgres service below to switch to Postgres.
+
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      APP_NAME: "Spark Personal OS"
+      DEMO_MODE: "true"
+      DATABASE_URL: "sqlite:///./data/spark.db"
+      JWT_SECRET_KEY: "dev-secret-change-me-in-production"
+      JWT_ALGORITHM: "HS256"
+      JWT_EXPIRE_MINUTES: "720"
+      LLM_PROVIDER: "mock"
+      CORS_ORIGINS: '["http://localhost:5173","http://localhost:3000"]'
+    volumes:
+      - backend_data:/app/data
+    command: >
+      sh -c "python -m app.db.seed && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_BASE_URL: "http://localhost:8000"
+    depends_on:
+      - backend
+    command: npm run dev -- --host 0.0.0.0
+
+  # Optional: switch DATABASE_URL above to point here for Postgres instead of SQLite.
+  postgres:
+    image: postgres:16-alpine
+    profiles: ["postgres"]
+    environment:
+      POSTGRES_USER: spark
+      POSTGRES_PASSWORD: spark
+      POSTGRES_DB: spark
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  backend_data:
+  postgres_data:

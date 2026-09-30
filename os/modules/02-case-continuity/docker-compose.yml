@@ -1,0 +1,21 @@
+services:
+  case-continuity-engine:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:////data/case_continuity.db
+      - UPLOAD_DIR=/data/uploads
+      - LLM_PROVIDER=${LLM_PROVIDER:-mock}
+      - LLM_API_KEY=${LLM_API_KEY:-}
+      - LLM_MODEL=${LLM_MODEL:-claude-sonnet-4-6}
+      - LLM_BASE_URL=${LLM_BASE_URL:-https://api.anthropic.com}
+      - APP_ENV=${APP_ENV:-demo}
+      - CORS_ORIGINS=${CORS_ORIGINS:-*}
+    volumes:
+      - cce-data:/data
+
+volumes:
+  cce-data:
