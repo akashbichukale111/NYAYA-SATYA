@@ -1,0 +1,142 @@
+/* NYAYA-SATYA OS — Master Header & Return Breadcrumb Styles */
+.os-master-header {
+  height: 58px;
+  background: #080c14;
+  border-bottom: 1px solid #1c2b42;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  color: #f0f4f8;
+}
+
+.os-header-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.os-back-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #121b2a;
+  border: 1px solid #2e4466;
+  border-radius: 6px;
+  padding: 6px 12px;
+  color: #d4af37;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  transition: all 0.2s ease;
+}
+
+.os-back-button:hover {
+  background: #172336;
+  border-color: #d4af37;
+  color: #fff;
+  transform: translateX(-2px);
+}
+
+.os-breadcrumb-trail {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.os-bc-root {
+  color: #d4af37;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.os-bc-sep {
+  color: #3b506e;
+}
+
+.os-bc-section {
+  color: #8a99ad;
+  font-weight: 500;
+}
+
+.os-bc-current {
+  color: #00e5ff;
+  font-weight: 700;
+}
+
+.os-header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.os-case-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #0f1724;
+  border: 1px solid #2e4466;
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 12px;
+}
+
+.os-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: os-pulse 2s infinite;
+}
+
+@keyframes os-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+
+.os-case-label {
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  color: #8a99ad;
+  font-weight: 600;
+}
+
+.os-case-dropdown {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  font-size: 12px;
+  outline: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.os-case-dropdown option {
+  background: #0c121c;
+  color: #f0f4f8;
+}
+
+.os-core-btn {
+  background: linear-gradient(135deg, #d4af37, #997f26);
+  color: #06090e;
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  transition: opacity 0.2s;
+}
+
+.os-core-btn:hover {
+  opacity: 0.9;
+}

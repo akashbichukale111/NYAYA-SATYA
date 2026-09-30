@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project 06 — Evidence Dependency Engine | NYAYA-SATYA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/os-master-header.css">
+  <style>
+    :root {
+      --bg-base: #06090e;
+      --bg-surface: #0c121c;
+      --bg-card: #121b2a;
+      --border-subtle: #1c2b42;
+      --border-accent: #2e4466;
+      --gold-primary: #d4af37;
+      --cyan-accent: #00e5ff;
+      --emerald-accent: #10b981;
+      --ruby-accent: #ef4444;
+      --amber-accent: #f59e0b;
+      --text-main: #f0f4f8;
+      --text-muted: #8a99ad;
+      --text-dim: #55667d;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background-color: var(--bg-base); color: var(--text-main); font-family: 'Plus Jakarta Sans', system-ui, sans-serif; min-height: 100vh; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 32px 24px; }
+    .engine-hero { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 24px; }
+    .engine-title h1 { font-size: 26px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 12px; }
+    .engine-badge { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: rgba(0, 229, 255, 0.15); color: var(--cyan-accent); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(0, 229, 255, 0.3); }
+    .graph-arena { background: #070b12; border: 1px solid var(--border-accent); border-radius: 12px; height: 380px; position: relative; overflow: hidden; margin-bottom: 24px; box-shadow: inset 0 0 30px rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; }
+    .dag-node { position: absolute; padding: 10px 14px; border-radius: 8px; font-size: 12px; font-family: 'JetBrains Mono', monospace; font-weight: 600; box-shadow: 0 4px 14px rgba(0,0,0,0.5); cursor: pointer; transition: transform 0.2s; }
+    .dag-node:hover { transform: scale(1.05); }
+    .node-claim { background: #172336; border: 2px solid var(--cyan-accent); color: #fff; }
+    .node-evidence { background: #1f1d14; border: 2px solid var(--gold-primary); color: #fef08a; }
+    .node-danger { border-color: var(--ruby-accent); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .panel { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 24px; }
+    .panel-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+  <!-- MASTER OS HEADER -->
+  <header class="os-master-header">
+    <div class="os-header-left">
+      <a href="/os" class="os-back-button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span>Back to NYAYA-SATYA OS</span>
+      </a>
+      <div class="os-breadcrumb-trail">
+        <span class="os-bc-root">NYAYA-SATYA</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-section">INTELLIGENCE ENGINES</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-current">06 EVIDENCE DEPENDENCY</span>
+      </div>
+    </div>
+    <div class="os-header-right">
+      <div class="os-case-badge">
+        <span class="os-pulse-dot"></span>
+        <span class="os-case-label">CASE CONTEXT:</span>
+        <select id="os-global-case-select" class="os-case-dropdown" onchange="osSwitchCase(this.value)">
+          <option value="CASE-2024-DEL-0482">State v. Rajesh Kumar (Tis Hazari)</option>
+          <option value="CASE-2023-BOM-1109">Apex Infra v. Mumbai Port Trust (Bombay HC)</option>
+          <option value="CASE-2024-KA-0077">Kaveri Farmers v. Karnataka (Karnataka HC)</option>
+        </select>
+      </div>
+      <a href="/os/core" class="os-core-btn">Open Core Intelligence →</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="engine-hero">
+      <div class="engine-title">
+        <h1><span>06</span> Evidence Dependency Engine <span class="engine-badge">GRAPH AUDIT</span></h1>
+        <p style="color:var(--text-muted); font-size:14px; margin-top:6px;">
+          Bipartite Directed Acyclic Graph (DAG) connecting legal claims to documentary and digital exhibits, identifying single points of evidentiary collapse.
+        </p>
+      </div>
+    </div>
+
+    <!-- Interactive DAG Arena -->
+    <div class="graph-arena">
+      <svg style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none;">
+        <line x1="220" y1="90" x2="620" y2="80" stroke="#2e4466" stroke-width="2" stroke-dasharray="4" />
+        <line x1="220" y1="180" x2="620" y2="80" stroke="#ef4444" stroke-width="2" />
+        <line x1="220" y1="280" x2="620" y2="240" stroke="#ef4444" stroke-width="3" />
+      </svg>
+      <!-- Evidence Nodes -->
+      <div class="dag-node node-evidence" style="top:70px; left:80px;">EX. P-1: CDR Cell Tower Log</div>
+      <div class="dag-node node-evidence" style="top:160px; left:80px;">EX. P-2: Panch Witness PW-1</div>
+      <div class="dag-node node-evidence node-danger" style="top:260px; left:80px;">EX. P-3: Seized Mobile Image (Hash Mismatch)</div>
+
+      <!-- Claim Nodes -->
+      <div class="dag-node node-claim" style="top:60px; right:120px;">CLAIM 1: Accused Presence at Crime Scene</div>
+      <div class="dag-node node-claim node-danger" style="top:220px; right:120px;">CLAIM 3: Chain of Custody Maintained (SINGLE POINT OF FAILURE)</div>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-title">Critical Single Points of Failure</div>
+        <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:8px; padding:16px; margin-bottom:14px;">
+          <h4 style="color:#fca5a5; font-size:14px;">⚠️ Claim 3: Chain of Custody Vulnerability</h4>
+          <p style="color:var(--text-muted); font-size:13px; margin-top:4px;">
+            The prosecution's entire nexus depends upon Exhibit P-3. Because no independent certificate under Section 63 BSA / 65B IEA exists, this claim has zero alternative corroboration.
+          </p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Claim Fragility Audit</div>
+        <div style="display:flex; flex-direction:column; gap:10px; font-size:13px;">
+          <div style="display:flex; justify-content:space-between; padding:10px; background:var(--bg-surface); border-radius:6px;">
+            <span>Claim 1: Presence at Scene</span>
+            <span style="color:var(--amber-accent); font-family:'JetBrains Mono';">HIGH FRAGILITY (PW-1 Hostile)</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding:10px; background:var(--bg-surface); border-radius:6px;">
+            <span>Claim 2: Phone Ownership</span>
+            <span style="color:var(--emerald-accent); font-family:'JetBrains Mono';">ROBUST (CAF Form Admitted)</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding:10px; background:var(--bg-surface); border-radius:6px;">
+            <span>Claim 3: Chain of Custody</span>
+            <span style="color:var(--ruby-accent); font-family:'JetBrains Mono';">CRITICAL VULNERABILITY</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script src="/os-shared-context.js"></script>
+</body>
+</html>

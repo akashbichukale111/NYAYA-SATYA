@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project 12 — Spark Workflow Autopilot | NYAYA-SATYA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/os-master-header.css">
+  <style>
+    :root {
+      --bg-base: #06090e;
+      --bg-surface: #0c121c;
+      --bg-card: #121b2a;
+      --border-subtle: #1c2b42;
+      --border-accent: #2e4466;
+      --gold-primary: #d4af37;
+      --cyan-accent: #00e5ff;
+      --emerald-accent: #10b981;
+      --ruby-accent: #ef4444;
+      --amber-accent: #f59e0b;
+      --text-main: #f0f4f8;
+      --text-muted: #8a99ad;
+      --text-dim: #55667d;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background-color: var(--bg-base); color: var(--text-main); font-family: 'Plus Jakarta Sans', system-ui, sans-serif; min-height: 100vh; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 32px 24px; }
+    .engine-hero { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 24px; }
+    .engine-title h1 { font-size: 26px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 12px; }
+    .engine-badge { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: rgba(16, 185, 129, 0.15); color: var(--emerald-accent); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .wf-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+    .step-track { display: flex; gap: 14px; margin: 18px 0; }
+    .step-node { flex: 1; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 12px; font-size: 12px; }
+    .step-done { border-color: var(--emerald-accent); color: var(--emerald-accent); }
+    .step-active { border-color: var(--gold-primary); color: #fff; background: rgba(212, 175, 55, 0.08); }
+    .btn-exec { background: linear-gradient(135deg, var(--gold-primary), #997f26); color: #06090e; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 700; font-size: 12px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <!-- MASTER OS HEADER -->
+  <header class="os-master-header">
+    <div class="os-header-left">
+      <a href="/os" class="os-back-button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span>Back to NYAYA-SATYA OS</span>
+      </a>
+      <div class="os-breadcrumb-trail">
+        <span class="os-bc-root">NYAYA-SATYA</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-section">INTELLIGENCE ENGINES</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-current">12 WORKFLOW AUTOPILOT</span>
+      </div>
+    </div>
+    <div class="os-header-right">
+      <div class="os-case-badge">
+        <span class="os-pulse-dot"></span>
+        <span class="os-case-label">CASE CONTEXT:</span>
+        <select id="os-global-case-select" class="os-case-dropdown" onchange="osSwitchCase(this.value)">
+          <option value="CASE-2024-DEL-0482">State v. Rajesh Kumar (Tis Hazari)</option>
+          <option value="CASE-2023-BOM-1109">Apex Infra v. Mumbai Port Trust (Bombay HC)</option>
+          <option value="CASE-2024-KA-0077">Kaveri Farmers v. Karnataka (Karnataka HC)</option>
+        </select>
+      </div>
+      <a href="/os/core" class="os-core-btn">Open Core Intelligence →</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="engine-hero">
+      <div class="engine-title">
+        <h1><span>12</span> Spark Workflow Autopilot <span class="engine-badge">SOP RUNNER</span></h1>
+        <p style="color:var(--text-muted); font-size:14px; margin-top:6px;">
+          Procedural Standard Operating Procedure (SOP) orchestrator, multi-stage task coordinator, and UNWIND human authorization boundary.
+        </p>
+      </div>
+    </div>
+
+    <!-- Active Workflow 1 -->
+    <div class="wf-card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <h3 style="color:#fff; font-size:16px;">SOP-479: Mandatory Statutory Bail Filing Workflow</h3>
+          <span style="font-size:12px; color:var(--text-muted);">Triggered by Undertrial Liberty Sentinel (418 days detention served)</span>
+        </div>
+        <span style="font-family:'JetBrains Mono'; font-size:12px; color:var(--gold-primary); font-weight:700;">80% COMPLETED</span>
+      </div>
+
+      <div class="step-track">
+        <div class="step-node step-done">
+          <strong>1. Custody Audit</strong>
+          <div>Verified (418d > 365d)</div>
+        </div>
+        <div class="step-node step-done">
+          <strong>2. Docket Intake</strong>
+          <div>DSLSA Profile Prepared</div>
+        </div>
+        <div class="step-node step-done">
+          <strong>3. Petition Draft</strong>
+          <div>Section 479 BNSS Compiled</div>
+        </div>
+        <div class="step-node step-active">
+          <strong>4. Human Legal Gate</strong>
+          <div style="color:var(--gold-primary);">Awaiting Advocate Sign</div>
+        </div>
+        <div class="step-node">
+          <strong>5. E-Filing Portal</strong>
+          <div>Tis Hazari Registry Dispatch</div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-surface); padding:12px 16px; border-radius:8px;">
+        <span style="font-size:13px; color:var(--text-muted);">Current Step: <strong>Human Counsel Review & Digital Signature</strong></span>
+        <button class="btn-exec" onclick="alert('Proceeding to UNWIND Human Legal Gate signoff...')">Execute Approval Boundary Gate →</button>
+      </div>
+    </div>
+  </main>
+  <script src="/os-shared-context.js"></script>
+</body>
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project 01 — Hearing Readiness Engine | NYAYA-SATYA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/os-master-header.css">
+  <style>
+    :root {
+      --bg-base: #06090e;
+      --bg-surface: #0c121c;
+      --bg-card: #121b2a;
+      --border-subtle: #1c2b42;
+      --border-accent: #2e4466;
+      --gold-primary: #d4af37;
+      --cyan-accent: #00e5ff;
+      --emerald-accent: #10b981;
+      --ruby-accent: #ef4444;
+      --amber-accent: #f59e0b;
+      --text-main: #f0f4f8;
+      --text-muted: #8a99ad;
+      --text-dim: #55667d;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 24px;
+      width: 100%;
+    }
+    .engine-hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 28px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 24px;
+    }
+    .engine-title h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .engine-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      background: rgba(212, 175, 55, 0.15);
+      color: var(--gold-primary);
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+    }
+    .engine-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      max-width: 750px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 24px;
+    }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .readiness-meter {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 20px;
+    }
+    .score-circle {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      border: 8px solid var(--amber-accent);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 24px rgba(245, 158, 11, 0.2);
+    }
+    .score-num {
+      font-size: 38px;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      color: #fff;
+    }
+    .score-label {
+      font-size: 11px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .checklist-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .checklist-table th {
+      text-align: left;
+      padding: 10px;
+      color: var(--text-dim);
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+    .checklist-table td {
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .status-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .st-verified { background: rgba(16, 185, 129, 0.1); color: var(--emerald-accent); }
+    .st-defective { background: rgba(239, 68, 68, 0.1); color: var(--ruby-accent); }
+    .st-pending { background: rgba(245, 158, 11, 0.1); color: var(--amber-accent); }
+    .btn-approve {
+      background: linear-gradient(135deg, var(--gold-primary), #997f26);
+      color: #06090e;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .alert-banner {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 24px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- MASTER OS HEADER -->
+  <header class="os-master-header">
+    <div class="os-header-left">
+      <a href="/os" class="os-back-button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span>Back to NYAYA-SATYA OS</span>
+      </a>
+      <div class="os-breadcrumb-trail">
+        <span class="os-bc-root">NYAYA-SATYA</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-section">INTELLIGENCE ENGINES</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-current">01 HEARING READINESS</span>
+      </div>
+    </div>
+    <div class="os-header-right">
+      <div class="os-case-badge">
+        <span class="os-pulse-dot"></span>
+        <span class="os-case-label">CASE CONTEXT:</span>
+        <select id="os-global-case-select" class="os-case-dropdown" onchange="osSwitchCase(this.value)">
+          <option value="CASE-2024-DEL-0482">State v. Rajesh Kumar (Tis Hazari)</option>
+          <option value="CASE-2023-BOM-1109">Apex Infra v. Mumbai Port Trust (Bombay HC)</option>
+          <option value="CASE-2024-KA-0077">Kaveri Farmers v. Karnataka (Karnataka HC)</option>
+        </select>
+      </div>
+      <a href="/os/core" class="os-core-btn">Open Core Intelligence →</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="engine-hero">
+      <div class="engine-title">
+        <h1><span>01</span> Hearing Readiness Engine <span class="engine-badge">HEALTHY</span></h1>
+        <p class="engine-desc">
+          Automated pre-hearing sufficiency audit, checklist verification, and procedural barrier elimination before cause list publication.
+        </p>
+      </div>
+      <div>
+        <span style="font-family:'JetBrains Mono'; font-size:13px; color:var(--cyan-accent);">NEXT LISTING: 2024-10-18</span>
+      </div>
+    </div>
+
+    <!-- Active Blocker Banner -->
+    <div class="alert-banner">
+      <div style="font-size:24px;">🚨</div>
+      <div>
+        <h4 style="color:#fca5a5; font-size:14px; font-weight:700;">Critical Listing Blocker Detected</h4>
+        <p style="color:var(--text-muted); font-size:13px; margin-top:2px;">
+          Charge-sheet supply under Section 207 CrPC is incomplete: Annexure D (CCTV Forensic Hash Log) was omitted from defense copies. Court will grant adjournment unless cured by praecipe.
+        </p>
+      </div>
+      <button class="btn-approve" onclick="approvePraecipe()" style="margin-left:auto;">Approve Curative Praecipe</button>
+    </div>
+
+    <div class="grid-2">
+      <!-- Readiness Score Card -->
+      <div class="card">
+        <div class="card-title">
+          <span>Readiness Score</span>
+          <span style="font-size:12px; color:var(--amber-accent); font-family:'JetBrains Mono';">ACTION REQUIRED</span>
+        </div>
+        <div class="readiness-meter">
+          <div class="score-circle">
+            <span class="score-num">78%</span>
+            <span class="score-label">Readiness</span>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:10px; font-size:13px;">
+          <div style="display:flex; justify-content:space-between;">
+            <span style="color:var(--text-dim);">Hearing Date:</span>
+            <span style="font-family:'JetBrains Mono'; color:#fff;">18 October 2024</span>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span style="color:var(--text-dim);">Days Until Hearing:</span>
+            <span style="font-family:'JetBrains Mono'; color:var(--cyan-accent);">18 Days</span>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span style="color:var(--text-dim);">Mandatory Prerequisites:</span>
+            <span style="font-family:'JetBrains Mono'; color:#fff;">4 / 5 Cleared</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Court Prerequisites Checklist -->
+      <div class="card">
+        <div class="card-title">
+          <span>Court Prerequisites Checklist</span>
+          <span style="font-size:12px; color:var(--text-dim);">Court 03, Tis Hazari</span>
+        </div>
+        <table class="checklist-table">
+          <thead>
+            <tr>
+              <th>Item / Requirement</th>
+              <th>Statutory Mandate</th>
+              <th>Audit Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="checklist-tbody">
+            <tr>
+              <td>Vakalatnama & Memo of Appearance</td>
+              <td>Delhi HC Rules Ch. IV</td>
+              <td><span class="status-pill st-verified">VERIFIED</span></td>
+              <td><span style="color:var(--text-dim);">None</span></td>
+            </tr>
+            <tr>
+              <td>Charge-sheet Supply to Accused</td>
+              <td>CrPC Section 207</td>
+              <td><span class="status-pill st-defective">DEFECTIVE</span></td>
+              <td><button class="btn-approve" onclick="approvePraecipe()">Cure Defect</button></td>
+            </tr>
+            <tr>
+              <td>FSL Forensic Hash Comparison</td>
+              <td>BSA Section 63</td>
+              <td><span class="status-pill st-pending">PENDING</span></td>
+              <td><button class="btn-approve" onclick="alert('Notice issued to Prosecution FSL Branch')">Issue Notice</button></td>
+            </tr>
+            <tr>
+              <td>Certified Copy of Bail Rejection</td>
+              <td>Practice Direction 2019</td>
+              <td><span class="status-pill st-verified">VERIFIED</span></td>
+              <td><span style="color:var(--text-dim);">On Record</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script src="/os-shared-context.js"></script>
+  <script>
+    async function approvePraecipe() {
+      const caseId = window.nyayaActiveCaseId || 'CASE-2024-DEL-0482';
+      const res = await fetch(`/api/modules/hearing-readiness/actions/CHK-2/approve?case_id=${caseId}`, { method: 'POST' });
+      const data = await res.json();
+      alert("Curative praecipe approved by Adv. Meenakshi Sundaram and logged in event bus!");
+      location.reload();
+    }
+  </script>
+</body>
+</html>

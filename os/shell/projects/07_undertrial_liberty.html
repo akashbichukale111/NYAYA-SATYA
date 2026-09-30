@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project 07 — Undertrial Liberty Sentinel | NYAYA-SATYA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/os-master-header.css">
+  <style>
+    :root {
+      --bg-base: #06090e;
+      --bg-surface: #0c121c;
+      --bg-card: #121b2a;
+      --border-subtle: #1c2b42;
+      --border-accent: #2e4466;
+      --gold-primary: #d4af37;
+      --cyan-accent: #00e5ff;
+      --emerald-accent: #10b981;
+      --ruby-accent: #ef4444;
+      --amber-accent: #f59e0b;
+      --text-main: #f0f4f8;
+      --text-muted: #8a99ad;
+      --text-dim: #55667d;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background-color: var(--bg-base); color: var(--text-main); font-family: 'Plus Jakarta Sans', system-ui, sans-serif; min-height: 100vh; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 32px 24px; }
+    .engine-hero { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 24px; }
+    .engine-title h1 { font-size: 26px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 12px; }
+    .engine-badge { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: rgba(239, 68, 68, 0.15); color: var(--ruby-accent); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 24px; }
+    .stat-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 22px; }
+    .stat-label { font-size: 11px; text-transform: uppercase; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
+    .stat-val { font-size: 32px; font-weight: 800; color: #fff; margin-top: 6px; font-family: 'JetBrains Mono', monospace; }
+    .liberty-banner { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; padding: 20px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
+    .btn-petition { background: linear-gradient(135deg, var(--emerald-accent), #059669); color: #fff; border: none; padding: 10px 22px; border-radius: 6px; font-weight: 700; font-size: 13px; cursor: pointer; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .panel { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 24px; }
+    .panel-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+  <!-- MASTER OS HEADER -->
+  <header class="os-master-header">
+    <div class="os-header-left">
+      <a href="/os" class="os-back-button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span>Back to NYAYA-SATYA OS</span>
+      </a>
+      <div class="os-breadcrumb-trail">
+        <span class="os-bc-root">NYAYA-SATYA</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-section">INTELLIGENCE ENGINES</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-current">07 UNDERTRIAL LIBERTY</span>
+      </div>
+    </div>
+    <div class="os-header-right">
+      <div class="os-case-badge">
+        <span class="os-pulse-dot"></span>
+        <span class="os-case-label">CASE CONTEXT:</span>
+        <select id="os-global-case-select" class="os-case-dropdown" onchange="osSwitchCase(this.value)">
+          <option value="CASE-2024-DEL-0482">State v. Rajesh Kumar (Tis Hazari)</option>
+          <option value="CASE-2023-BOM-1109">Apex Infra v. Mumbai Port Trust (Bombay HC)</option>
+          <option value="CASE-2024-KA-0077">Kaveri Farmers v. Karnataka (Karnataka HC)</option>
+        </select>
+      </div>
+      <a href="/os/core" class="os-core-btn">Open Core Intelligence →</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="engine-hero">
+      <div class="engine-title">
+        <h1><span>07</span> Undertrial Liberty Sentinel <span class="engine-badge">MANDATORY BAIL DUE</span></h1>
+        <p style="color:var(--text-muted); font-size:14px; margin-top:6px;">
+          Statutory detention monitoring under Section 479 Bharatiya Nagarik Suraksha Sanhita (BNSS) & Section 436A CrPC.
+        </p>
+      </div>
+    </div>
+
+    <!-- Statutory Guarantee Banner -->
+    <div class="liberty-banner">
+      <div>
+        <h3 style="color:#6ee7b7; font-size:16px; font-weight:700;">Mandatory Statutory Bail Entitlement Triggered</h3>
+        <p style="color:var(--text-muted); font-size:13px; margin-top:4px;">
+          Section 479(1) BNSS Mandate: A first-time offender who has undergone detention for a period extending up to one-third of the maximum period of imprisonment specified for that offence <strong>SHALL BE RELEASED ON BAIL</strong> by the Court.
+        </p>
+      </div>
+      <button class="btn-petition" onclick="generateBailPetition()">Compile Section 479 Petition</button>
+    </div>
+
+    <div class="grid-3">
+      <div class="stat-card">
+        <div class="stat-label">ACTUAL DETENTION SERVED</div>
+        <div class="stat-val" style="color:var(--cyan-accent);">418 Days</div>
+        <span style="font-size:11px; color:var(--text-dim);">Custody from 2023-08-10</span>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">1/3RD STATUTORY THRESHOLD</div>
+        <div class="stat-val">365 Days</div>
+        <span style="font-size:11px; color:var(--text-dim);">Maximum Sentence: 3 Years</span>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">OVERDUE DETENTION EXCEEDED</div>
+        <div class="stat-val" style="color:var(--ruby-accent);">+53 Days</div>
+        <span style="font-size:11px; color:var(--ruby-accent); font-weight:600;">Unlawful Continuous Detention</span>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-title">Statutory Eligibility Breakdown</div>
+        <table style="width:100%; border-collapse:collapse; font-size:13px;">
+          <tr style="border-bottom:1px solid var(--border-subtle);">
+            <td style="padding:10px 0; color:var(--text-dim);">Governing Statute:</td>
+            <td style="padding:10px 0; font-family:'JetBrains Mono'; color:#fff; text-align:right;">BNSS § 479 / CrPC § 436A</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border-subtle);">
+            <td style="padding:10px 0; color:var(--text-dim);">First-Time Offender Status:</td>
+            <td style="padding:10px 0; font-family:'JetBrains Mono'; color:var(--emerald-accent); text-align:right;">YES (No Prior Convictions)</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border-subtle);">
+            <td style="padding:10px 0; color:var(--text-dim);">Applicable Detention Ratio:</td>
+            <td style="padding:10px 0; font-family:'JetBrains Mono'; color:#fff; text-align:right;">One-Third (1/3rd)</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 0; color:var(--text-dim);">Judicial Discretion:</td>
+            <td style="padding:10px 0; font-family:'JetBrains Mono'; color:var(--gold-primary); text-align:right;">MANDATORY ("SHALL RELEASE")</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Draft Statutory Bail Application</div>
+        <p style="font-size:13px; color:var(--text-muted); line-height:1.6;">
+          Ready to generate formal petition: <em>"Application on behalf of Accused Rajesh Kumar under Section 479 of the Bharatiya Nagarik Suraksha Sanhita, 2023 for grant of mandatory statutory bail on ground of exceeding one-third detention."</em>
+        </p>
+        <button class="btn-petition" style="margin-top:16px;" onclick="generateBailPetition()">Generate Certified Court Copy</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="/os-shared-context.js"></script>
+  <script>
+    function generateBailPetition() {
+      alert("Draft petition under Section 479 BNSS compiled with custody certificate!\nAwaiting advocate signature at Human Legal Gate.");
+    }
+  </script>
+</body>
+</html>

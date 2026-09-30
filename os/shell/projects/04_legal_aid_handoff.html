@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Project 04 — Legal-Aid Handoff Engine | NYAYA-SATYA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/os-master-header.css" />
+  <style>
+    :root {
+      --ink: #1C2B39;
+      --ink-soft: #4A5A68;
+      --paper: #F7F5EF;
+      --paper-raised: #FFFFFF;
+      --line: #DDD7C8;
+      --verified: #3F6B4F;
+      --verified-bg: #E7EEE7;
+      --warn: #8A5A20;
+      --warn-bg: #F3E6D3;
+      --conflict: #8C3B32;
+      --conflict-bg: #F3E0DC;
+      --radius: 6px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--paper); color: var(--ink); font-family: 'IBM Plex Sans', sans-serif; min-height: 100vh; }
+    .lah-wrapper { display: flex; min-height: calc(100vh - 58px); }
+    .lah-sidebar { width: 240px; background: var(--ink); color: #E7E2D4; padding: 24px 0; }
+    .lah-brand { padding: 0 20px 20px 20px; border-bottom: 1px solid #33465A; }
+    .lah-brand h2 { color: #fff; font-size: 1.1rem; font-family: 'Source Serif 4', serif; }
+    .lah-tab { display: block; padding: 10px 20px; color: #C7CFD6; text-decoration: none; font-size: 0.88rem; border-left: 3px solid transparent; cursor: pointer; }
+    .lah-tab.active { background: #243646; color: #fff; border-left-color: var(--verified); font-weight: 600; }
+    .lah-main { flex: 1; padding: 32px 40px; max-width: 1080px; }
+    .lah-card { background: var(--paper-raised); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; margin-bottom: 24px; }
+    .lah-title { font-family: 'Source Serif 4', serif; font-size: 1.3rem; margin-bottom: 14px; font-weight: 600; }
+    .badge { display: inline-block; padding: 3px 8px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+    .badge-v { background: var(--verified-bg); color: var(--verified); }
+    .btn-lah { background: var(--ink); color: #fff; border: 1px solid var(--ink); padding: 8px 16px; border-radius: var(--radius); font-weight: 600; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <!-- MASTER OS HEADER -->
+  <header class="os-master-header">
+    <div class="os-header-left">
+      <a href="/os" class="os-back-button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span>Back to NYAYA-SATYA OS</span>
+      </a>
+      <div class="os-breadcrumb-trail">
+        <span class="os-bc-root">NYAYA-SATYA</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-section">INTELLIGENCE ENGINES</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-current">04 LEGAL-AID HANDOFF</span>
+      </div>
+    </div>
+    <div class="os-header-right">
+      <div class="os-case-badge">
+        <span class="os-pulse-dot"></span>
+        <span class="os-case-label">CASE CONTEXT:</span>
+        <select id="os-global-case-select" class="os-case-dropdown" onchange="osSwitchCase(this.value)">
+          <option value="CASE-2024-DEL-0482">State v. Rajesh Kumar (Tis Hazari)</option>
+          <option value="CASE-2023-BOM-1109">Apex Infra v. Mumbai Port Trust (Bombay HC)</option>
+          <option value="CASE-2024-KA-0077">Kaveri Farmers v. Karnataka (Karnataka HC)</option>
+        </select>
+      </div>
+      <a href="/os/core" class="os-core-btn">Open Core Intelligence →</a>
+    </div>
+  </header>
+
+  <div class="lah-wrapper">
+    <aside class="lah-sidebar">
+      <div class="lah-brand">
+        <h2>Legal-Aid Handoff</h2>
+        <small style="color:#96A5B3; font-size:11px;">DSLSA Central Panel</small>
+      </div>
+      <div class="lah-tab active">Intake Summary</div>
+      <div class="lah-tab">Fact Matrix & Chronology</div>
+      <div class="lah-tab">Document Index</div>
+      <div class="lah-tab">Bail Grounds Brief</div>
+    </aside>
+
+    <main class="lah-main">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <div>
+          <h1 style="font-family:'Source Serif 4'; font-size:1.6rem;">Counsel Transfer Dossier</h1>
+          <p style="color:var(--ink-soft); font-size:0.95rem;">Case transfer packet prepared for pro-bono defense counsel under Legal Services Authorities Act.</p>
+        </div>
+        <button class="btn-lah" onclick="alert('Exporting Legal-Aid Briefing Bundle PDF...')">Download Briefing Docket</button>
+      </div>
+
+      <div class="lah-card">
+        <div class="lah-title">Case Intake Profile</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; font-size:0.9rem;">
+          <div><strong>Appointed Counsel:</strong> Adv. Meenakshi Sundaram</div>
+          <div><strong>Authority:</strong> Delhi State Legal Services</div>
+          <div><strong>Intake Completeness:</strong> <span class="badge badge-v">94% COMPLETE</span></div>
+        </div>
+      </div>
+
+      <div class="lah-card">
+        <div class="lah-title">Key Defense Grounds for Urgent Bail</div>
+        <ol style="margin-left:20px; font-size:0.92rem; line-height:1.7;">
+          <li><strong>Overdue Statutory Detention:</strong> Accused has served 418 days in custody, surpassing the 1/3rd maximum imprisonment threshold under Section 479 BNSS / 436A CrPC.</li>
+          <li><strong>Zero Recovery from Person:</strong> Seizure memo records recovery from commercial vehicle shared with co-accused, not from exclusive personal possession.</li>
+          <li><strong>Absence of Independent Panch:</strong> Prosecution failed to associate independent civilian witnesses during alleged search and seizure.</li>
+        </ol>
+      </div>
+    </main>
+  </div>
+  <script src="/os-shared-context.js"></script>
+</body>
+</html>

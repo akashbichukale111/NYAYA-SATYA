@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project 11 — Spark Deadline Guardian | NYAYA-SATYA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/os-master-header.css">
+  <style>
+    :root {
+      --bg-base: #06090e;
+      --bg-surface: #0c121c;
+      --bg-card: #121b2a;
+      --border-subtle: #1c2b42;
+      --border-accent: #2e4466;
+      --gold-primary: #d4af37;
+      --cyan-accent: #00e5ff;
+      --emerald-accent: #10b981;
+      --ruby-accent: #ef4444;
+      --amber-accent: #f59e0b;
+      --text-main: #f0f4f8;
+      --text-muted: #8a99ad;
+      --text-dim: #55667d;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background-color: var(--bg-base); color: var(--text-main); font-family: 'Plus Jakarta Sans', system-ui, sans-serif; min-height: 100vh; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 32px 24px; }
+    .engine-hero { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 24px; }
+    .engine-title h1 { font-size: 26px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 12px; }
+    .engine-badge { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: rgba(239, 68, 68, 0.15); color: var(--ruby-accent); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .deadline-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 20px; margin-bottom: 16px; display: grid; grid-template-columns: 140px 1fr 180px; gap: 20px; align-items: center; }
+    .dl-countdown { text-align: center; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 12px; }
+    .dl-days { font-size: 28px; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: var(--ruby-accent); }
+    .dl-unit { font-size: 10px; color: var(--text-dim); text-transform: uppercase; }
+  </style>
+</head>
+<body>
+  <!-- MASTER OS HEADER -->
+  <header class="os-master-header">
+    <div class="os-header-left">
+      <a href="/os" class="os-back-button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span>Back to NYAYA-SATYA OS</span>
+      </a>
+      <div class="os-breadcrumb-trail">
+        <span class="os-bc-root">NYAYA-SATYA</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-section">INTELLIGENCE ENGINES</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-current">11 SPARK DEADLINE GUARDIAN</span>
+      </div>
+    </div>
+    <div class="os-header-right">
+      <div class="os-case-badge">
+        <span class="os-pulse-dot"></span>
+        <span class="os-case-label">CASE CONTEXT:</span>
+        <select id="os-global-case-select" class="os-case-dropdown" onchange="osSwitchCase(this.value)">
+          <option value="CASE-2024-DEL-0482">State v. Rajesh Kumar (Tis Hazari)</option>
+          <option value="CASE-2023-BOM-1109">Apex Infra v. Mumbai Port Trust (Bombay HC)</option>
+          <option value="CASE-2024-KA-0077">Kaveri Farmers v. Karnataka (Karnataka HC)</option>
+        </select>
+      </div>
+      <a href="/os/core" class="os-core-btn">Open Core Intelligence →</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="engine-hero">
+      <div class="engine-title">
+        <h1><span>11</span> Spark Deadline Guardian <span class="engine-badge">LIMITATION MONITOR</span></h1>
+        <p style="color:var(--text-muted); font-size:14px; margin-top:6px;">
+          Statutory limitation calculator, court holiday calendar reconciliation, and critical deadline escalation alerts.
+        </p>
+      </div>
+      <div>
+        <span style="font-family:'JetBrains Mono'; color:var(--ruby-accent); font-weight:700;">NEAREST TRIGGER: 4 DAYS</span>
+      </div>
+    </div>
+
+    <!-- Deadline Item 1 -->
+    <div class="deadline-card" style="border-left: 4px solid var(--ruby-accent);">
+      <div class="dl-countdown">
+        <div class="dl-days">4</div>
+        <div class="dl-unit">Days Left</div>
+      </div>
+      <div>
+        <h3 style="color:#fff; font-size:16px;">Reply to Section 173(8) Protest Petition</h3>
+        <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">
+          <strong>Statute:</strong> Limitation Act 1963 Article 137 • Delhi High Court Criminal Practice Directions.<br>
+          Prosecution's reply to complainant's protest petition must be filed on or before 2024-10-04.
+        </p>
+      </div>
+      <div>
+        <button style="background:var(--bg-surface); border:1px solid var(--border-accent); color:var(--gold-primary); padding:8px 14px; border-radius:6px; font-weight:700; font-size:12px; cursor:pointer;" onclick="alert('Deadline escalation notification dispatched to Lead Counsel!')">Dispatch Escalation Alert</button>
+      </div>
+    </div>
+
+    <!-- Deadline Item 2 -->
+    <div class="deadline-card" style="border-left: 4px solid var(--amber-accent);">
+      <div class="dl-countdown">
+        <div class="dl-days" style="color:var(--amber-accent);">12</div>
+        <div class="dl-unit">Days Left</div>
+      </div>
+      <div>
+        <h3 style="color:#fff; font-size:16px;">Registry Scrutiny Curative Re-filing Window</h3>
+        <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">
+          <strong>Statute:</strong> Delhi High Court Rules Chapter IV Rule 3.<br>
+          30-day statutory scrutiny curing period expires on 2024-10-12. If uncured, petition marks default dismissal.
+        </p>
+      </div>
+      <div>
+        <button style="background:var(--bg-surface); border:1px solid var(--border-accent); color:var(--cyan-accent); padding:8px 14px; border-radius:6px; font-weight:700; font-size:12px; cursor:pointer;" onclick="window.location.href='/os/projects/registry-defect'">Open Defect Engine →</button>
+      </div>
+    </div>
+  </main>
+  <script src="/os-shared-context.js"></script>
+</body>
+</html>

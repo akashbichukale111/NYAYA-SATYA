@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Project 02 — Case Continuity Engine | NYAYA-SATYA</title>
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="/os-master-header.css" />
+  <link rel="stylesheet" href="/project-static/02/styles.css" />
+  <style>
+    body { margin: 0; background: #0c121c; color: #e6edf3; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+    #cce-wrapper { display: flex; flex-direction: column; min-height: 100vh; }
+    #app { flex: 1; }
+  </style>
+</head>
+<body>
+  <!-- MASTER OS HEADER -->
+  <header class="os-master-header">
+    <div class="os-header-left">
+      <a href="/os" class="os-back-button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span>Back to NYAYA-SATYA OS</span>
+      </a>
+      <div class="os-breadcrumb-trail">
+        <span class="os-bc-root">NYAYA-SATYA</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-section">INTELLIGENCE ENGINES</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-current">02 CASE CONTINUITY</span>
+      </div>
+    </div>
+    <div class="os-header-right">
+      <div class="os-case-badge">
+        <span class="os-pulse-dot"></span>
+        <span class="os-case-label">CASE CONTEXT:</span>
+        <select id="os-global-case-select" class="os-case-dropdown" onchange="osSwitchCase(this.value)">
+          <option value="CASE-2024-DEL-0482">State v. Rajesh Kumar (Tis Hazari)</option>
+          <option value="CASE-2023-BOM-1109">Apex Infra v. Mumbai Port Trust (Bombay HC)</option>
+          <option value="CASE-2024-KA-0077">Kaveri Farmers v. Karnataka (Karnataka HC)</option>
+        </select>
+      </div>
+      <a href="/os/core" class="os-core-btn">Open Core Intelligence →</a>
+    </div>
+  </header>
+
+  <div id="cce-wrapper">
+    <div id="app">
+      <div style="grid-area: sidebar; display:flex; align-items:center; justify-content:center; color:#7c8898; padding:40px;">Loading Case Continuity Engine…</div>
+    </div>
+  </div>
+
+  <script>
+    window.__CCE_API_BASE__ = "/api/modules/case-continuity";
+  </script>
+  <script src="/os-shared-context.js"></script>
+  <script src="/project-static/02/api.js"></script>
+  <script src="/project-static/02/app.js"></script>
+</body>
+</html>
