@@ -16,7 +16,7 @@ REGISTRY: List[ModuleMetadata] = [
         status=ModuleHealthStatus.HEALTHY,
         notes="Full stack verified. Python backend with FastAPI and React/ReactFlow interactive readiness graph.",
         api_prefix="/api/modules/hearing-readiness",
-        ui_route="/modules/hearing-readiness",
+        ui_route="/projects/hearing-readiness",
         has_custom_frontend=True,
         features=[
             "Stage-specific readiness score calculation",
@@ -35,7 +35,7 @@ REGISTRY: List[ModuleMetadata] = [
         status=ModuleHealthStatus.HEALTHY,
         notes="Full backend verified. Python FastAPI engine with conflict resolution and health score metrics.",
         api_prefix="/api/modules/case-continuity",
-        ui_route="/modules/case-continuity",
+        ui_route="/projects/case-continuity",
         has_custom_frontend=False,
         features=[
             "Handoff integrity analysis",
@@ -54,7 +54,7 @@ REGISTRY: List[ModuleMetadata] = [
         status=ModuleHealthStatus.HEALTHY,
         notes="Full stack verified. Python FastAPI backend with React dashboard.",
         api_prefix="/api/modules/case-bottleneck",
-        ui_route="/modules/case-bottleneck",
+        ui_route="/projects/case-bottleneck",
         has_custom_frontend=True,
         features=[
             "Procedural stage duration benchmarking",
@@ -73,7 +73,7 @@ REGISTRY: List[ModuleMetadata] = [
         status=ModuleHealthStatus.HEALTHY,
         notes="Full backend verified. Python FastAPI engine with command center and document intake.",
         api_prefix="/api/modules/legal-aid-handoff",
-        ui_route="/modules/legal-aid-handoff",
+        ui_route="/projects/legal-aid-handoff",
         has_custom_frontend=False,
         features=[
             "Standardized legal-aid intake dossier",
@@ -92,7 +92,7 @@ REGISTRY: List[ModuleMetadata] = [
         status=ModuleHealthStatus.PARTIAL,
         notes="PARTIAL / SECTION 1 PRESENT. Grounded in authoritative UNWIND settle/obligation engine and procedural contracts.",
         api_prefix="/api/modules/procedural-obligation",
-        ui_route="/modules/procedural-obligation",
+        ui_route="/projects/procedural-obligation",
         has_custom_frontend=False,
         features=[
             "WHO: Counterparties told invalidated claims",
@@ -111,7 +111,7 @@ REGISTRY: List[ModuleMetadata] = [
         status=ModuleHealthStatus.HEALTHY,
         notes="Full stack verified. Python backend with React/ReactFlow visual graph and coverage analysis.",
         api_prefix="/api/modules/evidence-dependency",
-        ui_route="/modules/evidence-dependency",
+        ui_route="/projects/evidence-dependency",
         has_custom_frontend=True,
         features=[
             "Bipartite Claim-Evidence DAG visualization",
@@ -130,7 +130,7 @@ REGISTRY: List[ModuleMetadata] = [
         status=ModuleHealthStatus.HEALTHY,
         notes="Full stack verified. Python FastAPI backend with React/ReactFlow bail review queue.",
         api_prefix="/api/modules/undertrial-liberty",
-        ui_route="/modules/undertrial-liberty",
+        ui_route="/projects/undertrial-liberty",
         has_custom_frontend=True,
         features=[
             "Detention duration vs maximum sentence calculation",
@@ -149,7 +149,7 @@ REGISTRY: List[ModuleMetadata] = [
         status=ModuleHealthStatus.HEALTHY,
         notes="Full stack verified. Python backend with React/xyflow visual defect tree.",
         api_prefix="/api/modules/registry-defect",
-        ui_route="/modules/registry-defect",
+        ui_route="/projects/registry-defect",
         has_custom_frontend=True,
         features=[
             "High Court & District Court registry rules check",
@@ -168,7 +168,7 @@ REGISTRY: List[ModuleMetadata] = [
         status=ModuleHealthStatus.HEALTHY,
         notes="Full stack verified. Python FastAPI backend with React/ReactFlow interactive stress-test sandbox.",
         api_prefix="/api/modules/case-crash-test",
-        ui_route="/modules/case-crash-test",
+        ui_route="/projects/case-crash-test",
         has_custom_frontend=True,
         features=[
             "Adversarial counter-argument simulator",
@@ -187,7 +187,7 @@ REGISTRY: List[ModuleMetadata] = [
         status=ModuleHealthStatus.HEALTHY,
         notes="Full stack verified. Python FastAPI backend with React/Tailwind personal view manager (Section 1 verified).",
         api_prefix="/api/modules/spark-personal-os",
-        ui_route="/modules/spark-personal-os",
+        ui_route="/projects/spark-personal-os",
         has_custom_frontend=True,
         features=[
             "Personalized case morning digest",
@@ -206,7 +206,7 @@ REGISTRY: List[ModuleMetadata] = [
         status=ModuleHealthStatus.HEALTHY,
         notes="Full backend verified. Python FastAPI engine with limitation rules and text ingestion (Section 1 verified).",
         api_prefix="/api/modules/spark-deadline-guardian",
-        ui_route="/modules/spark-deadline-guardian",
+        ui_route="/projects/spark-deadline-guardian",
         has_custom_frontend=False,
         features=[
             "Limitation Act statutory period calculator",
@@ -225,7 +225,7 @@ REGISTRY: List[ModuleMetadata] = [
         status=ModuleHealthStatus.HEALTHY,
         notes="Full backend verified. Python FastAPI engine with workflow templates and task execution.",
         api_prefix="/api/modules/spark-workflow-autopilot",
-        ui_route="/modules/spark-workflow-autopilot",
+        ui_route="/projects/spark-workflow-autopilot",
         has_custom_frontend=False,
         features=[
             "Automated procedural SOP templates",

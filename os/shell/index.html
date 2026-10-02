@@ -381,71 +381,98 @@
     </div>
 
     <div class="sidebar-menu">
-      <a href="/os" class="nav-btn active">
+      <a href="/dashboard" class="nav-btn active">
         <span>🏛️</span>
         <span>Command Center</span>
       </a>
 
       <!-- Flagship Core Experience -->
-      <a href="/os/core" class="nav-btn nav-core-btn">
+      <a href="/core" class="nav-btn nav-core-btn">
         <span>⚖️</span>
         <span>NYAYA-SATYA CORE</span>
       </a>
 
+      <!-- Digital Twin Explorer -->
+      <a href="/twin" class="nav-btn">
+        <span>🌐</span>
+        <span>Digital Twin Explorer</span>
+      </a>
+
       <div class="sidebar-divider">INTELLIGENCE ENGINES</div>
 
-      <a href="/os/projects/hearing-readiness" class="nav-btn">
+      <a href="/projects/hearing-readiness" class="nav-btn">
         <span class="nav-badge-num">01</span>
         <span>Hearing Readiness</span>
       </a>
-      <a href="/os/projects/case-continuity" class="nav-btn">
+      <a href="/projects/case-continuity" class="nav-btn">
         <span class="nav-badge-num">02</span>
         <span>Case Continuity</span>
       </a>
-      <a href="/os/projects/case-bottleneck" class="nav-btn">
+      <a href="/projects/case-bottleneck" class="nav-btn">
         <span class="nav-badge-num">03</span>
         <span>Case Bottleneck</span>
       </a>
-      <a href="/os/projects/legal-aid-handoff" class="nav-btn">
+      <a href="/projects/legal-aid-handoff" class="nav-btn">
         <span class="nav-badge-num">04</span>
         <span>Legal-Aid Handoff</span>
       </a>
-      <a href="/os/projects/procedural-obligation" class="nav-btn">
+
+      <div class="sidebar-divider">PROCEDURAL & COMPLIANCE</div>
+
+      <a href="/projects/procedural-obligation" class="nav-btn">
         <span class="nav-badge-num">05</span>
         <span>Procedural Obligation</span>
       </a>
-      <a href="/os/projects/evidence-dependency" class="nav-btn">
+      <a href="/projects/evidence-dependency" class="nav-btn">
         <span class="nav-badge-num">06</span>
         <span>Evidence Dependency</span>
       </a>
-      <a href="/os/projects/undertrial-liberty" class="nav-btn">
+      <a href="/projects/undertrial-liberty" class="nav-btn">
         <span class="nav-badge-num">07</span>
         <span>Undertrial Liberty</span>
       </a>
-      <a href="/os/projects/registry-defect" class="nav-btn">
+      <a href="/projects/registry-defect" class="nav-btn">
         <span class="nav-badge-num">08</span>
         <span>Registry Defect</span>
       </a>
-      <a href="/os/projects/case-crash-test" class="nav-btn">
+
+      <div class="sidebar-divider">RESILIENCE LAB</div>
+
+      <a href="/projects/case-crash-test" class="nav-btn">
         <span class="nav-badge-num">09</span>
         <span>Case Crash Test</span>
       </a>
-      <a href="/os/projects/spark-personal-os" class="nav-btn">
+
+      <div class="sidebar-divider">PRACTICE AUTOMATION</div>
+
+      <a href="/spark/personal" class="nav-btn">
         <span class="nav-badge-num">10</span>
         <span>Spark Personal OS</span>
       </a>
-      <a href="/os/projects/spark-deadline-guardian" class="nav-btn">
+      <a href="/spark/deadlines" class="nav-btn">
         <span class="nav-badge-num">11</span>
         <span>Deadline Guardian</span>
       </a>
-      <a href="/os/projects/spark-workflow-autopilot" class="nav-btn">
+      <a href="/spark/workflows" class="nav-btn">
         <span class="nav-badge-num">12</span>
         <span>Workflow Autopilot</span>
       </a>
 
-      <div class="sidebar-divider">ADMINISTRATION</div>
+      <div class="sidebar-divider">GOVERNANCE & AUDIT</div>
 
-      <a href="/system-health-ui" class="nav-btn">
+      <a href="/governance/tarka-vyuh" class="nav-btn">
+        <span>⚔️</span>
+        <span>TARKA-VYUH Arena</span>
+      </a>
+      <a href="/governance/unwind" class="nav-btn">
+        <span>🛡️</span>
+        <span>UNWIND Human Gate</span>
+      </a>
+      <a href="/governance/audit" class="nav-btn">
+        <span>📜</span>
+        <span>Audit Ledger</span>
+      </a>
+      <a href="/governance/system-health" class="nav-btn">
         <span>⚙️</span>
         <span>System Diagnostics</span>
       </a>
@@ -480,7 +507,7 @@
         <span style="font-size:12px; background:rgba(239,68,68,0.15); color:#fca5a5; padding:4px 10px; border-radius:4px; border:1px solid rgba(239,68,68,0.3); font-weight:700;">
           ⚠️ 2 CRITICAL ALERTS
         </span>
-        <a href="/os/core" class="btn-launch-core">Launch NYAYA-SATYA Core →</a>
+        <a href="/core" class="btn-launch-core">Launch NYAYA-SATYA Core →</a>
       </div>
     </header>
 
@@ -495,8 +522,9 @@
           <p class="core-desc">
             The authoritative legal evidence intelligence command center. Features Case Digital Twin generation, Adversarial Review Gauntlet, Achilles' Heel discovery, Causal Blast Radius simulator, Repair & Re-Attack engine, Defense Dossier builder, and the UNWIND Human Legal Gate.
           </p>
-          <div style="display:flex; gap:12px; align-items:center;">
-            <a href="/os/core" class="btn-launch-core">Open Original Core UI (Full Experience) →</a>
+          <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+            <a href="/core" class="btn-launch-core">Open Original Core UI (Full Experience) →</a>
+            <a href="/twin" class="btn-launch-core" style="background:linear-gradient(135deg, #00e5ff, #0088cc); color:#06090e;">Explore Digital Twin Graph →</a>
             <span style="font-size:12px; color:var(--text-dim);">Preserves 100% of original workflows & endpoints</span>
           </div>
         </div>
@@ -516,7 +544,7 @@
 
       <div class="engines-grid">
         <!-- 01 -->
-        <a href="/os/projects/hearing-readiness" class="engine-card">
+        <a href="/projects/hearing-readiness" class="engine-card">
           <div class="engine-card-header">
             <span class="eng-num">01</span>
             <span style="font-size:10px; color:var(--emerald-accent); font-family:'JetBrains Mono';">● HEALTHY</span>
@@ -533,7 +561,7 @@
         </a>
 
         <!-- 02 -->
-        <a href="/os/projects/case-continuity" class="engine-card">
+        <a href="/projects/case-continuity" class="engine-card">
           <div class="engine-card-header">
             <span class="eng-num">02</span>
             <span style="font-size:10px; color:var(--emerald-accent); font-family:'JetBrains Mono';">● HEALTHY</span>
@@ -550,7 +578,7 @@
         </a>
 
         <!-- 03 -->
-        <a href="/os/projects/case-bottleneck" class="engine-card">
+        <a href="/projects/case-bottleneck" class="engine-card">
           <div class="engine-card-header">
             <span class="eng-num">03</span>
             <span style="font-size:10px; color:var(--ruby-accent); font-family:'JetBrains Mono';">● SEVERE DELAY</span>
@@ -567,7 +595,7 @@
         </a>
 
         <!-- 04 -->
-        <a href="/os/projects/legal-aid-handoff" class="engine-card">
+        <a href="/projects/legal-aid-handoff" class="engine-card">
           <div class="engine-card-header">
             <span class="eng-num">04</span>
             <span style="font-size:10px; color:var(--emerald-accent); font-family:'JetBrains Mono';">● HEALTHY</span>
@@ -584,7 +612,7 @@
         </a>
 
         <!-- 05 -->
-        <a href="/os/projects/procedural-obligation" class="engine-card">
+        <a href="/projects/procedural-obligation" class="engine-card">
           <div class="engine-card-header">
             <span class="eng-num">05</span>
             <span style="font-size:10px; color:var(--amber-accent); font-family:'JetBrains Mono';">● UNWIND GROUNDED</span>
@@ -601,7 +629,7 @@
         </a>
 
         <!-- 06 -->
-        <a href="/os/projects/evidence-dependency" class="engine-card">
+        <a href="/projects/evidence-dependency" class="engine-card">
           <div class="engine-card-header">
             <span class="eng-num">06</span>
             <span style="font-size:10px; color:var(--cyan-accent); font-family:'JetBrains Mono';">● GRAPH ACTIVE</span>
@@ -618,7 +646,7 @@
         </a>
 
         <!-- 07 -->
-        <a href="/os/projects/undertrial-liberty" class="engine-card">
+        <a href="/projects/undertrial-liberty" class="engine-card">
           <div class="engine-card-header">
             <span class="eng-num">07</span>
             <span style="font-size:10px; color:var(--ruby-accent); font-family:'JetBrains Mono';">● CRITICAL BAIL DUE</span>
@@ -635,7 +663,7 @@
         </a>
 
         <!-- 08 -->
-        <a href="/os/projects/registry-defect" class="engine-card">
+        <a href="/projects/registry-defect" class="engine-card">
           <div class="engine-card-header">
             <span class="eng-num">08</span>
             <span style="font-size:10px; color:var(--amber-accent); font-family:'JetBrains Mono';">● 2 DEFECTS</span>
@@ -652,7 +680,7 @@
         </a>
 
         <!-- 09 -->
-        <a href="/os/projects/case-crash-test" class="engine-card">
+        <a href="/projects/case-crash-test" class="engine-card">
           <div class="engine-card-header">
             <span class="eng-num">09</span>
             <span style="font-size:10px; color:var(--emerald-accent); font-family:'JetBrains Mono';">● SANDBOX ACTIVE</span>
@@ -669,7 +697,7 @@
         </a>
 
         <!-- 10 -->
-        <a href="/os/projects/spark-personal-os" class="engine-card">
+        <a href="/spark/personal" class="engine-card">
           <div class="engine-card-header">
             <span class="eng-num">10</span>
             <span style="font-size:10px; color:var(--emerald-accent); font-family:'JetBrains Mono';">● READY</span>
@@ -686,7 +714,7 @@
         </a>
 
         <!-- 11 -->
-        <a href="/os/projects/spark-deadline-guardian" class="engine-card">
+        <a href="/spark/deadlines" class="engine-card">
           <div class="engine-card-header">
             <span class="eng-num">11</span>
             <span style="font-size:10px; color:var(--ruby-accent); font-family:'JetBrains Mono';">● TRIGGER NEAR</span>
@@ -703,7 +731,7 @@
         </a>
 
         <!-- 12 -->
-        <a href="/os/projects/spark-workflow-autopilot" class="engine-card">
+        <a href="/spark/workflows" class="engine-card">
           <div class="engine-card-header">
             <span class="eng-num">12</span>
             <span style="font-size:10px; color:var(--emerald-accent); font-family:'JetBrains Mono';">● RUNNING</span>

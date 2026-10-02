@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TARKA-VYUH — Adversarial Reasoning & Fragility Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/os-master-header.css">
+  <style>
+    :root {
+      --bg-base: #06090e;
+      --bg-surface: #0c121c;
+      --bg-card: #121b2a;
+      --border-subtle: #1c2b42;
+      --border-accent: #2e4466;
+      --gold-primary: #d4af37;
+      --cyan-accent: #00e5ff;
+      --ruby-accent: #ef4444;
+      --amber-accent: #f59e0b;
+      --emerald-accent: #10b981;
+      --text-main: #f0f4f8;
+      --text-muted: #8a99ad;
+      --text-dim: #55667d;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg-base);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 30px 24px;
+    }
+    .tarka-hero {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(212, 175, 55, 0.08));
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 12px;
+      padding: 26px 32px;
+      margin-bottom: 26px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .tarka-title {
+      font-family: 'Cinzel', serif;
+      font-size: 24px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .tagline {
+      font-style: italic;
+      color: var(--gold-primary);
+      font-size: 13.5px;
+      margin-top: 6px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    .panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 22px;
+    }
+    .panel-hdr {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 10px;
+    }
+    .fragility-meter {
+      height: 12px;
+      background: #1c2b42;
+      border-radius: 6px;
+      overflow: hidden;
+      margin: 14px 0;
+    }
+    .fragility-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--emerald-accent), var(--amber-accent), var(--ruby-accent));
+      width: 78%;
+    }
+    .attack-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-left: 4px solid var(--ruby-accent);
+      border-radius: 6px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .badge-attack {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(239,68,68,0.2);
+      color: #fca5a5;
+    }
+    .btn-action {
+      background: linear-gradient(135deg, var(--gold-primary), #90761e);
+      color: #06090e;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .non-adj-box {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: 12.5px;
+      color: #a7f3d0;
+      margin-top: 24px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- Master Header -->
+  <header class="os-master-header">
+    <div class="os-header-left">
+      <a href="/dashboard" class="os-back-button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span>Command Center</span>
+      </a>
+      <div class="os-breadcrumb-trail">
+        <span class="os-bc-root">NYAYA-SATYA</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-section">GOVERNANCE</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-current">TARKA-VYUH ADVERSARIAL ARENA</span>
+      </div>
+    </div>
+    <div class="os-header-right">
+      <div class="os-case-badge">
+        <span class="os-pulse-dot"></span>
+        <span class="os-case-label">CASE CONTEXT:</span>
+        <select id="os-global-case-select" class="os-case-dropdown" onchange="osSwitchCase(this.value)">
+          <option value="CASE-2024-DEL-0482">State v. Rajesh Kumar (Tis Hazari)</option>
+          <option value="CASE-2023-BOM-1109">Apex Infra v. Mumbai Port Trust (Bombay HC)</option>
+          <option value="CASE-2024-KA-0077">Kaveri Farmers v. Karnataka (Karnataka HC)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="tarka-hero">
+      <div>
+        <h1 class="tarka-title">
+          <span>⚔️ TARKA-VYUH — Adversarial Review Engine</span>
+          <span style="font-size:12px; font-family:'JetBrains Mono'; background:rgba(239,68,68,0.2); color:#fca5a5; padding:3px 8px; border-radius:4px;">ARENA ACTIVE</span>
+        </h1>
+        <div class="tagline">"Don't trust the draft. Attack it. Repair it. Attack the repair."</div>
+      </div>
+      <div>
+        <a href="/core" class="btn-action">Launch Full Core Adversarial Gauntlet →</a>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <!-- Fragility Analysis -->
+      <div class="panel">
+        <div class="panel-hdr">
+          <span>📊 Case Fragility Metric</span>
+          <span style="font-family:'JetBrains Mono'; color:var(--ruby-accent); font-weight:700;">78% FRAGILE</span>
+        </div>
+        <p style="font-size:13px; color:var(--text-muted);">
+          Structural fragility evaluates missing evidence, contradictory claims, and vulnerability to hostile cross-examination.
+        </p>
+        <div class="fragility-meter">
+          <div class="fragility-fill"></div>
+        </div>
+        <div style="font-size:12px; color:var(--text-dim); display:flex; justify-content:space-between;">
+          <span>Resilient (0%)</span>
+          <span>Contested (50%)</span>
+          <span>Highly Vulnerable (100%)</span>
+        </div>
+
+        <div style="margin-top:20px;">
+          <h4 style="font-size:13.5px; color:#fff; margin-bottom:10px;">Identified Achilles' Heels:</h4>
+          <div class="attack-item">
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+              <strong style="color:#fff; font-size:13px;">Electronic CD Admissibility Defect</strong>
+              <span class="badge-attack">CRITICAL</span>
+            </div>
+            <div style="font-size:12px; color:var(--text-muted);">
+              CCTV CD (E-02) lacks mandatory Section 63 BSA / 65B IEA certificate. Entire corroborating alibi refutation is legally fragile.
+            </div>
+          </div>
+          <div class="attack-item">
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+              <strong style="color:#fff; font-size:13px;">Hostile Recovery Panchnama</strong>
+              <span class="badge-attack">HIGH</span>
+            </div>
+            <div style="font-size:12px; color:var(--text-muted);">
+              Independent panch witnesses executed affidavits stating signatures were coerced at police station.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Adversarial Attack Vectors -->
+      <div class="panel">
+        <div class="panel-hdr">
+          <span>🎯 Active Attack Hypotheses</span>
+          <a href="/projects/case-crash-test" style="font-size:12px; color:var(--cyan-accent); text-decoration:none;">Engine 09 Crash Test →</a>
+        </div>
+        
+        <div class="attack-item" style="border-left-color: var(--amber-accent);">
+          <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+            <strong style="color:#fff; font-size:13px;">Attack Vector 1: Spatial Impossibility</strong>
+            <span style="font-family:'JetBrains Mono'; font-size:10.5px; background:rgba(245,158,11,0.2); color:#fde68a; padding:2px 6px; border-radius:4px;">CDR COLLAPSE</span>
+          </div>
+          <p style="font-size:12px; color:var(--text-muted);">
+            Cross-referencing CDR tower logs (E-03) shows accused was physically at Pitampura at 21:30 hrs. Prosecution claim CLM-01 is contradictory.
+          </p>
+        </div>
+
+        <div class="attack-item" style="border-left-color: var(--cyan-accent);">
+          <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+            <strong style="color:#fff; font-size:13px;">Attack Vector 2: Section 230 BNSS Copy Non-Supply</strong>
+            <span style="font-family:'JetBrains Mono'; font-size:10.5px; background:rgba(0,229,255,0.2); color:var(--cyan-accent); padding:2px 6px; border-radius:4px;">PROCEDURAL BAR</span>
+          </div>
+          <p style="font-size:12px; color:var(--text-muted);">
+            Prosecution has failed to supply legible copies of annexures for 11 months. Trial cannot commence until copies furnished.
+          </p>
+        </div>
+
+        <div style="margin-top:20px; background:var(--bg-card); padding:14px; border-radius:8px; border:1px solid var(--border-subtle);">
+          <div style="font-size:13px; font-weight:700; color:#fff; margin-bottom:4px;">Recommended Repair Action:</div>
+          <p style="font-size:12px; color:var(--text-muted);">
+            File formal memorandum pressing for Sec 479 BNSS mandatory statutory release and exclusion of uncertified electronic record.
+          </p>
+          <div style="margin-top:10px;">
+            <a href="/governance/unwind" class="btn-action" style="font-size:12px; padding:6px 12px;">Authorize in UNWIND Gate →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="non-adj-box">
+      <span style="font-size:20px;">⚖️</span>
+      <div>
+        <strong>STRICT NON-ADJUDICATION GUARANTEE:</strong>
+        TARKA-VYUH produces adversarial audits, contradiction discovery, and vulnerability maps for legal advocates. It does NOT predict court verdicts, judge rulings, or replace human counsel discretion.
+      </div>
+    </div>
+  </div>
+
+  <script src="/os-shared-context.js"></script>
+</body>
+</html>

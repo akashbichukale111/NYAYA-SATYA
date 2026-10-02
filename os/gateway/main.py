@@ -238,13 +238,41 @@ def global_search(q: str = Query(..., min_length=1)):
     query = q.lower()
     results = []
     
-    # 1. Core experience
-    if "core" in query or "nyaya" in query or "twin" in query or "adversarial" in query:
+    # 1. Core experience & Twin
+    if "core" in query or "nyaya" in query:
         results.append({
             "category": "Flagship Platform",
             "title": "NYAYA-SATYA CORE",
-            "subtitle": "Original Legal Case Intelligence & Digital Twin Arena",
-            "target_route": "/os/core"
+            "subtitle": "Original Legal Case Intelligence & Evidence Arena",
+            "target_route": "/core"
+        })
+    if "twin" in query or "digital" in query or "graph" in query:
+        results.append({
+            "category": "Core Architecture",
+            "title": "Case Digital Twin Explorer",
+            "subtitle": "Deep Graph Visualization of Claims, Evidence & Causal Links",
+            "target_route": "/twin"
+        })
+    if "tarka" in query or "adversarial" in query or "attack" in query or "fragil" in query:
+        results.append({
+            "category": "Governance",
+            "title": "TARKA-VYUH Adversarial Arena",
+            "subtitle": "Fragility Scoring & Adversarial Gauntlet Attack Console",
+            "target_route": "/governance/tarka-vyuh"
+        })
+    if "unwind" in query or "gate" in query or "authoriz" in query or "counsel" in query:
+        results.append({
+            "category": "Governance",
+            "title": "UNWIND Human Legal Gate",
+            "subtitle": "Licensed Counsel Authorization & Non-Consequential Guard",
+            "target_route": "/governance/unwind"
+        })
+    if "audit" in query or "ledger" in query or "chain" in query:
+        results.append({
+            "category": "Governance",
+            "title": "Immutable Audit Ledger",
+            "subtitle": "Cryptographic Event Trail & State Hashes",
+            "target_route": "/governance/audit"
         })
     
     # 2. Search cases
@@ -254,7 +282,7 @@ def global_search(q: str = Query(..., min_length=1)):
                 "category": "Cases",
                 "title": f"{c.case_id} — {c.title}",
                 "subtitle": f"{c.court} • {c.stage.value}",
-                "target_route": f"/os?case_id={c.case_id}"
+                "target_route": f"/dashboard?case_id={c.case_id}"
             })
             
     # 3. Search engines
@@ -264,18 +292,19 @@ def global_search(q: str = Query(..., min_length=1)):
                 "category": "Intelligence Engines",
                 "title": f"Project {m.number:02d}: {m.name}",
                 "subtitle": m.tagline,
-                "target_route": f"/os/projects/{m.slug}"
+                "target_route": f"/projects/{m.slug}"
             })
 
     return {"query": q, "total_matches": len(results), "results": results[:15]}
 
 
 # ---------------------------------------------------------------------------
-# Master Platform Navigation & UI Serving
+# Master Platform Navigation & UI Serving (Canonical Routes & Aliases)
 # ---------------------------------------------------------------------------
 
-# 1. Master OS Command Center
+# 1. Master Command Center (/ and /dashboard and /os)
 @app.get("/", response_class=HTMLResponse)
+@app.get("/dashboard", response_class=HTMLResponse)
 @app.get("/os", response_class=HTMLResponse)
 def serve_master_os_command_center():
     index_file = SHELL_DIR / "index.html"
@@ -285,7 +314,8 @@ def serve_master_os_command_center():
     return HTMLResponse("<h1>Master OS Shell initializing...</h1>", status_code=200)
 
 
-# 2. Original NYAYA-SATYA Core Experience
+# 2. Original NYAYA-SATYA Core Experience (/core and /os/core)
+@app.get("/core", response_class=HTMLResponse)
 @app.get("/os/core", response_class=HTMLResponse)
 def serve_original_nyaya_satya_core():
     core_html_path = UNWIND_CORE_DIR / "web" / "static" / "index.html"
@@ -300,9 +330,9 @@ def serve_original_nyaya_satya_core():
     <!-- NYAYA-SATYA MASTER PLATFORM RETURN HEADER -->
     <header class="os-master-header">
       <div class="os-header-left">
-        <a href="/os" class="os-back-button">
+        <a href="/dashboard" class="os-back-button">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          <span>Back to NYAYA-SATYA OS</span>
+          <span>Command Center</span>
         </a>
         <div class="os-breadcrumb-trail">
           <span class="os-bc-root">NYAYA-SATYA</span>
@@ -342,7 +372,18 @@ def serve_original_nyaya_satya_core():
     return HTMLResponse(html)
 
 
-# 3. Specialized Project Experiences (12 Projects)
+# 3. Case Digital Twin Deep Explorer (/twin and /os/twin)
+@app.get("/twin", response_class=HTMLResponse)
+@app.get("/os/twin", response_class=HTMLResponse)
+def serve_twin_explorer():
+    twin_file = SHELL_DIR / "twin_explorer.html"
+    if twin_file.exists():
+        with open(twin_file, "r", encoding="utf-8") as f:
+            return f.read()
+    raise HTTPException(status_code=404, detail="Twin explorer UI not found")
+
+
+# 4. Specialized Project Experiences (12 Projects)
 PROJECT_PAGES = {
     "hearing-readiness": "01_hearing_readiness.html",
     "case-continuity": "02_case_continuity.html",
@@ -353,25 +394,73 @@ PROJECT_PAGES = {
     "undertrial-liberty": "07_undertrial_liberty.html",
     "registry-defect": "08_registry_defect.html",
     "case-crash-test": "09_case_crash_test.html",
+    "crash-test": "09_case_crash_test.html",
     "spark-personal-os": "10_spark_personal_os.html",
     "spark-deadline-guardian": "11_spark_deadline_guardian.html",
     "spark-workflow-autopilot": "12_spark_workflow_autopilot.html",
 }
 
+@app.get("/projects/{slug}", response_class=HTMLResponse)
 @app.get("/os/projects/{slug}", response_class=HTMLResponse)
 @app.get("/modules/{slug}", response_class=HTMLResponse)
 def serve_specialized_project(slug: str):
-    if slug not in PROJECT_PAGES:
-        raise HTTPException(status_code=404, detail=f"Specialized project '{slug}' not found")
+    target_slug = slug
+    if target_slug not in PROJECT_PAGES:
+        # Try finding prefix or match
+        normalized = slug.replace("_", "-").lower()
+        if normalized in PROJECT_PAGES:
+            target_slug = normalized
+        else:
+            raise HTTPException(status_code=404, detail=f"Specialized project '{slug}' not found")
 
-    page_file = SHELL_DIR / "projects" / PROJECT_PAGES[slug]
+    page_file = SHELL_DIR / "projects" / PROJECT_PAGES[target_slug]
     if page_file.exists():
         with open(page_file, "r", encoding="utf-8") as f:
             return f.read()
 
-    raise HTTPException(status_code=404, detail=f"Project UI file {PROJECT_PAGES[slug]} not found")
+    raise HTTPException(status_code=404, detail=f"Project UI file {PROJECT_PAGES[target_slug]} not found")
 
 
+# 5. Dedicated Spark Direct Routes
+@app.get("/spark/personal", response_class=HTMLResponse)
+def serve_spark_personal():
+    return serve_specialized_project("spark-personal-os")
+
+@app.get("/spark/deadlines", response_class=HTMLResponse)
+def serve_spark_deadlines():
+    return serve_specialized_project("spark-deadline-guardian")
+
+@app.get("/spark/workflows", response_class=HTMLResponse)
+def serve_spark_workflows():
+    return serve_specialized_project("spark-workflow-autopilot")
+
+
+# 6. Dedicated Governance & Audit Routes
+@app.get("/governance/tarka-vyuh", response_class=HTMLResponse)
+def serve_governance_tarka():
+    tarka_file = SHELL_DIR / "governance_tarka.html"
+    if tarka_file.exists():
+        with open(tarka_file, "r", encoding="utf-8") as f:
+            return f.read()
+    raise HTTPException(status_code=404, detail="TARKA-VYUH UI not found")
+
+@app.get("/governance/unwind", response_class=HTMLResponse)
+def serve_governance_unwind():
+    unwind_file = SHELL_DIR / "governance_unwind.html"
+    if unwind_file.exists():
+        with open(unwind_file, "r", encoding="utf-8") as f:
+            return f.read()
+    raise HTTPException(status_code=404, detail="UNWIND Gate UI not found")
+
+@app.get("/governance/audit", response_class=HTMLResponse)
+def serve_governance_audit():
+    audit_file = SHELL_DIR / "governance_audit.html"
+    if audit_file.exists():
+        with open(audit_file, "r", encoding="utf-8") as f:
+            return f.read()
+    raise HTTPException(status_code=404, detail="Audit ledger UI not found")
+
+@app.get("/governance/system-health", response_class=HTMLResponse)
 @app.get("/system-health-ui", response_class=HTMLResponse)
 def serve_system_health_ui():
     """Serves the Master OS shell with view initialized to system diagnostics."""
@@ -379,7 +468,6 @@ def serve_system_health_ui():
     if index_file.exists():
         with open(index_file, "r", encoding="utf-8") as f:
             content = f.read()
-            # Auto-trigger diagnostics tab
             content = content.replace("loadCockpit();", "loadCockpit(); showView('system-health');")
             return content
     return HTMLResponse("<h1>System Diagnostics</h1>", status_code=200)

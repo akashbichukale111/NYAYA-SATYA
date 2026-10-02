@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NYAYA-SATYA — Case Digital Twin Deep Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/os-master-header.css">
+  <style>
+    :root {
+      --bg-base: #06090e;
+      --bg-surface: #0c121c;
+      --bg-card: #121b2a;
+      --border-subtle: #1c2b42;
+      --border-accent: #2e4466;
+      --gold-primary: #d4af37;
+      --gold-glow: rgba(212, 175, 55, 0.25);
+      --cyan-accent: #00e5ff;
+      --emerald-accent: #10b981;
+      --ruby-accent: #ef4444;
+      --amber-accent: #f59e0b;
+      --text-main: #f0f4f8;
+      --text-muted: #8a99ad;
+      --text-dim: #55667d;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg-base);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 30px 24px;
+      width: 100%;
+    }
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(0, 229, 255, 0.05));
+      border: 1px solid var(--border-accent);
+      border-radius: 12px;
+      padding: 24px 30px;
+      margin-bottom: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .hero-title {
+      font-family: 'Cinzel', serif;
+      font-size: 24px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-sub {
+      color: var(--text-muted);
+      font-size: 13.5px;
+      margin-top: 6px;
+    }
+    .twin-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      background: rgba(0, 229, 255, 0.15);
+      color: var(--cyan-accent);
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: 1px solid rgba(0, 229, 255, 0.3);
+    }
+    .grid-layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+    .twin-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 22px;
+      margin-bottom: 24px;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 12px;
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .entity-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+    .entity-item:hover {
+      border-color: var(--border-accent);
+      transform: translateX(4px);
+    }
+    .entity-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .entity-id {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gold-primary);
+    }
+    .deep-link {
+      color: var(--cyan-accent);
+      text-decoration: none;
+      font-size: 11.5px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .deep-link:hover { text-decoration: underline; }
+    .badge {
+      font-size: 10.5px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .badge-con { background: rgba(239,68,68,0.2); color: #fca5a5; }
+    .badge-sup { background: rgba(16,185,129,0.2); color: #86efac; }
+    .badge-fra { background: rgba(245,158,11,0.2); color: #fde68a; }
+    .timeline-row {
+      display: flex;
+      gap: 16px;
+      padding: 10px 0;
+      border-left: 2px solid var(--border-subtle);
+      margin-left: 12px;
+      padding-left: 16px;
+      position: relative;
+    }
+    .timeline-row::before {
+      content: '';
+      position: absolute;
+      left: -6px;
+      top: 14px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--gold-primary);
+    }
+    .time-lbl {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--cyan-accent);
+      width: 90px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Master Header -->
+  <header class="os-master-header">
+    <div class="os-header-left">
+      <a href="/dashboard" class="os-back-button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span>Command Center</span>
+      </a>
+      <div class="os-breadcrumb-trail">
+        <span class="os-bc-root">NYAYA-SATYA</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-section">CORE ARCHITECTURE</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-current">CASE DIGITAL TWIN EXPLORER</span>
+      </div>
+    </div>
+    <div class="os-header-right">
+      <div class="os-case-badge">
+        <span class="os-pulse-dot"></span>
+        <span class="os-case-label">CASE CONTEXT:</span>
+        <select id="os-global-case-select" class="os-case-dropdown" onchange="osSwitchCase(this.value)">
+          <option value="CASE-2024-DEL-0482">State v. Rajesh Kumar (Tis Hazari)</option>
+          <option value="CASE-2023-BOM-1109">Apex Infra v. Mumbai Port Trust (Bombay HC)</option>
+          <option value="CASE-2024-KA-0077">Kaveri Farmers v. Karnataka (Karnataka HC)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="hero-banner">
+      <div>
+        <h1 class="hero-title">
+          <span>🌐 Case Digital Twin Deep Explorer</span>
+          <span class="twin-badge">STATE VERSION: v4 INTACT</span>
+        </h1>
+        <p class="hero-sub" id="twin-summary-text">
+          Complete structural mapping of evidence, claims, issues, contradictions, and causal dependencies for active case.
+        </p>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <a href="/core" class="deep-link" style="background:linear-gradient(135deg,var(--gold-primary),#8f741d); color:#06090e; padding:8px 16px; border-radius:6px; font-weight:700;">Open Core Twin Arena →</a>
+      </div>
+    </div>
+
+    <div class="grid-layout">
+      <!-- Left Column: Evidence & Claims & Contradictions -->
+      <div>
+        <!-- Contradictions & Fragility -->
+        <div class="twin-card" style="border-color: rgba(239,68,68,0.4);">
+          <div class="card-header">
+            <span class="card-title" style="color:#fca5a5;">⚡ Active Contradictions & Causal Clashes</span>
+            <a href="/governance/tarka-vyuh" class="deep-link">Attack in TARKA-VYUH →</a>
+          </div>
+          <div id="contradictions-list">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Evidence Nodes -->
+        <div class="twin-card">
+          <div class="card-header">
+            <span class="card-title">📁 Evidence Nodes & Admissibility</span>
+            <a href="/projects/evidence-dependency" class="deep-link">Analyze in Engine 06 →</a>
+          </div>
+          <div id="evidence-list">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Claims & Issues -->
+        <div class="twin-card">
+          <div class="card-header">
+            <span class="card-title">⚖️ Legal Claims & Framed Issues</span>
+            <a href="/projects/case-crash-test" class="deep-link">Stress-Test in Engine 09 →</a>
+          </div>
+          <div id="claims-list">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Timeline, Liberty, Bottlenecks, Governance -->
+      <div>
+        <!-- Governance State -->
+        <div class="twin-card" style="border-color: rgba(212, 175, 55, 0.4);">
+          <div class="card-header">
+            <span class="card-title" style="color:var(--gold-primary);">🛡️ UNWIND Governance State</span>
+            <a href="/governance/unwind" class="deep-link">Human Gate Console →</a>
+          </div>
+          <div id="governance-status" style="font-size:13px; line-height:1.6; color:var(--text-muted);">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Liberty & Custody Status -->
+        <div class="twin-card">
+          <div class="card-header">
+            <span class="card-title">🔓 Undertrial Liberty Metrics</span>
+            <a href="/projects/undertrial-liberty" class="deep-link">View Engine 07 →</a>
+          </div>
+          <div id="liberty-box" style="font-size:13px; line-height:1.6; color:var(--text-muted);">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Bottlenecks & Friction Points -->
+        <div class="twin-card">
+          <div class="card-header">
+            <span class="card-title">⏳ Case Bottlenecks</span>
+            <a href="/projects/case-bottleneck" class="deep-link">Solve in Engine 03 →</a>
+          </div>
+          <div id="bottlenecks-list">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Chronological Timeline -->
+        <div class="twin-card">
+          <div class="card-header">
+            <span class="card-title">📅 Chronological Timeline</span>
+            <a href="/projects/case-continuity" class="deep-link">Inspect Engine 02 →</a>
+          </div>
+          <div id="timeline-list">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/os-shared-context.js"></script>
+  <script>
+    async function loadTwin() {
+      const activeCaseId = osGetActiveCase();
+      const res = await fetch('/api/cases/active');
+      const data = await res.json();
+
+      document.getElementById('twin-summary-text').innerText = 
+        `${data.title} (${data.case_id}) • ${data.court} • ${data.stage} stage.`;
+
+      // Render Contradictions
+      const conEl = document.getElementById('contradictions-list');
+      if (data.contradictions && data.contradictions.length > 0) {
+        conEl.innerHTML = data.contradictions.map(c => `
+          <div class="entity-item" style="border-left: 3px solid var(--ruby-accent);">
+            <div class="entity-top">
+              <span class="entity-id">${c.id}</span>
+              <span class="badge badge-con">${c.severity}</span>
+            </div>
+            <div style="font-weight:700; font-size:13.5px; color:#fff; margin-bottom:4px;">${c.title}</div>
+            <div style="font-size:12px; color:var(--text-muted);">${c.description}</div>
+            <div style="margin-top:8px;">
+              <a href="/governance/tarka-vyuh" class="deep-link">Inspect Contradiction in TARKA-VYUH →</a>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        conEl.innerHTML = '<div style="font-size:12.5px; color:var(--text-dim);">No active evidentiary contradictions flagged.</div>';
+      }
+
+      // Render Evidence
+      const evEl = document.getElementById('evidence-list');
+      if (data.evidence && data.evidence.length > 0) {
+        evEl.innerHTML = data.evidence.map(e => `
+          <div class="entity-item">
+            <div class="entity-top">
+              <span class="entity-id">${e.id}: ${e.label}</span>
+              <span class="badge ${e.status === 'CONTESTED' ? 'badge-con' : (e.status === 'FRAGILE' ? 'badge-fra' : 'badge-sup')}">${e.status}</span>
+            </div>
+            <div style="font-size:12px; color:var(--text-muted); margin-bottom:6px;">${e.notes || ''}</div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:11px; color:var(--text-dim);">${e.materiality}</span>
+              <a href="/projects/evidence-dependency" class="deep-link">Check Dependencies →</a>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        evEl.innerHTML = '<div style="font-size:12.5px; color:var(--text-dim);">No evidence nodes ingested.</div>';
+      }
+
+      // Render Claims
+      const clmEl = document.getElementById('claims-list');
+      if (data.claims && data.claims.length > 0) {
+        clmEl.innerHTML = data.claims.map(c => `
+          <div class="entity-item">
+            <div class="entity-top">
+              <span class="entity-id">${c.claim_id}</span>
+              <span class="badge ${c.status === 'CONTRADICTED' ? 'badge-con' : 'badge-sup'}">${c.status}</span>
+            </div>
+            <div style="font-size:13px; color:#fff; margin-bottom:6px;">${c.statement}</div>
+            <div style="font-size:11px; color:var(--text-dim);">
+              Supporting Evidence: ${(c.supporting_evidence || []).join(', ') || 'None'}
+            </div>
+          </div>
+        `).join('');
+      } else {
+        clmEl.innerHTML = '<div style="font-size:12.5px; color:var(--text-dim);">No claims mapped.</div>';
+      }
+
+      // Render Governance Status
+      const govEl = document.getElementById('governance-status');
+      govEl.innerHTML = `
+        <div style="margin-bottom:8px;"><strong>Status:</strong> ${data.human_authorized ? '<span style="color:var(--emerald-accent);">AUTHORIZED BY COUNSEL</span>' : '<span style="color:var(--ruby-accent);">PENDING ADVOCATE AUTHORIZATION</span>'}</div>
+        <div style="margin-bottom:8px;"><strong>Lead Counsel:</strong> ${data.lead_counsel}</div>
+        <div style="margin-bottom:8px;"><strong>Non-Adjudication Invariant:</strong> ENFORCED (Zero verdict simulation)</div>
+        <a href="/governance/unwind" class="deep-link" style="margin-top:4px; display:inline-block;">Open Authorization Gate →</a>
+      `;
+
+      // Render Liberty Status
+      const libEl = document.getElementById('liberty-box');
+      if (data.undertrial_in_custody && data.liberty_events && data.liberty_events.length > 0) {
+        const le = data.liberty_events[0];
+        libEl.innerHTML = `
+          <div style="margin-bottom:6px;"><strong>Days in Custody:</strong> <span style="font-family:'JetBrains Mono'; color:var(--cyan-accent);">${le.days_in_custody} days</span></div>
+          <div style="margin-bottom:6px;"><strong>Statutory Fraction Served:</strong> ${(le.fraction_served * 100).toFixed(1)}% of max sentence</div>
+          <div style="margin-bottom:8px; color:#fca5a5;"><strong>Sec 479 BNSS:</strong> ${le.eligible_under_sec_479 ? 'ELIGIBLE FOR MANDATORY STATUTORY BAIL' : 'Pending eligibility'}</div>
+          <a href="/projects/undertrial-liberty" class="deep-link">File Liberty Motion Memo →</a>
+        `;
+      } else {
+        libEl.innerHTML = '<div style="color:var(--text-dim);">Accused not in pre-trial custody.</div>';
+      }
+
+      // Render Bottlenecks
+      const btnEl = document.getElementById('bottlenecks-list');
+      if (data.bottlenecks && data.bottlenecks.length > 0) {
+        btnEl.innerHTML = data.bottlenecks.map(b => `
+          <div class="entity-item" style="border-left: 3px solid var(--amber-accent);">
+            <div style="font-weight:700; font-size:12px; color:var(--amber-accent);">${b.type}</div>
+            <div style="font-size:12px; color:#fff; margin-top:2px;">${b.description}</div>
+            <a href="/projects/case-bottleneck" class="deep-link" style="margin-top:6px;">Unblock Bottleneck →</a>
+          </div>
+        `).join('');
+      } else {
+        btnEl.innerHTML = '<div style="font-size:12.5px; color:var(--text-dim);">No systemic bottlenecks detected.</div>';
+      }
+
+      // Render Timeline
+      const tlEl = document.getElementById('timeline-list');
+      if (data.timeline && data.timeline.length > 0) {
+        tlEl.innerHTML = data.timeline.map(t => `
+          <div class="timeline-row">
+            <div class="time-lbl">${t.time}</div>
+            <div>
+              <div style="font-weight:700; font-size:12.5px; color:#fff;">${t.title}</div>
+              <div style="font-size:11.5px; color:var(--text-muted);">${t.detail}</div>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        tlEl.innerHTML = '<div style="font-size:12.5px; color:var(--text-dim);">No timeline entries.</div>';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadTwin);
+  </script>
+</body>
+</html>

@@ -10,6 +10,9 @@
   localStorage.setItem('nyaya_active_case_id', activeCaseId);
 
   window.nyayaActiveCaseId = activeCaseId;
+  window.osGetActiveCase = function() {
+    return activeCaseId || localStorage.getItem('nyaya_active_case_id') || 'CASE-2024-DEL-0482';
+  };
 
   // 2. Global case switcher
   window.osSwitchCase = async function(newCaseId) {

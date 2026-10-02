@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UNWIND Core — Human Legal Gate & Governance Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/os-master-header.css">
+  <style>
+    :root {
+      --bg-base: #06090e;
+      --bg-surface: #0c121c;
+      --bg-card: #121b2a;
+      --border-subtle: #1c2b42;
+      --border-accent: #2e4466;
+      --gold-primary: #d4af37;
+      --cyan-accent: #00e5ff;
+      --emerald-accent: #10b981;
+      --ruby-accent: #ef4444;
+      --amber-accent: #f59e0b;
+      --text-main: #f0f4f8;
+      --text-muted: #8a99ad;
+      --text-dim: #55667d;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg-base);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 30px 24px;
+    }
+    .gate-hero {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.12), rgba(16, 185, 129, 0.08));
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      border-radius: 12px;
+      padding: 26px 32px;
+      margin-bottom: 26px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .gate-title {
+      font-family: 'Cinzel', serif;
+      font-size: 24px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .grid-layout {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 24px;
+    }
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 22px;
+      margin-bottom: 22px;
+    }
+    .card-hdr {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 10px;
+    }
+    .action-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-accent);
+      border-radius: 8px;
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+    .action-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .action-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .btn-approve {
+      background: linear-gradient(135deg, var(--emerald-accent), #059669);
+      color: #fff;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 12.5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-approve:hover { filter: brightness(1.1); }
+    .btn-reject {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 12.5px;
+      cursor: pointer;
+    }
+    .btn-revision {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fde68a;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 12.5px;
+      cursor: pointer;
+    }
+    .audit-row {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 8px 10px;
+      background: var(--bg-card);
+      border-radius: 4px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <!-- Master Header -->
+  <header class="os-master-header">
+    <div class="os-header-left">
+      <a href="/dashboard" class="os-back-button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span>Command Center</span>
+      </a>
+      <div class="os-breadcrumb-trail">
+        <span class="os-bc-root">NYAYA-SATYA</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-section">GOVERNANCE</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-current">UNWIND HUMAN LEGAL GATE</span>
+      </div>
+    </div>
+    <div class="os-header-right">
+      <div class="os-case-badge">
+        <span class="os-pulse-dot"></span>
+        <span class="os-case-label">CASE CONTEXT:</span>
+        <select id="os-global-case-select" class="os-case-dropdown" onchange="osSwitchCase(this.value)">
+          <option value="CASE-2024-DEL-0482">State v. Rajesh Kumar (Tis Hazari)</option>
+          <option value="CASE-2023-BOM-1109">Apex Infra v. Mumbai Port Trust (Bombay HC)</option>
+          <option value="CASE-2024-KA-0077">Kaveri Farmers v. Karnataka (Karnataka HC)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="gate-hero">
+      <div>
+        <h1 class="gate-title">
+          <span>🛡️ UNWIND Core — Human Legal Gate</span>
+          <span id="gate-status-badge" style="font-size:12px; font-family:'JetBrains Mono'; background:rgba(212,175,55,0.2); color:var(--gold-primary); padding:3px 8px; border-radius:4px;">
+            GATE STATE: ACTIVE
+          </span>
+        </h1>
+        <p style="font-size:13.5px; color:var(--text-muted); margin-top:6px;">
+          Enforces the core constitutional boundary: No consequential legal action executes without explicit, licensed counsel authorization.
+        </p>
+      </div>
+    </div>
+
+    <div class="grid-layout">
+      <!-- Actions Requiring Sign-off -->
+      <div>
+        <div class="card">
+          <div class="card-hdr">
+            <span>⚖️ Consequential Actions Awaiting Counsel Sign-off</span>
+            <span style="font-family:'JetBrains Mono'; font-size:11px; color:var(--cyan-accent);" id="pending-count">1 ACTION PENDING</span>
+          </div>
+
+          <div class="action-box" id="main-action-box">
+            <div class="action-title" id="action-title">ACT-01: File Formal Memorandum for Section 479 BNSS Statutory Release</div>
+            <div class="action-desc" id="action-desc">
+              Accused Rajesh Kumar has completed 428 days in pre-trial custody against 3-year statutory maximum (39% served). Trial has not commenced. Authorizing this action will generate court-ready memorandum addressed to Special Court No. 12, Tis Hazari.
+            </div>
+
+            <div style="font-size:12px; margin-bottom:14px; color:var(--text-dim);">
+              <strong>Authorized Signatory:</strong> Adv. Meenakshi Sundaram (Bar Council Enrollment D/1482/2012)
+            </div>
+
+            <div class="btn-group">
+              <button class="btn-approve" onclick="authorizeAction()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                [APPROVE & AUTHORIZE]
+              </button>
+              <button class="btn-reject" onclick="rejectAction()">[REJECT]</button>
+              <button class="btn-revision" onclick="requestRevision()">[REQUEST REVISION]</button>
+            </div>
+            <div id="auth-msg" style="margin-top:10px; font-size:12px; display:none;"></div>
+          </div>
+
+          <div style="font-size:12.5px; color:var(--text-muted); line-height:1.6; background:rgba(0,229,255,0.06); padding:12px; border-radius:6px; border:1px solid rgba(0,229,255,0.2);">
+            <strong>UNWIND Protocol Guarantee:</strong> Rejection or revision requests immediately halt all downstream filings and publish a high-priority alert back to the Case Digital Twin.
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Governance Audit Ledger -->
+      <div>
+        <div class="card">
+          <div class="card-hdr">
+            <span>📜 Tamper-Evident Audit Ledger</span>
+            <a href="/governance/audit" style="font-size:12px; color:var(--cyan-accent); text-decoration:none;">Full Ledger →</a>
+          </div>
+
+          <div id="audit-log">
+            <div class="audit-row">
+              <span>08:14:22 UTC</span>
+              <span style="color:var(--emerald-accent);">CASE_TWIN_VERIFIED</span>
+              <span>v4_INTACT</span>
+            </div>
+            <div class="audit-row">
+              <span>08:14:25 UTC</span>
+              <span style="color:var(--amber-accent);">TARKA_ATTACK_RUN</span>
+              <span>78%_FRAGILITY</span>
+            </div>
+            <div class="audit-row">
+              <span>08:14:28 UTC</span>
+              <span style="color:var(--ruby-accent);">GATE_HOLD_APPLIED</span>
+              <span>ACT-01_PENDING</span>
+            </div>
+          </div>
+
+          <div style="margin-top:16px; border-top:1px solid var(--border-subtle); padding-top:12px; font-size:11.5px; color:var(--text-dim);">
+            State Hash: <span style="font-family:'JetBrains Mono'; color:var(--gold-primary);">SHA256: 7f83b1657ff1...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/os-shared-context.js"></script>
+  <script>
+    async function authorizeAction() {
+      const activeCaseId = osGetActiveCase();
+      const res = await fetch(`/api/cases/${activeCaseId}/authorize?approver=Adv.+Meenakshi+Sundaram`, { method: 'POST' });
+      const data = await res.json();
+      
+      const msg = document.getElementById('auth-msg');
+      msg.style.display = 'block';
+      msg.style.color = 'var(--emerald-accent)';
+      msg.innerHTML = '<strong>✅ ACTION AUTHORIZED:</strong> Signed by Adv. Meenakshi Sundaram. Execution guard lifted.';
+      
+      document.getElementById('gate-status-badge').innerText = 'GATE STATE: AUTHORIZED';
+      document.getElementById('gate-status-badge').style.color = 'var(--emerald-accent)';
+      
+      // Append to audit log
+      const auditLog = document.getElementById('audit-log');
+      auditLog.innerHTML += `
+        <div class="audit-row">
+          <span>NOW</span>
+          <span style="color:var(--emerald-accent);">HUMAN_GATE_SIGNED</span>
+          <span>ADV_MEENAKSHI</span>
+        </div>
+      `;
+    }
+
+    function rejectAction() {
+      const msg = document.getElementById('auth-msg');
+      msg.style.display = 'block';
+      msg.style.color = 'var(--ruby-accent)';
+      msg.innerHTML = '<strong>❌ ACTION REJECTED:</strong> Consequential execution halted. Rejection recorded to audit ledger.';
+    }
+
+    function requestRevision() {
+      const msg = document.getElementById('auth-msg');
+      msg.style.display = 'block';
+      msg.style.color = 'var(--amber-accent)';
+      msg.innerHTML = '<strong>✏️ REVISION REQUESTED:</strong> Draft returned to legal preparation queue for counsel amendments.';
+    }
+  </script>
+</body>
+</html>

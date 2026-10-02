@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NYAYA-SATYA — Immutable Audit Ledger</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/os-master-header.css">
+  <style>
+    :root {
+      --bg-base: #06090e;
+      --bg-surface: #0c121c;
+      --bg-card: #121b2a;
+      --border-subtle: #1c2b42;
+      --border-accent: #2e4466;
+      --gold-primary: #d4af37;
+      --cyan-accent: #00e5ff;
+      --emerald-accent: #10b981;
+      --ruby-accent: #ef4444;
+      --amber-accent: #f59e0b;
+      --text-main: #f0f4f8;
+      --text-muted: #8a99ad;
+      --text-dim: #55667d;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg-base);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 30px 24px;
+    }
+    .audit-hero {
+      background: linear-gradient(135deg, rgba(0, 229, 255, 0.08), rgba(212, 175, 55, 0.05));
+      border: 1px solid var(--border-accent);
+      border-radius: 12px;
+      padding: 24px 30px;
+      margin-bottom: 24px;
+    }
+    .ledger-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .ledger-table th, .ledger-table td {
+      padding: 14px 18px;
+      text-align: left;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .ledger-table th {
+      background: var(--bg-card);
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+    .code-font {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Master Header -->
+  <header class="os-master-header">
+    <div class="os-header-left">
+      <a href="/dashboard" class="os-back-button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span>Command Center</span>
+      </a>
+      <div class="os-breadcrumb-trail">
+        <span class="os-bc-root">NYAYA-SATYA</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-section">GOVERNANCE</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-current">IMMUTABLE AUDIT LEDGER</span>
+      </div>
+    </div>
+    <div class="os-header-right">
+      <div class="os-case-badge">
+        <span class="os-pulse-dot"></span>
+        <span class="os-case-label">CASE CONTEXT:</span>
+        <select id="os-global-case-select" class="os-case-dropdown" onchange="osSwitchCase(this.value)">
+          <option value="CASE-2024-DEL-0482">State v. Rajesh Kumar (Tis Hazari)</option>
+          <option value="CASE-2023-BOM-1109">Apex Infra v. Mumbai Port Trust (Bombay HC)</option>
+          <option value="CASE-2024-KA-0077">Kaveri Farmers v. Karnataka (Karnataka HC)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="audit-hero">
+      <h1 style="font-family:'Cinzel',serif; font-size:24px; color:#fff;">📜 Immutable Audit Ledger & Chain of Custody</h1>
+      <p style="color:var(--text-muted); font-size:13.5px; margin-top:6px;">
+        Chronological cryptographic record of all cross-engine events, TARKA-VYUH attacks, and UNWIND human authorizations.
+      </p>
+    </div>
+
+    <table class="ledger-table">
+      <thead>
+        <tr>
+          <th>Timestamp (UTC)</th>
+          <th>Event Type</th>
+          <th>Origin Module</th>
+          <th>Case ID</th>
+          <th>Actor / Authority</th>
+          <th>State SHA-256</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="code-font">2024-10-01 12:00:00</td>
+          <td><span style="color:var(--cyan-accent); font-weight:600;">CASE_INGESTION</span></td>
+          <td>Core Pipeline</td>
+          <td class="code-font">CASE-2024-DEL-0482</td>
+          <td>SYSTEM_CORE</td>
+          <td class="code-font">3fa85f64...</td>
+        </tr>
+        <tr>
+          <td class="code-font">2024-10-01 14:22:10</td>
+          <td><span style="color:var(--amber-accent); font-weight:600;">EVIDENCE_GAP_DETECTED</span></td>
+          <td>06-Evidence-Dependency</td>
+          <td class="code-font">CASE-2024-DEL-0482</td>
+          <td>INTELLIGENCE_ENGINE</td>
+          <td class="code-font">91ab7c42...</td>
+        </tr>
+        <tr>
+          <td class="code-font">2024-10-01 16:05:40</td>
+          <td><span style="color:var(--ruby-accent); font-weight:600;">LIBERTY_THRESHOLD_SURPASSED</span></td>
+          <td>07-Undertrial-Liberty</td>
+          <td class="code-font">CASE-2024-DEL-0482</td>
+          <td>STATUTORY_MONITOR</td>
+          <td class="code-font">b47e8101...</td>
+        </tr>
+        <tr>
+          <td class="code-font">2024-10-01 18:30:15</td>
+          <td><span style="color:var(--emerald-accent); font-weight:600;">HUMAN_ACTION_AUTHORIZED</span></td>
+          <td>UNWIND-Gate</td>
+          <td class="code-font">CASE-2024-DEL-0482</td>
+          <td>Adv. Meenakshi Sundaram</td>
+          <td class="code-font">7f83b165...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script src="/os-shared-context.js"></script>
+</body>
+</html>
