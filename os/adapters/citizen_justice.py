@@ -221,6 +221,42 @@ def send_whatsapp_legal_alert(payload: WhatsAppAlertRequest):
             f"📞 *मुफ्त कानूनी सहायता:* DLSA हेल्पलाइन: *15100* अथवा अधिवक्ता: {case.lead_counsel}\n\n"
             f"न्याय-सत्य (Code for Billion) — हर नागरिक तक त्वरित न्याय।"
         )
+    elif lang == "kn":
+        msg = (
+            f"🏛️ *NYAYA-SATYA ನಾಗರಿಕ ಕಾನೂನು ಎಚ್ಚರಿಕೆ*\n\n"
+            f"ಆತ್ಮೀಯ {payload.recipient_name},\n"
+            f"ಪ್ರಕರಣ ಸಂಖ್ಯೆ: *{case.case_id}* ({case.title})\n"
+            f"ನ್ಯಾಯಾಲಯ: {case.court}\n"
+            f"ಮುಂದಿನ ವಿಚಾರಣೆ ದಿನಾಂಕ: *{case.next_hearing}*\n\n"
+            f"🚨 *ಜಾಮೀನು ಹಕ್ಕು ಮಾಹಿತಿ:* ಆರೋಪಿಯು ನ್ಯಾಯಾಂಗ ಬಂಧನದಲ್ಲಿ 428 ದಿನಗಳನ್ನು ಪೂರೈಸಿದ್ದಾರೆ. "
+            f"ಹೊಸ ಕಾಯ್ದೆಯ *ಕಲಂ 479 BNSS* ಅಡಿಯಲ್ಲಿ ಅವರು ಶಾಸನಬದ್ಧ ಜಾಮೀನಿಗೆ (Statutory Bail) ಅರ್ಹರಾಗಿದ್ದಾರೆ.\n\n"
+            f"📞 *ಉಚಿತ ಕಾನೂನು ನೆರವು:* DLSA ಹೆಲ್ಪ್‌ಲೈನ್: *15100* ಅಥವಾ ವಕೀಲರು: {case.lead_counsel}\n\n"
+            f"ನ್ಯಾಯ-ಸತ್ಯ (Code for Billion) — ಪ್ರತಿಯೊಬ್ಬ ನಾಗರಿಕನಿಗೂ ತ್ವರಿತ ನ್ಯಾಯ."
+        )
+    elif lang == "ta":
+        msg = (
+            f"🏛️ *NYAYA-SATYA குடிமக்கள் சட்ட அறிவிப்பு*\n\n"
+            f"அன்புள்ள {payload.recipient_name},\n"
+            f"வழக்கு எண்: *{case.case_id}* ({case.title})\n"
+            f"நீதிமன்றம்: {case.court}\n"
+            f"அடுத்த விசாரணை தேதி: *{case.next_hearing}*\n\n"
+            f"🚨 *பிணை உரிமை தகவல்:* குற்றம் சாட்டப்பட்டவர் காவலில் 428 நாட்களை நிறைவு செய்துள்ளார். "
+            f"புதிய சட்டத்தின் *பிரிவு 479 BNSS* இன் கீழ் சட்டப்பூர்வ பிணைக்கு (Statutory Bail) தகுதியுடையவர்.\n\n"
+            f"📞 *இலவச சட்ட உதவி:* DLSA உதவி எண்: *15100* அல்லது வழக்கறிஞர்: {case.lead_counsel}\n\n"
+            f"நியாய-சத்யா (Code for Billion) — அனைவருக்கும் விரைவான நீதி."
+        )
+    elif lang == "bn":
+        msg = (
+            f"🏛️ *NYAYA-SATYA নাগরিক আইনি বিজ্ঞপ্তি*\n\n"
+            f"প্রিয় {payload.recipient_name},\n"
+            f"মামলা নং: *{case.case_id}* ({case.title})\n"
+            f"আদালত: {case.court}\n"
+            f"পরবর্তী শুনানির তারিখ: *{case.next_hearing}*\n\n"
+            f"🚨 *জামিন অধিকার বিজ্ঞপ্তি:* অভিযুক্ত ব্যক্তি হেফাজতে ৪২৮ দিন পূর্ণ করেছেন। "
+            f"নতুন আইনের *ধারা ৪৭৯ BNSS* অনুযায়ী তিনি সংবিধিবদ্ধ জামিনের (Statutory Bail) যোগ্য।\n\n"
+            f"📞 *বিনামূল্যে আইনি সহায়তা:* DLSA হেল্পলাইন: *15100* অথবা আইনজীবী: {case.lead_counsel}\n\n"
+            f"ন্যায়-সত্য (Code for Billion) — প্রতিটি নাগরিকের জন্য দ্রুত বিচার।"
+        )
     else:
         msg = (
             f"🏛️ *NYAYA-SATYA Citizen Legal Rights Alert*\n\n"
