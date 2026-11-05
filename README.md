@@ -382,6 +382,42 @@ pytest tests/ -q
 | `/health` | `GET` | Container liveness check | `{"status": "HEALTHY", "uptime_seconds": ...}` |
 | `/ready` | `GET` | Core subsystem readiness | `{"ready": true, "subsystems": {"state_machine": "OK", ...}}` |
 | `/version` | `GET` | Version and governance notice | `{"version": "8.0.0", "epistemic_authority": "HUMAN_LEGAL_GATE"}` |
+| `/api/citizen/summary` | `GET` | Multilingual citizen rights status | `{"is_bail_eligible": true, "citizen_advice": ...}` |
+| `/api/citizen/send-alert` | `POST` | Last-mile WhatsApp/SMS transmission | `{"status": "SUCCESS", "whatsapp_direct_link": ...}` |
+
+---
+
+## 📱 Code for Billion — Citizen Justice Portal & WhatsApp Last-Mile Legal Alerts
+
+To solve the massive Indian legal backlog affecting **over 5 Crore pending cases and 75%+ undertrials**, NYAYA-SATYA integrates the **Citizen Justice Portal (`/citizen` and `/bharat`)**.
+
+Ordinary citizens and families of undertrial prisoners receive real-time, plain-language statutory bail alerts and legal aid information directly on **WhatsApp** in **6 Indian Languages** (मराठी, हिंदी, English, ಕನ್ನಡ, தமிழ், বাংলা).
+
+### 🌟 Live WhatsApp Alert Proof (Delivered to Citizens)
+
+The system automatically detects when an undertrial has served **1/3rd or 1/2 of their maximum sentence** under **Section 479 of the Bhartiya Nagarik Suraksha Sanhita (BNSS) 2023** and generates direct, official WhatsApp legal notifications with NALSA/DLSA free advocate contact details (Toll-Free `15100`):
+
+<p align="center">
+  <img src="docs/screenshots/whatsapp_marathi_english_alert.png" alt="WhatsApp Marathi and English Alert" width="45%" style="margin-right: 10px;">
+  <img src="docs/screenshots/whatsapp_hindi_alert.png" alt="WhatsApp Hindi Legal Notice" width="45%">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/whatsapp_kannada_alert.png" alt="WhatsApp Kannada Alert" width="45%" style="margin-right: 10px;">
+  <img src="docs/screenshots/whatsapp_tamil_bengali_alert.png" alt="WhatsApp Tamil & Bengali Alert" width="45%">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/whatsapp_marathi_alert_full.png" alt="Full Legal Rights Notice in Marathi" width="55%">
+</p>
+
+> *Live screen captures from actual WhatsApp alert deliveries triggered via the NYAYA-SATYA Citizen Justice Gateway to citizen relative Akash (+91-7773958375).*
+
+### Key Capabilities for the Billion:
+1. **Multilingual Access-to-Justice**: Case status and statutory rights translated instantly into Marathi, Hindi, English, Kannada, Tamil, and Bengali.
+2. **Instant 16-Digit CNR Lookup**: Citizens can enter any e-Courts CNR number (e.g. `DLCT01-004820-2024`) to auto-generate a Digital Twin and verify bail eligibility.
+3. **1-Click WhatsApp Trigger**: Empowers legal aid cells (NALSA / DLSA) to notify rural and disadvantaged families without friction.
+4. **Non-Adjudication Governance**: Consequential filings remain gated under licensed advocate authorization via the UNWIND Human Legal Gate.
 
 ---
 
