@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NYAYA-SATYA — नागरिक न्याय कक्ष (Citizen Justice Portal for 1 Billion)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/os-master-header.css">
+  <style>
+    :root {
+      --bg-base: #06090e;
+      --bg-surface: #0c121c;
+      --bg-card: #121b2a;
+      --bg-card-hover: #172336;
+      --border-subtle: #1c2b42;
+      --border-accent: #2e4466;
+      --gold-primary: #d4af37;
+      --gold-glow: rgba(212, 175, 55, 0.25);
+      --cyan-accent: #00e5ff;
+      --emerald-accent: #10b981;
+      --ruby-accent: #ef4444;
+      --amber-accent: #f59e0b;
+      --whatsapp-green: #25d366;
+      --text-main: #f0f4f8;
+      --text-muted: #8a99ad;
+      --text-dim: #55667d;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg-base);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1350px;
+      margin: 0 auto;
+      padding: 28px 24px;
+    }
+
+    /* Hero Banner with Multi-language pill */
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(0, 229, 255, 0.08), rgba(212, 175, 55, 0.08));
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: 12px;
+      padding: 26px 32px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .hero-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero-sub {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 6px;
+    }
+
+    /* Language Switcher Dropdown */
+    .lang-switcher-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-accent);
+      padding: 8px 14px;
+      border-radius: 8px;
+    }
+
+    .lang-select {
+      background: #000;
+      color: #fff;
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Grid Layout */
+    .portal-grid {
+      display: grid;
+      grid-template-columns: 2fr 1.2fr;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    @media (max-width: 900px) {
+      .portal-grid { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+
+    .card-hdr {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 10px;
+    }
+
+    /* Rights Status Box */
+    .rights-alert-box {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      border-radius: 8px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    .rights-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--emerald-accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .rights-desc {
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: #d1fae5;
+    }
+
+    /* Metric Grid */
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .metric-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 12px 14px;
+      text-align: center;
+    }
+
+    .metric-lbl {
+      font-size: 11px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .metric-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* WhatsApp Alert Box */
+    .whatsapp-panel {
+      background: linear-gradient(135deg, rgba(37, 211, 102, 0.12), rgba(12, 18, 28, 0.8));
+      border: 1px solid rgba(37, 211, 102, 0.4);
+      border-radius: 10px;
+      padding: 22px;
+    }
+
+    .wa-btn {
+      background: linear-gradient(135deg, #25d366, #128c7e);
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      justify-content: center;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(37, 211, 102, 0.25);
+      margin-top: 14px;
+    }
+
+    .wa-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+    }
+
+    .input-field {
+      width: 100%;
+      background: #000;
+      border: 1px solid var(--border-accent);
+      border-radius: 6px;
+      padding: 10px 14px;
+      color: #fff;
+      font-size: 14px;
+      margin-top: 6px;
+    }
+
+    .cnr-input-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .btn-cnr {
+      background: var(--gold-primary);
+      color: #06090e;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <!-- Master Header -->
+  <header class="os-master-header">
+    <div class="os-header-left">
+      <a href="/dashboard" class="os-back-button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span>Command Center</span>
+      </a>
+      <div class="os-breadcrumb-trail">
+        <span class="os-bc-root">NYAYA-SATYA</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-section">CODE FOR BILLION</span>
+        <span class="os-bc-sep">/</span>
+        <span class="os-bc-current" id="nav-portal-title">नागरिक न्याय पोर्टल (CITIZEN ACCESS)</span>
+      </div>
+    </div>
+    <div class="os-header-right">
+      <div class="os-case-badge">
+        <span class="os-pulse-dot"></span>
+        <span class="os-case-label">CASE:</span>
+        <select id="os-global-case-select" class="os-case-dropdown" onchange="osSwitchCase(this.value)">
+          <option value="CASE-2024-DEL-0482">State v. Rajesh Kumar (Tis Hazari)</option>
+          <option value="CASE-2023-BOM-1109">Apex Infra v. Mumbai Port Trust (Bombay HC)</option>
+          <option value="CASE-2024-KA-0077">Kaveri Farmers v. Karnataka (Karnataka HC)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Hero Banner with 6 Indian Languages -->
+    <div class="hero-banner">
+      <div>
+        <h1 class="hero-title">
+          <span>🇮🇳</span>
+          <span id="portal-heading">नागरिक न्याय कक्ष (Citizen Justice Portal)</span>
+        </h1>
+        <p class="hero-sub" id="portal-sub">
+          भारतातील १०० कोटी नागरिकांसाठी आणि अंडरट्रायल कुटुंबीयांसाठी थेट कायदेशीर हक्क माहिती आणि मोबाइल अलर्ट्स.
+        </p>
+      </div>
+
+      <div class="lang-switcher-box">
+        <span style="font-size:12px; color:var(--text-dim); font-weight:700;">भाषा / LANGUAGE:</span>
+        <select id="lang-select" class="lang-select" onchange="changeLanguage(this.value)">
+          <option value="mr" selected>मराठी (Marathi)</option>
+          <option value="hi">हिंदी (Hindi)</option>
+          <option value="en">English</option>
+          <option value="kn">ಕನ್ನಡ (Kannada)</option>
+          <option value="ta">தமிழ் (Tamil)</option>
+          <option value="bn">বাংলা (Bengali)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="portal-grid">
+      <!-- Left Column: Citizen Legal Rights & Status -->
+      <div>
+        <!-- Instant Rights & Bail Eligibility Status -->
+        <div class="card" style="border-color: rgba(16, 185, 129, 0.4);">
+          <div class="card-hdr">
+            <span style="color:var(--emerald-accent);">⚖️ कायदेशीर हक्क स्थिती (Legal Rights Status)</span>
+            <span id="badge-eligible" style="font-family:'JetBrains Mono'; font-size:11px; background:rgba(16,185,129,0.2); color:#86efac; padding:3px 8px; border-radius:4px;">
+              SEC 479 BNSS ACTIVE
+            </span>
+          </div>
+
+          <div class="rights-alert-box" id="rights-box">
+            <div class="rights-title" id="rights-title">
+              <span>✅</span> <span id="rights-status-text">जामीन हक्क सक्रिय (Statutory Bail Eligible)</span>
+            </div>
+            <div class="rights-desc" id="rights-desc">
+              आरोपीने कोठडीत ४२८ दिवस पूर्ण केले आहेत (कमाल शिक्षेच्या ३९%). भारतीय नागरिक सुरक्षा संहिता २०२३ च्या कलम ४७९ अन्वये ते वैधानिक जामिनास पात्र आहेत.
+            </div>
+          </div>
+
+          <div class="metric-row">
+            <div class="metric-box">
+              <div class="metric-lbl" id="lbl-custody">कोठडीतील दिवस</div>
+              <div class="metric-val" id="val-custody" style="color:var(--cyan-accent);">428 Days</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-lbl" id="lbl-hearing">पुढील तारीख</div>
+              <div class="metric-val" id="val-hearing" style="color:var(--gold-primary);">18-10-2024</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-lbl" id="lbl-court">न्यायालय</div>
+              <div class="metric-val" id="val-court" style="font-size:13px;">Tis Hazari</div>
+            </div>
+          </div>
+
+          <div style="background:var(--bg-card); padding:14px; border-radius:6px; border:1px solid var(--border-subtle); margin-top:12px;">
+            <div style="font-size:12px; color:var(--text-dim); text-transform:uppercase; margin-bottom:4px;" id="lbl-aid">मोफत वकील सहाय्य (Free Legal Aid):</div>
+            <div style="font-size:14px; font-weight:700; color:#fff;" id="val-counsel">Adv. Meenakshi Sundaram (DLSA Appointed)</div>
+            <div style="font-size:12px; color:var(--text-muted); margin-top:4px;">
+              राष्ट्रीय विधी सेवा प्राधिकरण (NALSA) मोफत हेल्पलाइन: <strong style="color:var(--emerald-accent);">15100</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- 16-Digit CNR Lookup for Ordinary Citizens -->
+        <div class="card">
+          <div class="card-hdr">
+            <span>🔍 e-Courts CNR नंबरवरून केस शोधा (16-Digit Search)</span>
+          </div>
+          <p style="font-size:13px; color:var(--text-muted);">
+            कोणत्याही भारतीय न्यायालयाचा १६-अंकी CNR नंबर टाका (उदा. DLCT01-004820-2024). सिस्टम आपोआप डिजिटल ट्विन तयार करेल:
+          </p>
+          <div class="cnr-input-group">
+            <input type="text" id="cnr-input" class="input-field" placeholder="DLCT01-004820-2024" value="DLCT01-004820-2024" style="margin-top:0;">
+            <button class="btn-cnr" onclick="searchCNR()">तपासा (Search)</button>
+          </div>
+          <div id="cnr-msg" style="margin-top:10px; font-size:12px; display:none;"></div>
+        </div>
+      </div>
+
+      <!-- Right Column: Direct WhatsApp / SMS Legal Alerts -->
+      <div>
+        <div class="whatsapp-panel">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+            <span style="font-size:24px;">📱</span>
+            <div>
+              <h3 style="font-size:16px; font-weight:800; color:#fff;">थेट व्हॉट्सॲप / SMS विधी अलर्ट</h3>
+              <span style="font-size:11.5px; color:var(--whatsapp-green); font-weight:600;">Last-Mile Delivery for Citizens</span>
+            </div>
+          </div>
+
+          <p style="font-size:13px; color:var(--text-muted); line-height:1.5;">
+            गरीब किंवा ग्रामीण पक्षकारांना कोर्टाच्या तारखा आणि जामीन हक्क थेट व्हॉट्सॲपवर पाठवा:
+          </p>
+
+          <div style="margin-top:14px;">
+            <label style="font-size:12px; color:var(--text-dim); text-transform:uppercase;">पक्षकार / नातेवाईकाचे नाव:</label>
+            <input type="text" id="wa-name" class="input-field" value="Akash (Relative of Undertrial)">
+          </div>
+
+          <div style="margin-top:12px;">
+            <label style="font-size:12px; color:var(--text-dim); text-transform:uppercase;">व्हॉट्सॲप / मोबाइल नंबर:</label>
+            <input type="text" id="wa-phone" class="input-field" value="7773958375" placeholder="10-digit mobile number">
+          </div>
+
+          <button class="wa-btn" onclick="sendWhatsAppAlert()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+            व्हॉट्सॲप अलर्ट पाठवा (Send WhatsApp Alert)
+          </button>
+
+          <div id="wa-result-box" style="margin-top:14px; display:none; background:rgba(0,0,0,0.4); padding:12px; border-radius:6px; border:1px solid rgba(37,211,102,0.3);">
+            <div style="font-size:12px; color:var(--whatsapp-green); font-weight:700;" id="wa-success-lbl">अलर्ट तयार झाला!</div>
+            <div style="font-size:11.5px; color:var(--text-muted); margin:6px 0;" id="wa-msg-preview"></div>
+            <a id="wa-direct-anchor" href="#" target="_blank" style="color:var(--cyan-accent); font-size:12px; font-weight:700; text-decoration:none;">
+              थेट व्हॉट्सॲप उघडा (Open in WhatsApp) →
+            </a>
+          </div>
+        </div>
+
+        <!-- Recent Alerts Audit -->
+        <div class="card" style="margin-top:20px;">
+          <div class="card-hdr">
+            <span>📋 अलीकडील पाठवलेले अलर्ट्स (Alerts Trail)</span>
+          </div>
+          <div id="alerts-trail" style="font-size:12px; color:var(--text-muted);">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/os-shared-context.js"></script>
+  <script>
+    let currentLang = 'mr';
+
+    async function loadCitizenPortal() {
+      const activeCaseId = osGetActiveCase();
+      const res = await fetch(`/api/citizen/summary?case_id=${encodeURIComponent(activeCaseId)}&lang=${currentLang}`);
+      const data = await res.json();
+
+      document.getElementById('portal-heading').innerText = data.portal_header;
+      document.getElementById('portal-sub').innerText = data.tagline;
+
+      document.getElementById('val-custody').innerText = `${data.custody_days} Days`;
+      document.getElementById('val-hearing').innerText = data.next_hearing_date || 'TBD';
+      document.getElementById('val-court').innerText = data.court;
+      document.getElementById('val-counsel').innerText = data.lead_counsel;
+
+      document.getElementById('lbl-custody').innerText = data.labels.undertrial_status;
+      document.getElementById('lbl-hearing').innerText = data.labels.next_hearing;
+      document.getElementById('lbl-court').innerText = data.labels.court;
+      document.getElementById('lbl-aid').innerText = data.labels.legal_aid;
+
+      document.getElementById('rights-desc').innerText = data.citizen_advice;
+
+      loadAlertsTrail();
+    }
+
+    function changeLanguage(newLang) {
+      currentLang = newLang;
+      loadCitizenPortal();
+    }
+
+    async function sendWhatsAppAlert() {
+      const activeCaseId = osGetActiveCase();
+      const phone = document.getElementById('wa-phone').value;
+      const name = document.getElementById('wa-name').value;
+
+      const res = await fetch('/api/citizen/send-alert', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phone_number: phone,
+          case_id: activeCaseId,
+          language: currentLang,
+          recipient_name: name
+        })
+      });
+
+      const data = await res.json();
+      const rBox = document.getElementById('wa-result-box');
+      rBox.style.display = 'block';
+      document.getElementById('wa-msg-preview').innerText = data.message;
+      document.getElementById('wa-direct-anchor').href = data.whatsapp_direct_link;
+
+      loadAlertsTrail();
+    }
+
+    async function searchCNR() {
+      const cnr = document.getElementById('cnr-input').value;
+      const res = await fetch('/api/citizen/cnr-lookup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cnr_number: cnr })
+      });
+      const data = await res.json();
+      const msg = document.getElementById('cnr-msg');
+      msg.style.display = 'block';
+      msg.style.color = 'var(--emerald-accent)';
+      msg.innerHTML = `<strong>✅ केस जोडली:</strong> ${data.case.title} (${data.case.case_id}) - डिजिटल ट्विन तयार!`;
+      
+      setTimeout(() => {
+        osSwitchCase(data.case.case_id);
+      }, 1500);
+    }
+
+    async function loadAlertsTrail() {
+      const res = await fetch('/api/citizen/alerts');
+      const data = await res.json();
+      const trail = document.getElementById('alerts-trail');
+      if (data.alerts && data.alerts.length > 0) {
+        trail.innerHTML = data.alerts.slice(0, 3).map(a => `
+          <div style="padding:8px 0; border-bottom:1px solid var(--border-subtle);">
+            <div style="display:flex; justify-content:space-between; color:#fff; font-weight:600;">
+              <span>${a.phone} (${a.recipient})</span>
+              <span style="color:var(--emerald-accent); font-family:'JetBrains Mono'; font-size:11px;">${a.status}</span>
+            </div>
+            <div style="font-size:11px; color:var(--text-dim); margin-top:2px;">${a.timestamp.substring(11, 19)} UTC • ${a.type}</div>
+          </div>
+        `).join('');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadCitizenPortal);
+  </script>
+</body>
+</html>

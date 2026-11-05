@@ -226,3 +226,38 @@ async def test_extension_interface_fallback():
     llm_provider = OfflineLLMProvider()
     out = await llm_provider.generate("Summarize charges")
     assert "Deterministic Offline Response" in out.content
+
+
+def test_citizen_justice_portal():
+    """Verify Citizen Justice Portal UI and API for Code for Billion."""
+    # 1. UI Routes
+    for path in ["/citizen", "/bharat", "/os/citizen"]:
+        res = client.get(path)
+        assert res.status_code == 200
+        assert "Citizen Justice Portal" in res.text or "नागरिक न्याय" in res.text
+
+    # 2. Multi-lingual Summary API (Marathi)
+    res_mr = client.get("/api/citizen/summary?lang=mr")
+    assert res_mr.status_code == 200
+    data_mr = res_mr.json()
+    assert data_mr["language"] == "mr"
+    assert "नागरिक न्याय" in data_mr["portal_header"]
+    assert "कलम ४७९" in data_mr["citizen_advice"]
+
+    # 3. WhatsApp Legal Alert Delivery
+    res_alert = client.post("/api/citizen/send-alert", json={
+        "phone_number": "7773958375",
+        "case_id": "CASE-2024-DEL-0482",
+        "language": "mr",
+        "recipient_name": "Akash"
+    })
+    assert res_alert.status_code == 200
+    alert_data = res_alert.json()
+    assert alert_data["status"] == "SUCCESS"
+    assert "7773958375" in alert_data["recipient_phone"]
+    assert "whatsapp_direct_link" in alert_data
+
+    # 4. CNR e-Courts Ingestion
+    res_cnr = client.post("/api/citizen/cnr-lookup", json={"cnr_number": "MHAU01-002134-2024"})
+    assert res_cnr.status_code == 200
+    assert "case" in res_cnr.json()

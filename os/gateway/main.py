@@ -38,6 +38,7 @@ from shared.module_registry import module_registry
 from shared.attention_center import attention_center
 from shared.event_bus import event_bus
 from adapters.modules import ADAPTERS
+from adapters.citizen_justice import router as citizen_justice_router
 
 # Import original NYAYA-SATYA Core router
 try:
@@ -65,9 +66,11 @@ app.add_middleware(
 if HAS_CORE_ROUTER:
     app.include_router(nyaya_core_router)
 
-# 2. Mount all 12 specialized project adapter routers
+# 2. Mount all 12 specialized project adapter routers + Citizen Justice Portal
 for adapter in ADAPTERS:
     app.include_router(adapter.router)
+
+app.include_router(citizen_justice_router)
 
 # 3. Mount Static Assets
 SHELL_DIR = OS_ROOT / "shell"
@@ -274,6 +277,13 @@ def global_search(q: str = Query(..., min_length=1)):
             "subtitle": "Cryptographic Event Trail & State Hashes",
             "target_route": "/governance/audit"
         })
+    if "citizen" in query or "bharat" in query or "whatsapp" in query or "marathi" in query or "hindi" in query or "lok" in query:
+        results.append({
+            "category": "Access to Justice",
+            "title": "नागरिक न्याय कक्ष (Citizen Justice Portal)",
+            "subtitle": "Multilingual Legal Rights, Bail Status & Direct WhatsApp Alerts",
+            "target_route": "/citizen"
+        })
     
     # 2. Search cases
     for c in case_store.list_cases():
@@ -381,6 +391,18 @@ def serve_twin_explorer():
         with open(twin_file, "r", encoding="utf-8") as f:
             return f.read()
     raise HTTPException(status_code=404, detail="Twin explorer UI not found")
+
+
+# 3B. Citizen Justice Portal for 1 Billion (/citizen and /bharat)
+@app.get("/citizen", response_class=HTMLResponse)
+@app.get("/bharat", response_class=HTMLResponse)
+@app.get("/os/citizen", response_class=HTMLResponse)
+def serve_citizen_portal():
+    citizen_file = SHELL_DIR / "citizen_portal.html"
+    if citizen_file.exists():
+        with open(citizen_file, "r", encoding="utf-8") as f:
+            return f.read()
+    raise HTTPException(status_code=404, detail="Citizen Portal UI not found")
 
 
 # 4. Specialized Project Experiences (12 Projects)
