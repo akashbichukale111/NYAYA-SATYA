@@ -16,13 +16,23 @@ from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from datetime import datetime
 
-# Add core path so nyaya core router can resolve imports
-UNWIND_CORE_DIR = Path(r"D:\NYAYA-SATYA\unwind-live-verified-main")
+# Resolve paths dynamically relative to this file
+GATEWAY_DIR = Path(__file__).resolve().parent
+OS_ROOT = GATEWAY_DIR.parent
+
+# Resolve Core repository root
+if (OS_ROOT / "web" / "static").exists():
+    UNWIND_CORE_DIR = OS_ROOT
+elif (OS_ROOT.parent / "web" / "static").exists():
+    UNWIND_CORE_DIR = OS_ROOT.parent
+elif (OS_ROOT.parent / "unwind-live-verified-main" / "web" / "static").exists():
+    UNWIND_CORE_DIR = OS_ROOT.parent / "unwind-live-verified-main"
+else:
+    UNWIND_CORE_DIR = Path.cwd()
+
 if str(UNWIND_CORE_DIR) not in sys.path:
     sys.path.insert(0, str(UNWIND_CORE_DIR))
 
-# Ensure os package root is in sys.path
-OS_ROOT = Path(r"D:\NYAYA-SATYA\os")
 if str(OS_ROOT) not in sys.path:
     sys.path.insert(0, str(OS_ROOT))
 
