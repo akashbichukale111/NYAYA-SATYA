@@ -383,104 +383,104 @@
     <div class="sidebar-menu">
       <a href="/dashboard" class="nav-btn active">
         <span>🏛️</span>
-        <span>Command Center</span>
+        <span id="sb-cmd">Command Center</span>
       </a>
 
       <!-- Flagship Core Experience -->
       <a href="/core" class="nav-btn nav-core-btn">
         <span>⚖️</span>
-        <span>NYAYA-SATYA CORE</span>
+        <span id="sb-core">NYAYA-SATYA CORE</span>
       </a>
 
       <!-- Digital Twin Explorer -->
       <a href="/twin" class="nav-btn">
         <span>🌐</span>
-        <span>Digital Twin Explorer</span>
+        <span id="sb-twin">Digital Twin Explorer</span>
       </a>
 
       <!-- Code for Billion Citizen Access -->
       <a href="/citizen" class="nav-btn" style="background:linear-gradient(135deg, rgba(16,185,129,0.18), rgba(0,229,255,0.12)); border:1px solid rgba(16,185,129,0.4); color:#a7f3d0; font-weight:700;">
         <span>🇮🇳</span>
-        <span>नागरिक न्याय (Citizen Portal)</span>
+        <span id="sb-citizen">Citizen Justice (नागरिक न्याय)</span>
       </a>
 
-      <div class="sidebar-divider">INTELLIGENCE ENGINES</div>
+      <div class="sidebar-divider" id="sb-div-intel">INTELLIGENCE ENGINES</div>
 
       <a href="/projects/hearing-readiness" class="nav-btn">
         <span class="nav-badge-num">01</span>
-        <span>Hearing Readiness</span>
+        <span id="sb-e01">Hearing Readiness</span>
       </a>
       <a href="/projects/case-continuity" class="nav-btn">
         <span class="nav-badge-num">02</span>
-        <span>Case Continuity</span>
+        <span id="sb-e02">Case Continuity</span>
       </a>
       <a href="/projects/case-bottleneck" class="nav-btn">
         <span class="nav-badge-num">03</span>
-        <span>Case Bottleneck</span>
+        <span id="sb-e03">Case Bottleneck</span>
       </a>
       <a href="/projects/legal-aid-handoff" class="nav-btn">
         <span class="nav-badge-num">04</span>
-        <span>Legal-Aid Handoff</span>
+        <span id="sb-e04">Legal-Aid Handoff</span>
       </a>
 
-      <div class="sidebar-divider">PROCEDURAL & COMPLIANCE</div>
+      <div class="sidebar-divider" id="sb-div-proc">PROCEDURAL & COMPLIANCE</div>
 
       <a href="/projects/procedural-obligation" class="nav-btn">
         <span class="nav-badge-num">05</span>
-        <span>Procedural Obligation</span>
+        <span id="sb-e05">Procedural Obligation</span>
       </a>
       <a href="/projects/evidence-dependency" class="nav-btn">
         <span class="nav-badge-num">06</span>
-        <span>Evidence Dependency</span>
+        <span id="sb-e06">Evidence Dependency</span>
       </a>
       <a href="/projects/undertrial-liberty" class="nav-btn">
         <span class="nav-badge-num">07</span>
-        <span>Undertrial Liberty</span>
+        <span id="sb-e07">Undertrial Liberty</span>
       </a>
       <a href="/projects/registry-defect" class="nav-btn">
         <span class="nav-badge-num">08</span>
-        <span>Registry Defect</span>
+        <span id="sb-e08">Registry Defect</span>
       </a>
 
-      <div class="sidebar-divider">RESILIENCE LAB</div>
+      <div class="sidebar-divider" id="sb-div-resilience">RESILIENCE LAB</div>
 
       <a href="/projects/case-crash-test" class="nav-btn">
         <span class="nav-badge-num">09</span>
-        <span>Case Crash Test</span>
+        <span id="sb-e09">Case Crash Test</span>
       </a>
 
-      <div class="sidebar-divider">PRACTICE AUTOMATION</div>
+      <div class="sidebar-divider" id="sb-div-practice">PRACTICE AUTOMATION</div>
 
       <a href="/spark/personal" class="nav-btn">
         <span class="nav-badge-num">10</span>
-        <span>Spark Personal OS</span>
+        <span id="sb-e10">Spark Personal OS</span>
       </a>
       <a href="/spark/deadlines" class="nav-btn">
         <span class="nav-badge-num">11</span>
-        <span>Deadline Guardian</span>
+        <span id="sb-e11">Deadline Guardian</span>
       </a>
       <a href="/spark/workflows" class="nav-btn">
         <span class="nav-badge-num">12</span>
-        <span>Workflow Autopilot</span>
+        <span id="sb-e12">Workflow Autopilot</span>
       </a>
 
-      <div class="sidebar-divider">GOVERNANCE & AUDIT</div>
+      <div class="sidebar-divider" id="sb-div-gov">GOVERNANCE & AUDIT</div>
 
       <a href="/governance/tarka-vyuh" class="nav-btn">
         <span>⚔️</span>
-        <span>TARKA-VYUH Arena</span>
+        <span id="sb-tarka">TARKA-VYUH Arena</span>
       </a>
       <a href="/governance/unwind" class="nav-btn">
         <span>🛡️</span>
-        <span>UNWIND Human Gate</span>
+        <span id="sb-unwind">UNWIND Human Gate</span>
       </a>
       <a href="/governance/audit" class="nav-btn">
         <span>📜</span>
-        <span>Audit Ledger</span>
+        <span id="sb-audit">Audit Ledger</span>
       </a>
       <a href="/governance/system-health" class="nav-btn">
         <span>⚙️</span>
-        <span>System Diagnostics</span>
+        <span id="sb-health">System Diagnostics</span>
       </a>
     </div>
 
@@ -510,10 +510,23 @@
       </div>
 
       <div style="display:flex; align-items:center; gap:14px;">
-        <span style="font-size:12px; background:rgba(239,68,68,0.15); color:#fca5a5; padding:4px 10px; border-radius:4px; border:1px solid rgba(239,68,68,0.3); font-weight:700;">
+        <!-- Global Language Switcher -->
+        <div style="display:flex; align-items:center; gap:6px; background:var(--bg-card); border:1px solid var(--border-accent); border-radius:6px; padding:4px 10px;">
+          <span style="font-size:12px; color:var(--gold-primary); font-weight:700;">🌐 LANGUAGE:</span>
+          <select id="main-lang-select" class="nyaya-lang-select" onchange="osSetGlobalLang(this.value)" style="background:transparent; color:#fff; border:none; font-size:12px; font-weight:700; cursor:pointer; outline:none;">
+            <option value="en" selected>English (Default)</option>
+            <option value="hi">हिंदी (Hindi)</option>
+            <option value="mr">मराठी (Marathi)</option>
+            <option value="kn">ಕನ್ನಡ (Kannada)</option>
+            <option value="ta">தமிழ் (Tamil)</option>
+            <option value="bn">বাংলা (Bengali)</option>
+          </select>
+        </div>
+
+        <span id="top-alerts-badge" style="font-size:12px; background:rgba(239,68,68,0.15); color:#fca5a5; padding:4px 10px; border-radius:4px; border:1px solid rgba(239,68,68,0.3); font-weight:700;">
           ⚠️ 2 CRITICAL ALERTS
         </span>
-        <a href="/core" class="btn-launch-core">Launch NYAYA-SATYA Core →</a>
+        <a href="/core" class="btn-launch-core" id="top-launch-core-btn">Launch NYAYA-SATYA Core →</a>
       </div>
     </header>
 
@@ -522,31 +535,31 @@
       <section class="core-flagship-card">
         <div>
           <div class="core-title">
-            <span>NYAYA-SATYA CORE</span>
-            <span class="core-badge">FLAGSHIP PLATFORM</span>
+            <span id="core-title-text">NYAYA-SATYA CORE</span>
+            <span class="core-badge" id="core-badge-text">FLAGSHIP PLATFORM</span>
           </div>
-          <p class="core-desc">
+          <p class="core-desc" id="core-desc-text">
             The authoritative legal evidence intelligence command center. Features Case Digital Twin generation, Adversarial Review Gauntlet, Achilles' Heel discovery, Causal Blast Radius simulator, Repair & Re-Attack engine, Defense Dossier builder, and the UNWIND Human Legal Gate.
           </p>
           <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-            <a href="/core" class="btn-launch-core">Open Original Core UI (Full Experience) →</a>
-            <a href="/twin" class="btn-launch-core" style="background:linear-gradient(135deg, #00e5ff, #0088cc); color:#06090e;">Explore Digital Twin Graph →</a>
-            <a href="/citizen" class="btn-launch-core" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff;">नागरिक न्याय कक्ष (Citizen Portal) →</a>
-            <span style="font-size:12px; color:var(--text-dim);">Preserves 100% of original workflows & endpoints</span>
+            <a href="/core" class="btn-launch-core" id="btn-open-core">Open Original Core UI (Full Experience) →</a>
+            <a href="/twin" class="btn-launch-core" id="btn-open-twin" style="background:linear-gradient(135deg, #00e5ff, #0088cc); color:#06090e;">Explore Digital Twin Graph →</a>
+            <a href="/citizen" class="btn-launch-core" id="btn-open-citizen" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff;">Citizen Justice Portal (नागरिक न्याय) →</a>
+            <span style="font-size:12px; color:var(--text-dim);" id="core-sub-note">Preserves 100% of original workflows & endpoints</span>
           </div>
         </div>
         <div style="border-left:1px solid var(--border-accent); padding-left:24px; display:flex; flex-direction:column; justify-content:center; gap:12px; font-size:13px;">
-          <div><span style="color:var(--text-dim);">Evidence Graph:</span> <strong style="color:var(--cyan-accent); font-family:'JetBrains Mono';">Active (44 nodes)</strong></div>
-          <div><span style="color:var(--text-dim);">Adversarial Arena:</span> <strong style="color:var(--ruby-accent); font-family:'JetBrains Mono';">3 Vulnerabilities</strong></div>
-          <div><span style="color:var(--text-dim);">Causal Simulator:</span> <strong style="color:var(--emerald-accent); font-family:'JetBrains Mono';">Blast Radius Mapped</strong></div>
-          <div><span style="color:var(--text-dim);">Human Legal Gate:</span> <strong style="color:var(--gold-primary); font-family:'JetBrains Mono';">Awaiting Signoff</strong></div>
+          <div><span style="color:var(--text-dim);" id="lbl-meta-graph">Evidence Graph:</span> <strong style="color:var(--cyan-accent); font-family:'JetBrains Mono';">Active (44 nodes)</strong></div>
+          <div><span style="color:var(--text-dim);" id="lbl-meta-arena">Adversarial Arena:</span> <strong style="color:var(--ruby-accent); font-family:'JetBrains Mono';">3 Vulnerabilities</strong></div>
+          <div><span style="color:var(--text-dim);" id="lbl-meta-causal">Causal Simulator:</span> <strong style="color:var(--emerald-accent); font-family:'JetBrains Mono';">Blast Radius Mapped</strong></div>
+          <div><span style="color:var(--text-dim);" id="lbl-meta-gate">Human Legal Gate:</span> <strong style="color:var(--gold-primary); font-family:'JetBrains Mono';">Awaiting Signoff</strong></div>
         </div>
       </section>
 
       <!-- 12 Engines Section -->
       <div class="section-title-row">
-        <h2 class="section-title"><span>⚡</span> 12 Specialized Intelligence Engines</h2>
-        <span style="font-family:'JetBrains Mono'; font-size:12px; color:var(--text-dim);">12 / 12 ENGINES SYNCHRONIZED</span>
+        <h2 class="section-title"><span id="sec-engines-icon">⚡</span> <span id="sec-engines-title">12 Specialized Intelligence Engines</span></h2>
+        <span style="font-family:'JetBrains Mono'; font-size:12px; color:var(--text-dim);" id="sec-engines-sub">12 / 12 ENGINES SYNCHRONIZED</span>
       </div>
 
       <div class="engines-grid">
@@ -557,14 +570,14 @@
             <span style="font-size:10px; color:var(--emerald-accent); font-family:'JetBrains Mono';">● HEALTHY</span>
           </div>
           <div>
-            <div class="eng-title">Hearing Readiness Engine</div>
-            <div class="eng-tagline">Pre-hearing docket audit, checklist verification, and action approvals</div>
+            <div class="eng-title" id="eng-title-01">Hearing Readiness Engine</div>
+            <div class="eng-tagline" id="eng-tag-01">Pre-hearing docket audit, checklist verification, and action approvals</div>
           </div>
           <div class="eng-metrics">
             <div><div class="eng-k">READINESS</div><div class="eng-v" style="color:var(--amber-accent);">78%</div></div>
             <div><div class="eng-k">BLOCKERS</div><div class="eng-v" style="color:var(--ruby-accent);">1 Unserved</div></div>
           </div>
-          <div class="eng-footer"><span>Launch Project 01 Frontend</span><span>→</span></div>
+          <div class="eng-footer"><span id="eng-btn-01">Launch Project 01 Frontend</span><span>→</span></div>
         </a>
 
         <!-- 02 -->
@@ -574,14 +587,14 @@
             <span style="font-size:10px; color:var(--emerald-accent); font-family:'JetBrains Mono';">● HEALTHY</span>
           </div>
           <div>
-            <div class="eng-title">Case Continuity Engine</div>
-            <div class="eng-tagline">Multi-counsel handoff resilience, order sheet discrepancy tracker</div>
+            <div class="eng-title" id="eng-title-02">Case Continuity Engine</div>
+            <div class="eng-tagline" id="eng-tag-02">Multi-counsel handoff resilience, order sheet discrepancy tracker</div>
           </div>
           <div class="eng-metrics">
             <div><div class="eng-k">CONTINUITY</div><div class="eng-v" style="color:var(--emerald-accent);">91%</div></div>
             <div><div class="eng-k">CONFLICTS</div><div class="eng-v">1 Order Sheet</div></div>
           </div>
-          <div class="eng-footer"><span>Launch Project 02 Frontend</span><span>→</span></div>
+          <div class="eng-footer"><span id="eng-btn-02">Launch Project 02 Frontend</span><span>→</span></div>
         </a>
 
         <!-- 03 -->
@@ -591,14 +604,14 @@
             <span style="font-size:10px; color:var(--ruby-accent); font-family:'JetBrains Mono';">● SEVERE DELAY</span>
           </div>
           <div>
-            <div class="eng-title">Case Bottleneck Engine</div>
-            <div class="eng-tagline">Root-cause delay diagnosis and court median comparative analytics</div>
+            <div class="eng-title" id="eng-title-03">Case Bottleneck Engine</div>
+            <div class="eng-tagline" id="eng-tag-03">Root-cause delay diagnosis and court median comparative analytics</div>
           </div>
           <div class="eng-metrics">
             <div><div class="eng-k">STAGE DAYS</div><div class="eng-v" style="color:var(--ruby-accent);">112 Days</div></div>
             <div><div class="eng-k">VS MEDIAN</div><div class="eng-v">+350%</div></div>
           </div>
-          <div class="eng-footer"><span>Launch Project 03 Frontend</span><span>→</span></div>
+          <div class="eng-footer"><span id="eng-btn-03">Launch Project 03 Frontend</span><span>→</span></div>
         </a>
 
         <!-- 04 -->
@@ -608,14 +621,14 @@
             <span style="font-size:10px; color:var(--emerald-accent); font-family:'JetBrains Mono';">● HEALTHY</span>
           </div>
           <div>
-            <div class="eng-title">Legal-Aid Handoff Engine</div>
-            <div class="eng-tagline">Pro-bono counsel transition dossier, fact matrix, and briefing packet</div>
+            <div class="eng-title" id="eng-title-04">Legal-Aid Handoff Engine</div>
+            <div class="eng-tagline" id="eng-tag-04">Pro-bono counsel transition dossier, fact matrix, and briefing packet</div>
           </div>
           <div class="eng-metrics">
             <div><div class="eng-k">INTAKE</div><div class="eng-v">94% Done</div></div>
             <div><div class="eng-k">AUTHORITY</div><div class="eng-v">DSLSA</div></div>
           </div>
-          <div class="eng-footer"><span>Launch Project 04 Frontend</span><span>→</span></div>
+          <div class="eng-footer"><span id="eng-btn-04">Launch Project 04 Frontend</span><span>→</span></div>
         </a>
 
         <!-- 05 -->
@@ -625,14 +638,14 @@
             <span style="font-size:10px; color:var(--amber-accent); font-family:'JetBrains Mono';">● UNWIND GROUNDED</span>
           </div>
           <div>
-            <div class="eng-title">Procedural Obligation Engine</div>
-            <div class="eng-tagline">Strict WHO / WHAT / LOSS / SIGN statutory correction compliance</div>
+            <div class="eng-title" id="eng-title-05">Procedural Obligation Engine</div>
+            <div class="eng-tagline" id="eng-tag-05">Strict WHO / WHAT / LOSS / SIGN statutory correction compliance</div>
           </div>
           <div class="eng-metrics">
             <div><div class="eng-k">PENDING SIGN</div><div class="eng-v" style="color:var(--amber-accent);">1 Obligation</div></div>
             <div><div class="eng-k">BASIS</div><div class="eng-v">Sec 207 CrPC</div></div>
           </div>
-          <div class="eng-footer"><span>Launch Project 05 Frontend</span><span>→</span></div>
+          <div class="eng-footer"><span id="eng-btn-05">Launch Project 05 Frontend</span><span>→</span></div>
         </a>
 
         <!-- 06 -->
@@ -642,14 +655,14 @@
             <span style="font-size:10px; color:var(--cyan-accent); font-family:'JetBrains Mono';">● GRAPH ACTIVE</span>
           </div>
           <div>
-            <div class="eng-title">Evidence Dependency Engine</div>
-            <div class="eng-tagline">Bipartite DAG of claims & evidence, single points of evidentiary failure</div>
+            <div class="eng-title" id="eng-title-06">Evidence Dependency Engine</div>
+            <div class="eng-tagline" id="eng-tag-06">Bipartite DAG of claims & evidence, single points of evidentiary failure</div>
           </div>
           <div class="eng-metrics">
             <div><div class="eng-k">SINGLE POINT</div><div class="eng-v" style="color:var(--ruby-accent);">Claim 3</div></div>
             <div><div class="eng-k">INTEGRITY</div><div class="eng-v">68%</div></div>
           </div>
-          <div class="eng-footer"><span>Launch Project 06 Frontend</span><span>→</span></div>
+          <div class="eng-footer"><span id="eng-btn-06">Launch Project 06 Frontend</span><span>→</span></div>
         </a>
 
         <!-- 07 -->
@@ -659,14 +672,14 @@
             <span style="font-size:10px; color:var(--ruby-accent); font-family:'JetBrains Mono';">● CRITICAL BAIL DUE</span>
           </div>
           <div>
-            <div class="eng-title">Undertrial Liberty Sentinel</div>
-            <div class="eng-tagline">Section 479 BNSS / 436A CrPC custody duration & statutory bail entitlement</div>
+            <div class="eng-title" id="eng-title-07">Undertrial Liberty Sentinel</div>
+            <div class="eng-tagline" id="eng-tag-07">Section 479 BNSS / 436A CrPC custody duration & statutory bail entitlement</div>
           </div>
           <div class="eng-metrics">
             <div><div class="eng-k">CUSTODY</div><div class="eng-v" style="color:var(--cyan-accent);">418 Days</div></div>
             <div><div class="eng-k">OVERDUE</div><div class="eng-v" style="color:var(--ruby-accent);">+53 Days</div></div>
           </div>
-          <div class="eng-footer"><span>Launch Project 07 Frontend</span><span>→</span></div>
+          <div class="eng-footer"><span id="eng-btn-07">Launch Project 07 Frontend</span><span>→</span></div>
         </a>
 
         <!-- 08 -->
@@ -676,14 +689,14 @@
             <span style="font-size:10px; color:var(--amber-accent); font-family:'JetBrains Mono';">● 2 DEFECTS</span>
           </div>
           <div>
-            <div class="eng-title">Registry Defect Engine</div>
-            <div class="eng-tagline">Court scrutiny rules validator and automated curative refiling steps</div>
+            <div class="eng-title" id="eng-title-08">Registry Defect Engine</div>
+            <div class="eng-tagline" id="eng-tag-08">Court scrutiny rules validator and automated curative refiling steps</div>
           </div>
           <div class="eng-metrics">
             <div><div class="eng-k">CURE WINDOW</div><div class="eng-v" style="color:var(--amber-accent);">12 Days</div></div>
             <div><div class="eng-k">RULES</div><div class="eng-v">Delhi HC / Comm</div></div>
           </div>
-          <div class="eng-footer"><span>Launch Project 08 Frontend</span><span>→</span></div>
+          <div class="eng-footer"><span id="eng-btn-08">Launch Project 08 Frontend</span><span>→</span></div>
         </a>
 
         <!-- 09 -->
@@ -693,14 +706,14 @@
             <span style="font-size:10px; color:var(--emerald-accent); font-family:'JetBrains Mono';">● SANDBOX ACTIVE</span>
           </div>
           <div>
-            <div class="eng-title">Case Crash Test Lab</div>
-            <div class="eng-tagline">Adversarial stress-testing sandbox & simulated hostile witness collapse</div>
+            <div class="eng-title" id="eng-title-09">Case Crash Test Lab</div>
+            <div class="eng-tagline" id="eng-tag-09">Adversarial stress-testing sandbox & simulated hostile witness collapse</div>
           </div>
           <div class="eng-metrics">
             <div><div class="eng-k">RESILIENCE</div><div class="eng-v" style="color:var(--cyan-accent);">64 / 100</div></div>
             <div><div class="eng-k">SCENARIOS</div><div class="eng-v">12 Tested</div></div>
           </div>
-          <div class="eng-footer"><span>Launch Project 09 Frontend</span><span>→</span></div>
+          <div class="eng-footer"><span id="eng-btn-09">Launch Project 09 Frontend</span><span>→</span></div>
         </a>
 
         <!-- 10 -->
@@ -710,14 +723,14 @@
             <span style="font-size:10px; color:var(--emerald-accent); font-family:'JetBrains Mono';">● READY</span>
           </div>
           <div>
-            <div class="eng-title">Spark Personal OS</div>
-            <div class="eng-tagline">Morning legal digest, cause list schedule, and priority inbox</div>
+            <div class="eng-title" id="eng-title-10">Spark Personal OS</div>
+            <div class="eng-tagline" id="eng-tag-10">Morning legal digest, cause list schedule, and priority inbox</div>
           </div>
           <div class="eng-metrics">
             <div><div class="eng-k">HEARINGS</div><div class="eng-v">2 Listed</div></div>
             <div><div class="eng-k">ALERTS</div><div class="eng-v">4 Unread</div></div>
           </div>
-          <div class="eng-footer"><span>Launch Project 10 Frontend</span><span>→</span></div>
+          <div class="eng-footer"><span id="eng-btn-10">Launch Project 10 Frontend</span><span>→</span></div>
         </a>
 
         <!-- 11 -->
@@ -727,14 +740,14 @@
             <span style="font-size:10px; color:var(--ruby-accent); font-family:'JetBrains Mono';">● TRIGGER NEAR</span>
           </div>
           <div>
-            <div class="eng-title">Spark Deadline Guardian</div>
-            <div class="eng-tagline">Statutory limitation calculator & court calendar holiday adjustments</div>
+            <div class="eng-title" id="eng-title-11">Spark Deadline Guardian</div>
+            <div class="eng-tagline" id="eng-tag-11">Statutory limitation calculator & court calendar holiday adjustments</div>
           </div>
           <div class="eng-metrics">
             <div><div class="eng-k">NEAREST</div><div class="eng-v" style="color:var(--ruby-accent);">4 Days</div></div>
             <div><div class="eng-k">STATUTE</div><div class="eng-v">Art. 137 Lim.</div></div>
           </div>
-          <div class="eng-footer"><span>Launch Project 11 Frontend</span><span>→</span></div>
+          <div class="eng-footer"><span id="eng-btn-11">Launch Project 11 Frontend</span><span>→</span></div>
         </a>
 
         <!-- 12 -->
@@ -744,19 +757,341 @@
             <span style="font-size:10px; color:var(--emerald-accent); font-family:'JetBrains Mono';">● RUNNING</span>
           </div>
           <div>
-            <div class="eng-title">Spark Workflow Autopilot</div>
-            <div class="eng-tagline">Procedural SOP execution & UNWIND human authorization boundary</div>
+            <div class="eng-title" id="eng-title-12">Spark Workflow Autopilot</div>
+            <div class="eng-tagline" id="eng-tag-12">Procedural SOP execution & UNWIND human authorization boundary</div>
           </div>
           <div class="eng-metrics">
             <div><div class="eng-k">PROGRESS</div><div class="eng-v" style="color:var(--gold-primary);">80%</div></div>
             <div><div class="eng-k">CURRENT</div><div class="eng-v">Human Sign</div></div>
           </div>
-          <div class="eng-footer"><span>Launch Project 12 Frontend</span><span>→</span></div>
+          <div class="eng-footer"><span id="eng-btn-12">Launch Project 12 Frontend</span><span>→</span></div>
         </a>
       </div>
     </main>
   </div>
 
   <script src="/os-shared-context.js"></script>
+  <script>
+    // 6-Language Exhaustive Dictionary for Master OS Dashboard
+    const DASHBOARD_I18N = {
+      'en': {
+        cmd_center: 'Command Center',
+        core_title: 'NYAYA-SATYA CORE',
+        twin_title: 'Digital Twin Explorer',
+        citizen_title: 'Citizen Justice Portal',
+        div_intel: 'INTELLIGENCE ENGINES',
+        div_proc: 'PROCEDURAL & COMPLIANCE',
+        div_resilience: 'RESILIENCE LAB',
+        div_practice: 'PRACTICE AUTOMATION',
+        div_gov: 'GOVERNANCE & AUDIT',
+        alerts_badge: '⚠️ 2 CRITICAL ALERTS',
+        top_launch_core: 'Launch NYAYA-SATYA Core →',
+        core_badge: 'FLAGSHIP PLATFORM',
+        core_desc: "The authoritative legal evidence intelligence command center. Features Case Digital Twin generation, Adversarial Review Gauntlet, Achilles' Heel discovery, Causal Blast Radius simulator, Repair & Re-Attack engine, Defense Dossier builder, and the UNWIND Human Legal Gate.",
+        btn_open_core: 'Open Original Core UI (Full Experience) →',
+        btn_open_twin: 'Explore Digital Twin Graph →',
+        btn_open_citizen: 'Citizen Justice Portal (नागरिक न्याय) →',
+        sec_engines_title: '12 Specialized Intelligence Engines',
+        e01_title: 'Hearing Readiness Engine',
+        e01_tag: 'Pre-hearing docket audit, checklist verification, and action approvals',
+        e02_title: 'Case Continuity Engine',
+        e02_tag: 'Multi-counsel handoff resilience, order sheet discrepancy tracker',
+        e03_title: 'Case Bottleneck Engine',
+        e03_tag: 'Root-cause delay diagnosis and court median comparative analytics',
+        e04_title: 'Legal-Aid Handoff Engine',
+        e04_tag: 'Pro-bono counsel transition dossier, fact matrix, and briefing packet',
+        e05_title: 'Procedural Obligation Engine',
+        e05_tag: 'Strict WHO / WHAT / LOSS / SIGN statutory correction compliance',
+        e06_title: 'Evidence Dependency Engine',
+        e06_tag: 'Bipartite DAG of claims & evidence, single points of evidentiary failure',
+        e07_title: 'Undertrial Liberty Sentinel',
+        e07_tag: 'Section 479 BNSS / 436A CrPC custody duration & statutory bail entitlement',
+        e08_title: 'Registry Defect Engine',
+        e08_tag: 'Court scrutiny rules validator and automated curative refiling steps',
+        e09_title: 'Case Crash Test Lab',
+        e09_tag: 'Adversarial stress-testing sandbox & simulated hostile witness collapse',
+        e10_title: 'Spark Personal OS',
+        e10_tag: 'Morning legal digest, cause list schedule, and priority inbox',
+        e11_title: 'Spark Deadline Guardian',
+        e11_tag: 'Statutory limitation calculator & court calendar holiday adjustments',
+        e12_title: 'Spark Workflow Autopilot',
+        e12_tag: 'Procedural SOP execution & UNWIND human authorization boundary',
+        launch_btn: 'Launch Project Frontend →'
+      },
+      'hi': {
+        cmd_center: 'कमांड सेंटर',
+        core_title: 'न्याय-सत्य कोर',
+        twin_title: 'डिजिटल ट्विन एक्सप्लोरर',
+        citizen_title: 'नागरिक न्याय पोर्टल',
+        div_intel: 'विधिक इंटेलिजेंस इंजन',
+        div_proc: 'प्रक्रिया एवं अनुपालन',
+        div_resilience: 'रेजिलिएंस लैब',
+        div_practice: 'वकालत ऑटोमेशन',
+        div_gov: 'गवर्नेंस एवं ऑडिट',
+        alerts_badge: '⚠️ 2 गंभीर विधिक अलर्ट्स',
+        top_launch_core: 'न्याय-सत्य कोर खोलें →',
+        core_badge: 'प्रमुख विधिक प्लेटफॉर्म',
+        core_desc: 'अधिकारयुक्त विधिक साक्ष्य इंटेलिजेंस कमांड सेंटर। केस डिजिटल ट्विन निर्माण, प्रतिरोधी साक्ष्य समीक्षा (TARKA), अचूक कमजोरियों की पहचान, ब्लास्ट-रेडियस सिमुलेटर, रक्षा डॉजियर निर्माण और UNWIND अधिवक्ता हस्ताक्षर गेट।',
+        btn_open_core: 'ओरिजिनल कोर UI खोलें (पूर्ण अनुभव) →',
+        btn_open_twin: 'डिजिटल ट्विन ग्राफ देखें →',
+        btn_open_citizen: 'नागरिक न्याय कक्ष (Citizen Portal) →',
+        sec_engines_title: '12 विशेष विधिक इंटेलिजेंस इंजन',
+        e01_title: 'सुनवाई तैयारी इंजन (Hearing Readiness)',
+        e01_tag: 'पेशी पूर्व डॉकेट ऑडिट, चेकलिस्ट सत्यापन और आवश्यक अनुमतियां',
+        e02_title: 'केस निरंतरता इंजन (Case Continuity)',
+        e02_tag: 'वकील बदलाव में संदर्भ सुरक्षा और आदेश पत्र विसंगति ट्रैकर',
+        e03_title: 'केस अड़चन इंजन (Case Bottleneck)',
+        e03_tag: 'अदालती देरी के मूल कारणों की पहचान एवं समय विश्लेषण',
+        e04_title: 'विधिक सहायता हस्तांतरण (Legal-Aid Handoff)',
+        e04_tag: 'पैनल वकीलों के लिए त्वरित केस डॉजियर, तथ्य मैट्रिक्स और ब्रीफिंग',
+        e05_title: 'प्रक्रियात्मक दायित्व इंजन (Procedural Obligation)',
+        e05_tag: 'धारा 207 दंड प्रक्रिया संहिता एवं वैधानिक अनुपालन सुधार',
+        e06_title: 'साक्ष्य निर्भरता इंजन (Evidence Dependency)',
+        e06_tag: 'साक्ष्य और दावों का ग्राफ, साक्ष्य विफलता बिंदुओं की जांच',
+        e07_title: 'विचाराधीन कैदी स्वतंत्रता प्रहरी (Liberty Sentinel)',
+        e07_tag: 'धारा 479 BNSS / 436A हिरासत अवधि एवं वैधानिक जमानत पात्रता',
+        e08_title: 'रजिस्ट्री दोष निवारण इंजन (Registry Defect)',
+        e08_tag: 'अदालती जांच नियमों का सत्यापन और स्वचालित सुधार कदम',
+        e09_title: 'केस क्रैश टेस्ट लैब (Case Crash Test)',
+        e09_tag: 'प्रतिकूल साक्षियों और साक्ष्य टूटने की स्थिति का तनाव परीक्षण',
+        e10_title: 'स्पार्क पर्सनल विधिक ओएस (Spark Personal OS)',
+        e10_tag: 'प्रातःकालीन विधिक सारांश, केस सूची और प्राथमिक इनबॉक्स',
+        e11_title: 'समयसीमा रक्षक इंजन (Deadline Guardian)',
+        e11_tag: 'अदालती समयसीमा कैलकुलेटर और अवकाश समायोजन',
+        e12_title: 'वर्कफ़्लो ऑटोपायलट (Workflow Autopilot)',
+        e12_tag: 'विधिक प्रक्रियाओं का स्वचालित निष्पादन और UNWIND मानवीय नियंत्रण',
+        launch_btn: 'इंजन पोर्टल खोलें →'
+      },
+      'mr': {
+        cmd_center: 'कमांड सेंटर',
+        core_title: 'न्याय-सत्य कोर',
+        twin_title: 'डिजिटल ट्विन एक्सप्लोरर',
+        citizen_title: 'नागरिक न्याय कक्ष',
+        div_intel: 'विधी गुप्तचर इंजिने',
+        div_proc: 'प्रक्रिया आणि अनुपालन',
+        div_resilience: 'रेझिलियन्स लॅब',
+        div_practice: 'वकिली ऑटोमेशन',
+        div_gov: 'प्रशासन आणि ऑडिट',
+        alerts_badge: '⚠️ २ गंभीर विधी अलर्ट्स',
+        top_launch_core: 'न्याय-सत्य कोर उघडा →',
+        core_badge: 'प्रमुख विधी व्यासपीठ',
+        core_desc: 'अधिकारयुक्त कायदेशीर पुरावा बुद्धिमत्ता कमांड सेंटर. केस डिजिटल ट्विन निर्मिती, विरोधी पुरावा चाचणी (TARKA), कच्च्या दुव्यांचा शोध, ब्लास्ट-रेडियस सिम्युलेटर, बचाव डॉझियर आणि UNWIND वकील मंजुरी गेट.',
+        btn_open_core: 'मूळ कोर UI उघडा (संपूर्ण अनुभव) →',
+        btn_open_twin: 'डिजिटल ट्विन ग्राफ तपासा →',
+        btn_open_citizen: 'नागरिक न्याय कक्ष (Citizen Portal) →',
+        sec_engines_title: '१२ विशेष विधी गुप्तचर इंजिने',
+        e01_title: 'सुनावणी तयारी इंजिन (Hearing Readiness)',
+        e01_tag: 'सुनावणीपूर्व डॉकेट ऑडिट, चेकलिस्ट पडताळणी आणि आवश्यक परवानग्या',
+        e02_title: 'केस सातत्य इंजिन (Case Continuity)',
+        e02_tag: 'वकील बदलात माहितीचे जतन आणि आदेश पत्र त्रुटी ट्रॅकर',
+        e03_title: 'केस विलंब शोधक (Case Bottleneck)',
+        e03_tag: 'न्यायालयीन विलंबाच्या मूळ कारणांचे विश्लेषण आणि तुलना',
+        e04_title: 'मोफत विधी सहाय्य हस्तांतरण (Legal-Aid Handoff)',
+        e04_tag: 'सरकारी पॅनल वकिलांसाठी केस डॉझियर आणि वस्तुस्थिती माहिती',
+        e05_title: 'प्रक्रियात्मक बंधन इंजिन (Procedural Obligation)',
+        e05_tag: 'कलम २०७ फौजदारी प्रक्रिया संहिता व कायदेशीर त्रुटी निवारण',
+        e06_title: 'पुरावा अवलंबित्व इंजिन (Evidence Dependency)',
+        e06_tag: 'दावे आणि पुराव्यांचा ग्राफ, पुराव्यातील नाजूक घटकांची तपासणी',
+        e07_title: 'कैदी हक्क व जामीन रक्षक (Liberty Sentinel)',
+        e07_tag: 'कलम ४७९ BNSS कोठडी कालावधी व वैधानिक जामीन हक्क तपासणी',
+        e08_title: 'रजिस्ट्री त्रुटी निवारक (Registry Defect)',
+        e08_tag: 'न्यायालयीन छाननी नियमांची तपासणी व त्वरित दुरुस्ती उपाय',
+        e09_title: 'केस ताण चाचणी लॅब (Case Crash Test)',
+        e09_tag: 'फितूर साक्षीदार आणि पुरावे कोसळण्याच्या स्थितीची ताण चाचणी',
+        e10_title: 'स्पार्क पर्सनल विधी ओएस (Spark Personal OS)',
+        e10_tag: 'सकाळचा विधी सारांश, दैनंदिन सुनावणी यादी आणि इनबॉक्स',
+        e11_title: 'मुदत रक्षक इंजिन (Deadline Guardian)',
+        e11_tag: 'कायदेशीर मुदत कॅल्क्युलेटर आणि सुट्ट्यांचे नियोजन',
+        e12_title: 'वर्कफ्लो ऑटोपायलट (Workflow Autopilot)',
+        e12_tag: 'विधी प्रक्रियांचे स्वयंचलित संचालन आणि UNWIND मानवीय नियंत्रण',
+        launch_btn: 'इंजिन पोर्टल उघडा →'
+      },
+      'kn': {
+        cmd_center: 'ಕಮಾಂಡ್ ಸೆಂಟರ್',
+        core_title: 'ನ್ಯಾಯ-ಸತ್ಯ ಕೋರ್',
+        twin_title: 'ಡಿಜಿಟಲ್ ಟ್ವಿನ್ ಎಕ್ಸ್‌ಪ್ಲೋರರ್',
+        citizen_title: 'ನಾಗರಿಕ ನ್ಯಾಯ ಪೋರ್ಟಲ್',
+        div_intel: 'ಕಾನೂನು ಬುದ್ಧಿಮತ್ತೆ ಇಂಜಿನ್‌ಗಳು',
+        div_proc: 'ವಿಧಾನ ಮತ್ತು ಅನುಸರಣೆ',
+        div_resilience: 'ಸ್ಥಿತಿಸ್ಥಾಪಕತ್ವ ಲ್ಯಾಬ್',
+        div_practice: 'ವಕಾಲತ್ತು ಆಟೊಮೇಷನ್',
+        div_gov: 'ಆಡಳಿತ ಮತ್ತು ಲೆಕ್ಕಪರಿಶೋಧನೆ',
+        alerts_badge: '⚠️ 2 ಗಂಭೀರ ಎಚ್ಚರಿಕೆಗಳು',
+        top_launch_core: 'ನ್ಯಾಯ-ಸತ್ಯ ಕೋರ್ ತೆರೆಯಿರಿ →',
+        core_badge: 'ಪ್ರಮುಖ ವೇದಿಕೆ',
+        core_desc: 'ಅಧಿಕೃತ ಸಾಕ್ಷ್ಯಾಧಾರಿತ ಕಾನೂನು ಬುದ್ಧಿಮತ್ತೆ ನಿಯಂತ್ರಣ ಕೇಂದ್ರ.',
+        btn_open_core: 'ಮೂಲ ಕೋರ್ UI ತೆರೆಯಿರಿ →',
+        btn_open_twin: 'ಡಿಜಿಟಲ್ ಟ್ವಿನ್ ನೋಡಿ →',
+        btn_open_citizen: 'ನಾಗರಿಕ ನ್ಯಾಯ ಕಕ್ಷ →',
+        sec_engines_title: '12 ವಿಶೇಷ ಕಾನೂನು ಇಂಜಿನ್‌ಗಳು',
+        e01_title: 'ವಿಚಾರಣೆ ಸನ್ನದ್ಧತೆ ಇಂಜಿನ್',
+        e01_tag: 'ವಿಚಾರಣೆಗೆ ಮುನ್ನ ದಾಖಲೆಗಳ ಪರಿಶೀಲನೆ',
+        e02_title: 'ಪ್ರಕರಣ ನಿರಂತರತೆ ಇಂಜಿನ್',
+        e02_tag: 'ವಕೀಲರ ಬದಲಾವಣೆಯಲ್ಲೂ ಪ್ರಕರಣ ಮಾಹಿತಿ ಸಂರಕ್ಷಣೆ',
+        e03_title: 'ಪ್ರಕರಣ ವಿಳಂಬ ವಿಶ್ಲೇಷಕ',
+        e03_tag: 'ನ್ಯಾಯಾಲಯದ ವಿಳಂಬಕ್ಕೆ ಮೂಲ ಕಾರಣ ಪತ್ತೆ',
+        e04_title: 'ಉಚಿತ ಕಾನೂನು ನೆರವು ವರ್ಗಾವಣೆ',
+        e04_tag: 'ಪ್ಯಾನಲ್ ವಕೀಲರಿಗೆ ತ್ವರಿತ ಪ್ರಕರಣ ವಿವರಣೆ',
+        e05_title: 'ವಿಧಾನಬದ್ಧ ಕರ್ತವ್ಯ ಇಂಜಿನ್',
+        e05_tag: 'ಕಲಂ 207 ನಿಯಮಗಳ ಪಾಲನೆ',
+        e06_title: 'ಸಾಕ್ಷ್ಯಾಧಾರ ಅವಲಂಬನೆ ಇಂಜಿನ್',
+        e06_tag: 'ಸಾಕ್ಷ್ಯಾಧಾರಗಳ ನಕ್ಷೆ ಮತ್ತು ದೌರ್ಬಲ್ಯ ಪತ್ತೆ',
+        e07_title: 'ಬಂಧಿತರ ಸ್ವಾತಂತ್ರ್ಯ ಕಾವಲುಗಾರ',
+        e07_tag: 'ಕಲಂ 479 BNSS ಅಡಿಯಲ್ಲಿ ಜಾಮೀನು ಅರ್ಹತೆ',
+        e08_title: 'ರಿಜಿಸ್ಟ್ರಿ ದೋಷ ಸರಿಪಡಿಸುವಿಕೆ',
+        e08_tag: 'ನ್ಯಾಯಾಲಯ ದಾಖಲಾತಿ ನಿಯಮಗಳ ಪರಿಶೀಲನೆ',
+        e09_title: 'ಪ್ರಕರಣ ಒತ್ತಡ ಪರೀಕ್ಷಾ ಲ್ಯಾಬ್',
+        e09_tag: 'ವಿರೋಧಿ ಸಾಕ್ಷಿಗಳ ವೈಫಲ್ಯದ ಪರೀಕ್ಷೆ',
+        e10_title: 'ಸ್ಪಾರ್ಕ್ ಪರ್ಸನಲ್ ಲೀಗಲ್ ಒಎಸ್',
+        e10_tag: 'ಮುಂಜಾನೆಯ ಪ್ರಕರಣಗಳ ವಿವರ',
+        e11_title: 'ಸಮಯಪಾಲನಾ ರಕ್ಷಕ',
+        e11_tag: 'ಕಾಲಮಿತಿ ಲೆಕ್ಕಾಚಾರ',
+        e12_title: 'ಕಾರ್ಯಪ್ರಕ್ರಿಯೆ ಆಟೋಪೈಲಟ್',
+        e12_tag: 'ಕಾನೂನು ಪ್ರಕ್ರಿಯೆಗಳ ಸ್ವಯಂಚಾಲನೆ',
+        launch_btn: 'ಇಂಜಿನ್ ತೆರೆಯಿರಿ →'
+      },
+      'ta': {
+        cmd_center: 'கட்டளை மையம்',
+        core_title: 'நியாய-சத்யா கோர்',
+        twin_title: 'டிஜிட்டல் இரட்டை ஆய்வு',
+        citizen_title: 'குடிமக்கள் நீதி தளம்',
+        div_intel: 'சட்ட நுண்ணறிவு இயந்திரங்கள்',
+        div_proc: 'நடைமுறை மற்றும் இணக்கம்',
+        div_resilience: 'ஆய்வகம்',
+        div_practice: 'சட்ட ஆட்டோமேஷன்',
+        div_gov: 'நிர்வாகம் மற்றும் தணிக்கை',
+        alerts_badge: '⚠️ 2 முக்கிய எச்சரிக்கைகள்',
+        top_launch_core: 'நியாய-சத்யா திறக்கவும் →',
+        core_badge: 'முதன்மை தளம்',
+        core_desc: 'அதிகாரப்பூர்வ சட்ட ஆதார நுண்ணறிவு கட்டளை மையம்.',
+        btn_open_core: 'முழு கோர் UI திறக்கவும் →',
+        btn_open_twin: 'டிஜிட்டல் வரைபடம் →',
+        btn_open_citizen: 'குடிமக்கள் நீதி தளம் →',
+        sec_engines_title: '12 சிறப்பு சட்ட நுண்ணறிவு இயந்திரங்கள்',
+        e01_title: 'விசாரணை தயார்நிலை இயந்திரம்',
+        e01_tag: 'விசாரணைக்கு முந்தைய ஆய்வு',
+        e02_title: 'வழக்கு தொடர்ச்சி இயந்திரம்',
+        e02_tag: 'வழக்கறிஞர் மாற்றத்திலும் தகவல் பாதுகாப்பு',
+        e03_title: 'வழக்கு தாமத பகுப்பாய்வு',
+        e03_tag: 'நீதிமன்ற தாமதத்திற்கான மூல காரணம் கண்டறிதல்',
+        e04_title: 'இலவச சட்ட உதவி பரிமாற்றம்',
+        e04_tag: 'அரசு வழக்கறிஞர்களுக்கான ஆவணங்கள்',
+        e05_title: 'நடைமுறை கடமை இயந்திரம்',
+        e05_tag: 'பிரிவு 207 சட்ட இணக்கம்',
+        e06_title: 'ஆதார சார்பு இயந்திரம்',
+        e06_tag: 'ஆதார வரைபடம் மற்றும் பலவீன ஆய்வு',
+        e07_title: 'கைதிகள் சுதந்திர காவலர்',
+        e07_tag: 'பிரிவு 479 BNSS பிணை தகுதி',
+        e08_title: 'பதிவு குறைபாடு திருத்தம்',
+        e08_tag: 'நீதிமன்ற விதிகள் சரிபார்ப்பு',
+        e09_title: 'வழக்கு அழுத்த சோதனை',
+        e09_tag: 'எதிர் சாட்சிகள் முறிவு சோதனை',
+        e10_title: 'ஸ்பார்க் தனிநபர் ஓஎஸ்',
+        e10_tag: 'காலை வழக்கு சுருக்கம்',
+        e11_title: 'காலக்கெடு காவலர்',
+        e11_tag: 'சட்டப்பூர்வ காலக்கெடு கணக்கீடு',
+        e12_title: 'பணி ஆட்டோபைலட்',
+        e12_tag: 'சட்ட செயல்முறை தானியக்கம்',
+        launch_btn: 'இயந்திரத்தை திறக்கவும் →'
+      },
+      'bn': {
+        cmd_center: 'কমান্ড সেন্টার',
+        core_title: 'ন্যায়-সত্য কোর',
+        twin_title: 'ডিজিটাল টুইন এক্সপ্লোরার',
+        citizen_title: 'নাগরিক ন্যায় পোর্টাল',
+        div_intel: 'আইনি গোয়েন্দা ইঞ্জিন',
+        div_proc: 'পদ্ধতি ও সম্মতি',
+        div_resilience: 'স্থিতিস্থাপকতা ল্যাব',
+        div_practice: 'আইন অনুশীলন অটোমেশন',
+        div_gov: 'শাসন ও নিরীক্ষা',
+        alerts_badge: '⚠️ ২টি জরুরি সতর্কতা',
+        top_launch_core: 'ন্যায়-সত্য কোর খুলুন →',
+        core_badge: 'প্রধান প্ল্যাটফর্ম',
+        core_desc: 'কর্তৃত্বপূর্ণ আইনি প্রমাণ গোয়েন্দা কমান্ড সেন্টার।',
+        btn_open_core: 'সম্পূর্ণ কোর UI খুলুন →',
+        btn_open_twin: 'ডিজিটাল টুইন গ্রাফ →',
+        btn_open_citizen: 'নাগরিক ন্যায় পোর্টাল →',
+        sec_engines_title: '১২টি বিশেষ আইনি গোয়েন্দা ইঞ্জিন',
+        e01_title: 'শুনানি প্রস্তুতি ইঞ্জিন',
+        e01_tag: 'শুনানি পূর্ববর্তী নিরীক্ষা',
+        e02_title: 'মামলা ধারাবাহিকতা ইঞ্জিন',
+        e02_tag: 'আইনজীবী পরিবর্তনের তথ্য সুরক্ষা',
+        e03_title: 'মামলা বিলম্ব বিশ্লেষক',
+        e03_tag: 'আদালতের বিলম্বের মূল কারণ অনুসন্ধান',
+        e04_title: 'আইনি সহায়তা হস্তান্তর',
+        e04_tag: 'প্যানেল আইনজীবীদের জন্য ডসিয়ার',
+        e05_title: 'পদ্ধতিগত বাধ্যবাধকতা ইঞ্জিন',
+        e05_tag: 'ধারা ২০৭ সম্মতি সংশোধন',
+        e06_title: 'প্রমাণ নির্ভরতা ইঞ্জিন',
+        e06_tag: 'প্রমাণ মানচিত্র ও দুর্বলতা বিশ্লেষণ',
+        e07_title: 'বিচারধীন বন্দী মুক্তি প্রহরী',
+        e07_tag: 'ধারা ৪৭৯ BNSS সংবিধিবদ্ধ জামিন অধিকার',
+        e08_title: 'রেজিস্ট্রি ত্রুটি সংশোধন',
+        e08_tag: 'আদালতি নিয়মাবলী যাচাই',
+        e09_title: 'মামলা চাপ পরীক্ষা ল্যাব',
+        e09_tag: 'প্রতিকূল সাক্ষীর চাপ পরীক্ষা',
+        e10_title: 'স্পার্ক ব্যক্তিগত আইনি ওএস',
+        e10_tag: 'সকালের আইনি সারাংশ ও তালিকা',
+        e11_title: 'সময়সীমা অভিভাবক',
+        e11_tag: 'আইনি সময়সীমা গণনা',
+        e12_title: 'ওয়ার্কফ্লো অটোসঞ্চালন',
+        e12_tag: 'আইনি প্রক্রিয়ার স্বয়ংক্রিয় সম্পাদন',
+        launch_btn: 'ইঞ্জিন পোর্টাল খুলুন →'
+      }
+    };
+
+    // Apply dashboard translations
+    window.applyLanguageTranslations = function(lang) {
+      const activeLang = lang || (window.osGetActiveLang ? window.osGetActiveLang() : 'en');
+      const dict = DASHBOARD_I18N[activeLang] || DASHBOARD_I18N['en'];
+
+      // Synchronize dropdown
+      const sel = document.getElementById('main-lang-select');
+      if (sel) sel.value = activeLang;
+
+      // Sidebar
+      if (document.getElementById('sb-cmd')) document.getElementById('sb-cmd').innerText = dict.cmd_center;
+      if (document.getElementById('sb-core')) document.getElementById('sb-core').innerText = dict.core_title;
+      if (document.getElementById('sb-twin')) document.getElementById('sb-twin').innerText = dict.twin_title;
+      if (document.getElementById('sb-citizen')) document.getElementById('sb-citizen').innerText = dict.citizen_title;
+
+      if (document.getElementById('sb-div-intel')) document.getElementById('sb-div-intel').innerText = dict.div_intel;
+      if (document.getElementById('sb-div-proc')) document.getElementById('sb-div-proc').innerText = dict.div_proc;
+      if (document.getElementById('sb-div-resilience')) document.getElementById('sb-div-resilience').innerText = dict.div_resilience;
+      if (document.getElementById('sb-div-practice')) document.getElementById('sb-div-practice').innerText = dict.div_practice;
+      if (document.getElementById('sb-div-gov')) document.getElementById('sb-div-gov').innerText = dict.div_gov;
+
+      // Topbar
+      if (document.getElementById('top-alerts-badge')) document.getElementById('top-alerts-badge').innerText = dict.alerts_badge;
+      if (document.getElementById('top-launch-core-btn')) document.getElementById('top-launch-core-btn').innerText = dict.top_launch_core;
+
+      // Core Card
+      if (document.getElementById('core-title-text')) document.getElementById('core-title-text').innerText = dict.core_title;
+      if (document.getElementById('core-badge-text')) document.getElementById('core-badge-text').innerText = dict.core_badge;
+      if (document.getElementById('core-desc-text')) document.getElementById('core-desc-text').innerText = dict.core_desc;
+      if (document.getElementById('btn-open-core')) document.getElementById('btn-open-core').innerText = dict.btn_open_core;
+      if (document.getElementById('btn-open-twin')) document.getElementById('btn-open-twin').innerText = dict.btn_open_twin;
+      if (document.getElementById('btn-open-citizen')) document.getElementById('btn-open-citizen').innerText = dict.btn_open_citizen;
+
+      // Section
+      if (document.getElementById('sec-engines-title')) document.getElementById('sec-engines-title').innerText = dict.sec_engines_title;
+
+      // 12 Engines
+      const engines = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+      engines.forEach(num => {
+        const titleEl = document.getElementById(`eng-title-${num}`);
+        const tagEl = document.getElementById(`eng-tag-${num}`);
+        const btnEl = document.getElementById(`eng-btn-${num}`);
+        if (titleEl && dict[`e${num}_title`]) titleEl.innerText = dict[`e${num}_title`];
+        if (tagEl && dict[`e${num}_tag`]) tagEl.innerText = dict[`e${num}_tag`];
+        if (btnEl && dict.launch_btn) btnEl.innerText = dict.launch_btn;
+      });
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const activeLang = window.osGetActiveLang ? window.osGetActiveLang() : 'en';
+      window.applyLanguageTranslations(activeLang);
+    });
+  </script>
 </body>
 </html>

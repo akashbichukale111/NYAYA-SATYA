@@ -3,51 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NYAYA-SATYA — नागरिक न्याय कक्ष (Citizen Justice Portal for 1 Billion)</title>
+  <title>NYAYA-SATYA — Citizen Justice & Undertrial Liberty Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/os-master-header.css">
   <style>
     :root {
       --bg-base: #06090e;
       --bg-surface: #0c121c;
       --bg-card: #121b2a;
-      --bg-card-hover: #172336;
       --border-subtle: #1c2b42;
       --border-accent: #2e4466;
       --gold-primary: #d4af37;
-      --gold-glow: rgba(212, 175, 55, 0.25);
       --cyan-accent: #00e5ff;
       --emerald-accent: #10b981;
       --ruby-accent: #ef4444;
-      --amber-accent: #f59e0b;
-      --whatsapp-green: #25d366;
       --text-main: #f0f4f8;
       --text-muted: #8a99ad;
       --text-dim: #55667d;
+      --whatsapp-green: #25d366;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: var(--bg-base);
+      background-color: var(--bg-base);
       color: var(--text-main);
       font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     .container {
-      max-width: 1350px;
+      max-width: 1240px;
       margin: 0 auto;
-      padding: 28px 24px;
+      padding: 24px;
+      width: 100%;
     }
 
-    /* Hero Banner with Multi-language pill */
     .hero-banner {
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(0, 229, 255, 0.08), rgba(212, 175, 55, 0.08));
-      border: 1px solid rgba(16, 185, 129, 0.35);
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.12), rgba(0, 229, 255, 0.08));
+      border: 1px solid rgba(212, 175, 55, 0.3);
       border-radius: 12px;
-      padding: 26px 32px;
+      padding: 24px 28px;
       margin-bottom: 24px;
       display: flex;
       justify-content: space-between;
@@ -57,6 +56,7 @@
     }
 
     .hero-title {
+      font-family: 'Cinzel', serif;
       font-size: 24px;
       font-weight: 800;
       color: #fff;
@@ -69,17 +69,18 @@
       color: var(--text-muted);
       font-size: 14px;
       margin-top: 6px;
+      max-width: 720px;
+      line-height: 1.5;
     }
 
-    /* Language Switcher Dropdown */
     .lang-switcher-box {
       display: flex;
       align-items: center;
       gap: 10px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-accent);
+      background: var(--bg-card);
       padding: 8px 14px;
       border-radius: 8px;
+      border: 1px solid var(--border-accent);
     }
 
     .lang-select {
@@ -87,82 +88,77 @@
       color: #fff;
       border: 1px solid var(--border-subtle);
       border-radius: 6px;
-      padding: 6px 10px;
+      padding: 6px 12px;
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
     }
 
-    /* Grid Layout */
     .portal-grid {
       display: grid;
-      grid-template-columns: 2fr 1.2fr;
+      grid-template-columns: 1.2fr 1fr;
       gap: 24px;
-      margin-bottom: 28px;
     }
 
     @media (max-width: 900px) {
-      .portal-grid { grid-template-columns: 1fr; }
+      .portal-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .card {
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
       border-radius: 10px;
-      padding: 22px;
-      margin-bottom: 20px;
+      padding: 20px;
     }
 
     .card-hdr {
-      font-size: 16px;
-      font-weight: 700;
-      color: #fff;
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 16px;
-      border-bottom: 1px solid var(--border-subtle);
-      padding-bottom: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
     }
 
-    /* Rights Status Box */
     .rights-alert-box {
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid rgba(16, 185, 129, 0.4);
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
       border-radius: 8px;
-      padding: 18px;
+      padding: 16px;
       margin-bottom: 18px;
     }
 
     .rights-title {
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--emerald-accent);
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 6px;
+      font-size: 15px;
+      font-weight: 800;
+      color: #34d399;
+      margin-bottom: 8px;
     }
 
     .rights-desc {
       font-size: 13.5px;
+      color: var(--text-main);
       line-height: 1.6;
-      color: #d1fae5;
     }
 
-    /* Metric Grid */
     .metric-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
-      margin: 18px 0;
+      margin: 16px 0;
     }
 
     .metric-box {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
-      border-radius: 6px;
-      padding: 12px 14px;
+      border-radius: 8px;
+      padding: 12px;
       text-align: center;
     }
 
@@ -170,46 +166,45 @@
       font-size: 11px;
       color: var(--text-dim);
       text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace;
       margin-bottom: 4px;
     }
 
     .metric-val {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 16px;
-      font-weight: 700;
+      font-size: 18px;
+      font-weight: 800;
       color: #fff;
     }
 
-    /* WhatsApp Alert Box */
     .whatsapp-panel {
-      background: linear-gradient(135deg, rgba(37, 211, 102, 0.12), rgba(12, 18, 28, 0.8));
-      border: 1px solid rgba(37, 211, 102, 0.4);
+      background: linear-gradient(135deg, rgba(37, 211, 102, 0.12), rgba(18, 27, 42, 0.9));
+      border: 1px solid rgba(37, 211, 102, 0.3);
       border-radius: 10px;
-      padding: 22px;
+      padding: 20px;
     }
 
     .wa-btn {
-      background: linear-gradient(135deg, #25d366, #128c7e);
-      color: #fff;
+      background: #25d366;
+      color: #06090e;
       border: none;
+      border-radius: 6px;
       padding: 12px 20px;
-      border-radius: 8px;
       font-weight: 800;
       font-size: 14px;
       cursor: pointer;
-      display: inline-flex;
+      display: flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
       width: 100%;
-      justify-content: center;
-      transition: all 0.2s;
-      box-shadow: 0 4px 14px rgba(37, 211, 102, 0.25);
       margin-top: 14px;
+      transition: all 0.2s;
     }
 
     .wa-btn:hover {
+      background: #22bf5b;
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
     }
 
     .input-field {
@@ -247,20 +242,20 @@
     <div class="os-header-left">
       <a href="/dashboard" class="os-back-button">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-        <span>Command Center</span>
+        <span id="nav-cmd-center">Command Center</span>
       </a>
       <div class="os-breadcrumb-trail">
         <span class="os-bc-root">NYAYA-SATYA</span>
         <span class="os-bc-sep">/</span>
         <span class="os-bc-section">CODE FOR BILLION</span>
         <span class="os-bc-sep">/</span>
-        <span class="os-bc-current" id="nav-portal-title">नागरिक न्याय पोर्टल (CITIZEN ACCESS)</span>
+        <span class="os-bc-current" id="nav-portal-title">CITIZEN ACCESS PORTAL</span>
       </div>
     </div>
     <div class="os-header-right">
       <div class="os-case-badge">
         <span class="os-pulse-dot"></span>
-        <span class="os-case-label">CASE:</span>
+        <span class="os-case-label" id="top-case-label">CASE:</span>
         <select id="os-global-case-select" class="os-case-dropdown" onchange="osSwitchCase(this.value)">
           <option value="CASE-2024-DEL-0482">State v. Rajesh Kumar (Tis Hazari)</option>
           <option value="CASE-2023-BOM-1109">Apex Infra v. Mumbai Port Trust (Bombay HC)</option>
@@ -276,18 +271,18 @@
       <div>
         <h1 class="hero-title">
           <span>🇮🇳</span>
-          <span id="portal-heading">नागरिक न्याय कक्ष (Citizen Justice Portal)</span>
+          <span id="portal-heading">Citizen Justice & Rights Portal</span>
         </h1>
         <p class="hero-sub" id="portal-sub">
-          भारत के 100 करोड़ नागरिकों एवं विचाराधीन कैदियों के परिवारों के लिए सीधे विधिक अधिकार एवं मोबाइल अलर्ट्स।
+          Direct legal rights transparency, statutory pre-trial bail tracking under Section 479 BNSS, and mobile WhatsApp notifications for India's 1 billion citizens.
         </p>
       </div>
 
       <div class="lang-switcher-box">
-        <span style="font-size:12px; color:var(--text-dim); font-weight:700;">भाषा / LANGUAGE:</span>
-        <select id="lang-select" class="lang-select" onchange="changeLanguage(this.value)">
-          <option value="hi" selected>हिंदी (Hindi)</option>
-          <option value="en">English</option>
+        <span style="font-size:12px; color:var(--text-dim); font-weight:700;" id="lbl-lang-select">LANGUAGE:</span>
+        <select id="lang-select" class="lang-select nyaya-lang-select" onchange="changeLanguage(this.value)">
+          <option value="en" selected>English (Default)</option>
+          <option value="hi">हिंदी (Hindi)</option>
           <option value="mr">मराठी (Marathi)</option>
           <option value="kn">ಕನ್ನಡ (Kannada)</option>
           <option value="ta">தமிழ் (Tamil)</option>
@@ -303,7 +298,7 @@
         <!-- Instant Rights & Bail Eligibility Status -->
         <div class="card" style="border-color: rgba(16, 185, 129, 0.4);">
           <div class="card-hdr">
-            <span style="color:var(--emerald-accent);">⚖️ विधिक अधिकार स्थिति (Legal Rights Status)</span>
+            <span style="color:var(--emerald-accent);" id="lbl-rights-hdr">⚖️ Legal Rights Status</span>
             <span id="badge-eligible" style="font-family:'JetBrains Mono'; font-size:11px; background:rgba(16,185,129,0.2); color:#86efac; padding:3px 8px; border-radius:4px;">
               SEC 479 BNSS ACTIVE
             </span>
@@ -311,43 +306,43 @@
 
           <div class="rights-alert-box" id="rights-box">
             <div class="rights-title" id="rights-title">
-              <span>✅</span> <span id="rights-status-text">ज़मानत अधिकार सक्रिय (Statutory Bail Eligible)</span>
+              <span>✅</span> <span id="rights-status-text">Statutory Bail Eligible (Sec 479 BNSS)</span>
             </div>
             <div class="rights-desc" id="rights-desc">
-              अभियुक्त ने हिरासत में 428 दिन पूरे कर लिए हैं (अधिकतम सजा का 39%)। भारतीय नागरिक सुरक्षा संहिता (BNSS) 2023 की धारा 479 के तहत वे वैधानिक जमानत के पात्र हैं।
+              Accused has completed 428 days in pre-trial custody (39% of maximum term). Under Section 479 BNSS (new criminal code), statutory bail is mandatory by law.
             </div>
           </div>
 
           <div class="metric-row">
             <div class="metric-box">
-              <div class="metric-lbl" id="lbl-custody">हिरासत में दिन</div>
+              <div class="metric-lbl" id="lbl-custody">Days in Custody</div>
               <div class="metric-val" id="val-custody" style="color:var(--cyan-accent);">428 Days</div>
             </div>
             <div class="metric-box">
-              <div class="metric-lbl" id="lbl-hearing">अगली पेशी तारीख</div>
+              <div class="metric-lbl" id="lbl-hearing">Next Hearing</div>
               <div class="metric-val" id="val-hearing" style="color:var(--gold-primary);">18-10-2024</div>
             </div>
             <div class="metric-box">
-              <div class="metric-lbl" id="lbl-court">न्यायालय</div>
+              <div class="metric-lbl" id="lbl-court">Court</div>
               <div class="metric-val" id="val-court" style="font-size:13px;">Tis Hazari</div>
             </div>
           </div>
 
           <div style="background:var(--bg-card); padding:14px; border-radius:6px; border:1px solid var(--border-subtle); margin-top:12px;">
-            <div style="font-size:12px; color:var(--text-dim); text-transform:uppercase; margin-bottom:4px;" id="lbl-aid">निःशुल्क कानूनी सहायता (Free Legal Aid):</div>
+            <div style="font-size:12px; color:var(--text-dim); text-transform:uppercase; margin-bottom:4px;" id="lbl-aid">Free Legal Aid Counsel:</div>
             <div style="font-size:14px; font-weight:700; color:#fff;" id="val-counsel">Adv. Meenakshi Sundaram (DLSA Appointed)</div>
-            <div style="font-size:12px; color:var(--text-muted); margin-top:4px;">
-              राष्ट्रीय विधिक सेवा प्राधिकरण (NALSA) निःशुल्क हेल्पलाइन: <strong style="color:var(--emerald-accent);">15100</strong>
+            <div style="font-size:12px; color:var(--text-muted); margin-top:4px;" id="lbl-nalsa-wrap">
+              National Legal Services Authority (NALSA) Toll-Free: <strong style="color:var(--emerald-accent);">15100</strong>
             </div>
           </div>
 
           <!-- Citizen Voice & Adhikar Patra Download Actions -->
           <div style="display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;">
-            <button onclick="speakRightsAdvice()" style="flex:1; background:linear-gradient(135deg, #1e3a8a, #3b82f6); color:#fff; border:none; padding:10px 14px; border-radius:6px; font-weight:700; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
-              <span>🔊</span> <span id="btn-speak-lbl">आवाज़ में सुनें (Listen Aloud)</span>
+            <button id="btn-speak-voice" onclick="speakRightsAdvice()" style="flex:1; background:linear-gradient(135deg, #1e3a8a, #3b82f6); color:#fff; border:none; padding:10px 14px; border-radius:6px; font-weight:700; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; transition:all 0.2s;">
+              <span>🔊</span> <span id="btn-speak-lbl">Listen Aloud (Voice Audio)</span>
             </button>
-            <a id="btn-download-adhikar" href="/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=hi" target="_blank" style="flex:1.2; background:linear-gradient(135deg, #047857, #10b981); color:#fff; text-decoration:none; padding:10px 14px; border-radius:6px; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; gap:6px;">
-              <span>📜</span> <span>ज़मानत अधिकार पत्र (Download Adhikar Patra)</span>
+            <a id="btn-download-adhikar" href="/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=en" target="_blank" style="flex:1.2; background:linear-gradient(135deg, #047857, #10b981); color:#fff; text-decoration:none; padding:10px 14px; border-radius:6px; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; gap:6px;">
+              <span>📜</span> <span id="btn-download-lbl">Download Bail Certificate (Adhikar Patra)</span>
             </a>
           </div>
         </div>
@@ -355,21 +350,21 @@
         <!-- Real Court Record / PDF Ingestion Card -->
         <div class="card" style="margin-top:20px; border-color: rgba(56, 189, 248, 0.3);">
           <div class="card-hdr">
-            <span style="color:var(--cyan-accent);">📄 कोर्ट दस्तावेज़ / FIR / याचिका (PDF) अपलोड एवं फॉरेन्सिक विश्लेषण</span>
+            <span style="color:var(--cyan-accent);" id="lbl-pdf-hdr">📄 Court Document / FIR / Petition (PDF) Upload & Forensic Audit</span>
             <span style="font-size:10px; background:rgba(56,189,248,0.2); color:#bae6fd; padding:2px 8px; border-radius:4px;">AGENT FOUNDRY ENABLED</span>
           </div>
-          <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">
-            कोई भी अदालती FIR, चार्जशीट या जमानत याचिका (PDF) अपलोड करें। <strong>Google Antigravity Agent Foundry</strong> के 9 स्वायत्त एजेंट्स साक्ष्यों का विश्लेषण कर धारा 479 BNSS के अंतर्गत जमानत अधिकार की गणना करेंगे:
+          <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;" id="lbl-pdf-desc">
+            Upload any court record, charge sheet, or FIR (PDF). <strong>Google Antigravity Agent Foundry</strong> swarm will verify custody duration and compute statutory bail rights under Section 479 BNSS:
           </p>
 
           <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
             <input type="file" id="pdf-file-input" accept=".pdf,.txt,.doc,.docx" class="input-field" style="margin-top:0; flex:1;">
-            <button class="btn-cnr" onclick="uploadCourtPDF()" style="background:var(--cyan-accent); color:#030712;">विश्लेषण करें (Analyze)</button>
-            <button class="btn-cnr" onclick="loadSampleFIRDemo()" style="background:var(--gold-primary); color:#030712;">📂 नमूना FIR लोड करें (Load Sample FIR)</button>
+            <button class="btn-cnr" id="btn-pdf-analyze" onclick="uploadCourtPDF()" style="background:var(--cyan-accent); color:#030712;">Analyze Document</button>
+            <button class="btn-cnr" id="btn-pdf-sample" onclick="loadSampleFIRDemo()" style="background:var(--gold-primary); color:#030712;">📂 Load Sample FIR (Demo)</button>
           </div>
 
           <div id="pdf-progress" style="display:none; margin-top:12px; font-size:12px; color:var(--cyan-accent); font-weight:600;">
-            ⏳ Google Antigravity Agent Swarm दस्तावेज़ की जांच कर रहा है... (SHA-256 Hashing & Extraction)...
+            ⏳ Google Antigravity Agent Swarm is auditing document (SHA-256 Hashing & Extraction)...
           </div>
 
           <div id="pdf-result-card" style="display:none; margin-top:16px; background:#020617; border:1px solid #1e293b; border-radius:8px; padding:16px;">
@@ -379,10 +374,10 @@
             </div>
 
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:12.5px; margin-bottom:12px;">
-              <div><strong>अभियुक्त (Accused):</strong> <span id="pdf-res-accused" style="color:#f8fafc;">Rajesh Kumar</span></div>
-              <div><strong>FIR क्र. (FIR No.):</strong> <span id="pdf-res-fir" style="color:#f8fafc;">0482/2023</span></div>
-              <div><strong>हिरासत (Custody):</strong> <span id="pdf-res-custody" style="color:#38bdf8; font-weight:700;">428 Days</span></div>
-              <div><strong>धारा 479 BNSS स्थिति:</strong> <span id="pdf-res-status" style="color:#34d399; font-weight:700;">वैधानिक जमानत पात्र (Statutory Bail Active)</span></div>
+              <div><strong>Accused:</strong> <span id="pdf-res-accused" style="color:#f8fafc;">Rajesh Kumar</span></div>
+              <div><strong>FIR No:</strong> <span id="pdf-res-fir" style="color:#f8fafc;">0482/2023</span></div>
+              <div><strong>Custody:</strong> <span id="pdf-res-custody" style="color:#38bdf8; font-weight:700;">428 Days</span></div>
+              <div><strong>Sec 479 Status:</strong> <span id="pdf-res-status" style="color:#34d399; font-weight:700;">Mandatory Bail Active</span></div>
             </div>
 
             <div style="font-size:11.5px; color:#94a3b8; background:rgba(15,23,42,0.8); border:1px solid #334155; border-radius:6px; padding:10px;" id="pdf-res-swarm">
@@ -392,16 +387,16 @@
         </div>
 
         <!-- 16-Digit CNR Lookup for Ordinary Citizens -->
-        <div class="card">
+        <div class="card" style="margin-top:20px;">
           <div class="card-hdr">
-            <span>🔍 e-Courts CNR नंबर से केस खोजें (16-Digit Search)</span>
+            <span id="lbl-cnr-hdr">🔍 e-Courts 16-Digit CNR Case Search</span>
           </div>
-          <p style="font-size:13px; color:var(--text-muted);">
-            किसी भी भारतीय न्यायालय का 16-अंकीय CNR नंबर दर्ज करें (उदा. DLCT01-004820-2024)। सिस्टम स्वचालित रूप से केस डिजिटल ट्विन तैयार करेगा:
+          <p style="font-size:13px; color:var(--text-muted);" id="lbl-cnr-desc">
+            Enter any Indian court 16-digit CNR number (e.g., DLCT01-004820-2024). The system automatically constructs the Case Digital Twin:
           </p>
           <div class="cnr-input-group">
             <input type="text" id="cnr-input" class="input-field" placeholder="DLCT01-004820-2024" value="DLCT01-004820-2024" style="margin-top:0;">
-            <button class="btn-cnr" onclick="searchCNR()">खोजें (Search)</button>
+            <button class="btn-cnr" id="btn-cnr-search" onclick="searchCNR()">Search Case</button>
           </div>
           <div id="cnr-msg" style="margin-top:10px; font-size:12px; display:none;"></div>
         </div>
@@ -413,24 +408,24 @@
           <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
             <span style="font-size:24px;">📱</span>
             <div>
-              <h3 style="font-size:16px; font-weight:800; color:#fff;">सीधे व्हाट्सएप / SMS विधिक अलर्ट</h3>
-              <span style="font-size:11.5px; color:var(--whatsapp-green); font-weight:600;">Last-Mile Delivery for Citizens</span>
+              <h3 style="font-size:16px; font-weight:800; color:#fff;" id="lbl-wa-hdr">Direct WhatsApp / Mobile Legal Alerts</h3>
+              <span style="font-size:11.5px; color:var(--whatsapp-green); font-weight:600;" id="lbl-wa-tag">Last-Mile Delivery for Citizens</span>
             </div>
           </div>
 
-          <p style="font-size:13px; color:var(--text-muted); line-height:1.5;">
-            गरीब या ग्रामीण पक्षकारों को कोर्ट की तारीखें और जमानत अधिकार सीधे व्हाट्सएप पर भेजें:
+          <p style="font-size:13px; color:var(--text-muted); line-height:1.5;" id="lbl-wa-desc">
+            Send upcoming court dates, bail rights, and legal aid contacts directly to undertrial families on WhatsApp:
           </p>
 
           <div style="margin-top:14px;">
-            <label style="font-size:12px; color:var(--text-dim); text-transform:uppercase;">पक्षकार / परिजन का नाम:</label>
+            <label style="font-size:12px; color:var(--text-dim); text-transform:uppercase;" id="lbl-wa-name-tag">Litigant / Family Member Name:</label>
             <input type="text" id="wa-name" class="input-field" value="Akash (Relative of Undertrial)">
           </div>
 
           <div style="margin-top:12px;">
             <label style="font-size:12px; color:var(--text-dim); text-transform:uppercase; display:flex; justify-content:space-between; align-items:center;">
-              <span>व्हाट्सएप / मोबाइल नंबर:</span>
-              <span style="font-size:11px; color:#10b981; font-weight:600;">🔒 Privacy Masked</span>
+              <span id="lbl-wa-phone-tag">WhatsApp / Mobile Number:</span>
+              <span style="font-size:11px; color:#10b981; font-weight:600;" id="lbl-privacy-badge">🔒 Privacy Masked</span>
             </label>
             
             <!-- Masked Display Mode (Active by default) -->
@@ -442,7 +437,7 @@
                 <button type="button" onclick="toggleViewPhone()" style="background:#1e293b; color:#94a3b8; border:1px solid #334155; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer;" id="btn-toggle-phone-view">
                   👁️ View
                 </button>
-                <button type="button" onclick="enableEditPhone()" style="background:#1e293b; color:#38bdf8; border:1px solid #334155; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer;">
+                <button type="button" onclick="enableEditPhone()" style="background:#1e293b; color:#38bdf8; border:1px solid #334155; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer;" id="btn-edit-phone">
                   ✏️ Edit / Change
                 </button>
               </div>
@@ -451,32 +446,32 @@
             <!-- Input Mode (When Editing) -->
             <div id="wa-phone-edit-wrap" style="display:none; gap:6px; margin-top:6px;">
               <input type="text" id="wa-phone" class="input-field" value="7773958375" placeholder="10-digit mobile number" style="margin-top:0; flex:1;">
-              <button type="button" class="btn-cnr" onclick="saveAndMaskPhone()" style="background:#10b981; color:#06090e; padding:6px 14px; font-size:12px;">Save & Mask</button>
+              <button type="button" class="btn-cnr" id="btn-save-phone" onclick="saveAndMaskPhone()" style="background:#10b981; color:#06090e; padding:6px 14px; font-size:12px;">Save & Mask</button>
             </div>
           </div>
 
           <!-- Operator Token Privacy Card -->
           <div style="margin-top:12px; background:rgba(0,0,0,0.5); border:1px solid var(--border-subtle); padding:10px 12px; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
             <div>
-              <div style="font-size:11px; color:var(--text-dim); text-transform:uppercase;">Admin Security Token:</div>
+              <div style="font-size:11px; color:var(--text-dim); text-transform:uppercase;" id="lbl-admin-token">Admin Security Token:</div>
               <div id="operator-token-display" style="font-family:'JetBrains Mono', monospace; font-size:12px; font-weight:700; color:#38bdf8; margin-top:2px;">••••••••••••</div>
             </div>
             <div style="display:flex; gap:6px;">
               <button type="button" onclick="toggleViewToken()" style="background:#0f172a; color:#94a3b8; border:1px solid #334155; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer;" id="btn-toggle-token-view">👁️ View</button>
-              <button type="button" onclick="editTokenPrompt()" style="background:#0f172a; color:#38bdf8; border:1px solid #334155; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer;">✏️ Change</button>
+              <button type="button" onclick="editTokenPrompt()" style="background:#0f172a; color:#38bdf8; border:1px solid #334155; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer;" id="btn-edit-token">✏️ Change</button>
             </div>
           </div>
 
           <button class="wa-btn" onclick="sendWhatsAppAlert()">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
-            व्हाट्सएप अलर्ट भेजें (Send WhatsApp Alert)
+            <span id="btn-wa-send-text">Send WhatsApp Alert</span>
           </button>
 
           <div id="wa-result-box" style="margin-top:14px; display:none; background:rgba(0,0,0,0.4); padding:12px; border-radius:6px; border:1px solid rgba(37,211,102,0.3);">
-            <div style="font-size:12px; color:var(--whatsapp-green); font-weight:700;" id="wa-success-lbl">अलर्ट तैयार हुआ (Alert Generated)!</div>
+            <div style="font-size:12px; color:var(--whatsapp-green); font-weight:700;" id="wa-success-lbl">Alert Dispatched!</div>
             <div style="font-size:11.5px; color:var(--text-muted); margin:6px 0;" id="wa-msg-preview"></div>
             <a id="wa-direct-anchor" href="#" target="_blank" style="color:var(--cyan-accent); font-size:12px; font-weight:700; text-decoration:none;">
-              सीधे व्हाट्सएप खोलें (Open in WhatsApp) →
+              Open Direct in WhatsApp →
             </a>
           </div>
         </div>
@@ -484,7 +479,7 @@
         <!-- Recent Alerts Audit -->
         <div class="card" style="margin-top:20px;">
           <div class="card-hdr">
-            <span>📋 हाल ही में भेजे गए अलर्ट्स (Alerts Trail)</span>
+            <span id="lbl-trail-hdr">📋 Recent Alerts Audit Trail</span>
           </div>
           <div id="alerts-trail" style="font-size:12px; color:var(--text-muted);">
             <!-- Rendered dynamically -->
@@ -496,11 +491,281 @@
 
   <script src="/os-shared-context.js"></script>
   <script>
-    let currentLang = 'hi';
+    // 6-Language Exhaustive Dictionary for Citizen Justice
+    const CITIZEN_I18N = {
+      'en': {
+        nav_title: 'CITIZEN ACCESS PORTAL',
+        cmd_center: 'Command Center',
+        portal_heading: 'Citizen Justice & Rights Portal',
+        portal_sub: "Direct legal rights transparency, statutory pre-trial bail tracking under Section 479 BNSS, and mobile WhatsApp notifications for India's 1 billion citizens.",
+        rights_hdr: '⚖️ Legal Rights Status',
+        badge_eligible: 'SEC 479 BNSS ACTIVE',
+        rights_status: 'Statutory Bail Eligible (Sec 479 BNSS)',
+        rights_desc: 'Accused has completed 428 days in pre-trial custody (39% of maximum term). Under Section 479 BNSS (new criminal code), statutory bail is mandatory by law.',
+        custody_lbl: 'Days in Custody',
+        hearing_lbl: 'Next Hearing',
+        court_lbl: 'Court',
+        aid_lbl: 'Free Legal Aid Counsel:',
+        nalsa_text: 'National Legal Services Authority (NALSA) Toll-Free: 15100',
+        btn_speak: 'Listen Aloud (Voice Audio)',
+        btn_download: 'Download Bail Certificate (Adhikar Patra)',
+        pdf_hdr: '📄 Court Document / FIR / Petition (PDF) Upload & Forensic Audit',
+        pdf_desc: 'Upload any court record, charge sheet, or FIR (PDF). Google Antigravity Agent Foundry swarm will verify custody duration and compute statutory bail rights under Section 479 BNSS:',
+        btn_analyze: 'Analyze Document',
+        btn_sample: '📂 Load Sample FIR (Demo)',
+        cnr_hdr: '🔍 e-Courts 16-Digit CNR Case Search',
+        cnr_desc: 'Enter any Indian court 16-digit CNR number (e.g., DLCT01-004820-2024). The system automatically constructs the Case Digital Twin:',
+        btn_search: 'Search Case',
+        wa_hdr: 'Direct WhatsApp / Mobile Legal Alerts',
+        wa_tag: 'Last-Mile Delivery for Citizens',
+        wa_desc: 'Send upcoming court dates, bail rights, and legal aid contacts directly to undertrial families on WhatsApp:',
+        wa_name_tag: 'Litigant / Family Member Name:',
+        wa_phone_tag: 'WhatsApp / Mobile Number:',
+        privacy_badge: '🔒 Privacy Masked',
+        btn_wa_send: 'Send WhatsApp Alert',
+        trail_hdr: '📋 Recent Alerts Audit Trail',
+        alert_sent: 'Alert Generated Successfully!',
+        open_wa: 'Open Direct in WhatsApp →'
+      },
+      'hi': {
+        nav_title: 'नागरिक न्याय पोर्टल',
+        cmd_center: 'कमांड सेंटर',
+        portal_heading: 'नागरिक न्याय कक्ष (Citizen Justice Portal)',
+        portal_sub: 'भारत के 100 करोड़ नागरिकों एवं विचाराधीन कैदियों के परिवारों के लिए सीधे विधिक अधिकार एवं मोबाइल अलर्ट्स।',
+        rights_hdr: '⚖️ विधिक अधिकार स्थिति (Legal Rights Status)',
+        badge_eligible: 'धारा 479 BNSS सक्रिय',
+        rights_status: 'ज़मानत अधिकार सक्रिय (Statutory Bail Eligible)',
+        rights_desc: 'अभियुक्त ने हिरासत में 428 दिन पूरे कर लिए हैं (अधिकतम सजा का 39%)। भारतीय नागरिक सुरक्षा संहिता (BNSS) 2023 की धारा 479 के तहत वे वैधानिक जमानत के पात्र हैं।',
+        custody_lbl: 'हिरासत में दिन',
+        hearing_lbl: 'अगली पेशी तारीख',
+        court_lbl: 'न्यायालय',
+        aid_lbl: 'निःशुल्क कानूनी सहायता (Free Legal Aid):',
+        nalsa_text: 'राष्ट्रीय विधिक सेवा प्राधिकरण (NALSA) निःशुल्क हेल्पलाइन: 15100',
+        btn_speak: 'आवाज़ में सुनें (Listen Aloud)',
+        btn_download: 'ज़मानत अधिकार पत्र (Download Adhikar Patra)',
+        pdf_hdr: '📄 कोर्ट दस्तावेज़ / FIR / याचिका (PDF) अपलोड एवं फॉरेन्सिक विश्लेषण',
+        pdf_desc: 'कोई भी अदालती FIR, चार्जशीट या जमानत याचिका (PDF) अपलोड करें। Google Antigravity Agent Foundry के 9 स्वायत्त एजेंट्स साक्ष्यों का विश्लेषण कर धारा 479 BNSS के अंतर्गत जमानत अधिकार की गणना करेंगे:',
+        btn_analyze: 'विश्लेषण करें (Analyze)',
+        btn_sample: '📂 नमूना FIR लोड करें (Load Sample FIR)',
+        cnr_hdr: '🔍 e-Courts CNR नंबर से केस खोजें (16-Digit Search)',
+        cnr_desc: 'किसी भी भारतीय न्यायालय का 16-अंकीय CNR नंबर दर्ज करें (उदा. DLCT01-004820-2024)। सिस्टम स्वचालित रूप से केस डिजिटल ट्विन तैयार करेगा:',
+        btn_search: 'खोजें (Search)',
+        wa_hdr: 'सीधे व्हाट्सएप / SMS विधिक अलर्ट',
+        wa_tag: 'नागरिकों तक अंतिम छोर तक विधिक सहायता',
+        wa_desc: 'गरीब या ग्रामीण पक्षकारों को कोर्ट की तारीखें और जमानत अधिकार सीधे व्हाट्सएप पर भेजें:',
+        wa_name_tag: 'पक्षकार / परिजन का नाम:',
+        wa_phone_tag: 'व्हाट्सएप / मोबाइल नंबर:',
+        privacy_badge: '🔒 प्राइवेसी सुरक्षित (Masked)',
+        btn_wa_send: 'व्हाट्सएप अलर्ट भेजें (Send Alert)',
+        trail_hdr: '📋 हाल ही में भेजे गए अलर्ट्स (Alerts Trail)',
+        alert_sent: 'अलर्ट तैयार हुआ (Alert Generated)!',
+        open_wa: 'सीधे व्हाट्सएप खोलें (Open in WhatsApp) →'
+      },
+      'mr': {
+        nav_title: 'नागरिक न्याय कक्ष',
+        cmd_center: 'कमांड सेंटर',
+        portal_heading: 'नागरिक न्याय कक्ष (Citizen Justice Portal)',
+        portal_sub: 'भारतातील १०० कोटी नागरिकांसाठी आणि अंडरट्रायल कुटुंबीयांसाठी थेट कायदेशीर हक्क माहिती आणि मोबाइल अलर्ट्स.',
+        rights_hdr: '⚖️ कायदेशीर हक्क स्थिती (Legal Rights Status)',
+        badge_eligible: 'कलम ४७९ BNSS सक्रिय',
+        rights_status: 'जामीन हक्क सक्रिय (Statutory Bail Eligible)',
+        rights_desc: 'आरोपीने कोठडीत ४२८ दिवस पूर्ण केले आहेत (कमाल शिक्षेच्या ३९%). भारतीय नागरिक सुरक्षा संहिता २०२३ च्या कलम ४७९ अन्वये ते वैधानिक जामिनास पात्र आहेत.',
+        custody_lbl: 'कोठडीतील दिवस',
+        hearing_lbl: 'पुढील तारीख',
+        court_lbl: 'न्यायालय',
+        aid_lbl: 'मोफत वकील सहाय्य (Free Legal Aid):',
+        nalsa_text: 'राष्ट्रीय विधी सेवा प्राधिकरण (NALSA) मोफत हेल्पलाइन: 15100',
+        btn_speak: 'आवाजात ऐका (Listen Aloud)',
+        btn_download: 'जामीन अधिकार पत्रक (Download Patra)',
+        pdf_hdr: '📄 कोर्ट डॉक्युमेंट / FIR / याचिका (PDF) अपलोड व फॉरेन्सिक विश्लेषण',
+        pdf_desc: 'कोणतीही न्यायालयीन FIR, चार्जशीट किंवा जामीन याचिका (PDF) अपलोड करा. Google Antigravity Agent Foundry मधील ९ एजंट्स पुराव्यांचे विश्लेषण करून कलम ४७९ BNSS अंतर्गत जामीन हक्क तपासतील:',
+        btn_analyze: 'विश्लेषण करा (Analyze)',
+        btn_sample: '📂 नमुना FIR लोड करा (Sample FIR)',
+        cnr_hdr: '🔍 e-Courts CNR नंबरवरून केस शोधा (16-Digit Search)',
+        cnr_desc: 'कोणत्याही भारतीय न्यायालयाचा १६-अंकी CNR नंबर टाका (उदा. DLCT01-004820-2024). सिस्टम आपोआप डिजिटल ट्विन तयार करेल:',
+        btn_search: 'तपासा (Search)',
+        wa_hdr: 'थेट व्हॉट्सॲप / SMS विधी अलर्ट',
+        wa_tag: 'नागरिकांपर्यंत थेट न्याय पोहोचवणे',
+        wa_desc: 'गरीब किंवा ग्रामीण पक्षकारांना कोर्टाच्या तारखा आणि जामीन हक्क थेट व्हॉट्सॲपवर पाठवा:',
+        wa_name_tag: 'पक्षकार / नातेवाईकाचे नाव:',
+        wa_phone_tag: 'व्हॉट्सॲप / मोबाइल नंबर:',
+        privacy_badge: '🔒 गोपनीयता सुरक्षित (Masked)',
+        btn_wa_send: 'व्हॉट्सॲप अलर्ट पाठवा (Send Alert)',
+        trail_hdr: '📋 अलीकडील पाठवलेले अलर्ट्स (Alerts Trail)',
+        alert_sent: 'अलर्ट तयार झाला (Alert Generated)!',
+        open_wa: 'थेट व्हॉट्सॲप उघडा (Open in WhatsApp) →'
+      },
+      'kn': {
+        nav_title: 'ನಾಗರಿಕ ನ್ಯಾಯ ಪೋರ್ಟಲ್',
+        cmd_center: 'ಕಮಾಂಡ್ ಸೆಂಟರ್',
+        portal_heading: 'ನಾಗರಿಕ ನ್ಯಾಯ ಕಕ್ಷ (Citizen Justice Portal)',
+        portal_sub: 'ಸಾಮಾನ್ಯ ನಾಗರಿಕರಿಗೆ ಉಚಿತ ಕಾನೂನು ನೆರವು, ಕಲಂ 479 BNSS ಅಡಿಯಲ್ಲಿ ಶಾಸನಬದ್ಧ ಜಾಮೀನು ಎಚ್ಚರಿಕೆಗಳು.',
+        rights_hdr: '⚖️ ಕಾನೂನು ಹಕ್ಕುಗಳ ಸ್ಥಿತಿ',
+        badge_eligible: 'ಕಲಂ 479 BNSS ಸಕ್ರಿಯ',
+        rights_status: 'ಶಾಸನಬದ್ಧ ಜಾಮೀನು ಅರ್ಹತೆ (Statutory Bail Eligible)',
+        rights_desc: 'ಆರೋಪಿಯು ನ್ಯಾಯಾಂಗ ಬಂಧನದಲ್ಲಿ 428 ದಿನಗಳನ್ನು ಪೂರೈಸಿದ್ದಾರೆ. ಹೊಸ ಕಾಯ್ದೆಯ ಕಲಂ 479 BNSS ಅಡಿಯಲ್ಲಿ ಅವರು ಶಾಸನಬದ್ಧ ಜಾಮೀನಿಗೆ ಅರ್ಹರಾಗಿದ್ದಾರೆ.',
+        custody_lbl: 'ಬಂಧನದಲ್ಲಿ ಕಳೆದ ದಿನಗಳು',
+        hearing_lbl: 'ಮುಂದಿನ ವಿಚಾರಣೆ ದಿನಾಂಕ',
+        court_lbl: 'ನ್ಯಾಯಾಲಯ',
+        aid_lbl: 'ಉಚಿತ ಕಾನೂನು ನೆರವು:',
+        nalsa_text: 'ರಾಷ್ಟ್ರೀಯ ಕಾನೂನು ಸೇವೆಗಳ ಪ್ರಾಧಿಕಾರ (NALSA) ಉಚಿತ ಸಹಾಯವಾಣಿ: 15100',
+        btn_speak: 'ಧ್ವನಿಯಲ್ಲಿ ಆಲಿಸಿ (Listen Aloud)',
+        btn_download: 'ಜಾಮೀನು ಹಕ್ಕು ಪತ್ರ (Download Patra)',
+        pdf_hdr: '📄 ನ್ಯಾಯಾಲಯ ದಾಖಲೆ / FIR (PDF) ಪರಿಶೀಲನೆ',
+        pdf_desc: 'ಯಾವುದೇ ನ್ಯಾಯಾಲಯ ದಾಖಲೆ ಅಥವಾ FIR ಅನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ. 9 ಸ್ವಾಯತ್ತ ಏಜೆಂಟ್‌ಗಳು ಕಲಂ 479 BNSS ಅಡಿಯಲ್ಲಿ ಜಾಮೀನು ಹಕ್ಕನ್ನು ವಿಶ್ಲೇಷಿಸುತ್ತಾರೆ:',
+        btn_analyze: 'ವಿಶ್ಲೇಷಿಸಿ (Analyze)',
+        btn_sample: '📂 ಮಾದರಿ FIR ಲೋಡ್ ಮಾಡಿ',
+        cnr_hdr: '🔍 e-Courts 16-ಅಂಕಿಯ CNR ಹುಡುಕಾಟ',
+        cnr_desc: 'ಯಾವುದೇ ಭಾರತೀಯ ನ್ಯಾಯಾಲಯದ 16-ಅಂಕಿಯ CNR ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ:',
+        btn_search: 'ಹುಡುಕಿ (Search)',
+        wa_hdr: 'ನೇರ ವಾಟ್ಸಾಪ್ / SMS ಕಾನೂನು ಎಚ್ಚರಿಕೆ',
+        wa_tag: 'ಪ್ರತಿಯೊಬ್ಬ ನಾಗರಿಕನಿಗೂ ತ್ವರಿತ ನ್ಯಾಯ',
+        wa_desc: 'ವಿಚಾರಣಾಧೀನ ಕೈದಿಗಳ ಕುಟುಂಬಗಳಿಗೆ ನ್ಯಾಯಾಲಯದ ದಿನಾಂಕಗಳು ಮತ್ತು ಜಾಮೀನು ಹಕ್ಕುಗಳನ್ನು ನೇರವಾಗಿ ವಾಟ್ಸಾಪ್‌ಗೆ ಕಳುಹಿಸಿ:',
+        wa_name_tag: 'ಕಕ್ಷಿದಾರರ / ಸಂಬಂಧಿಕರ ಹೆಸರು:',
+        wa_phone_tag: 'ವಾಟ್ಸಾಪ್ / ಮೊಬೈಲ್ ಸಂಖ್ಯೆ:',
+        privacy_badge: '🔒 ಗೌಪ್ಯತೆ ರಕ್ಷಿತ',
+        btn_wa_send: 'ವಾಟ್ಸಾಪ್ ಸಂದೇಶ ಕಳುಹಿಸಿ',
+        trail_hdr: '📋 ಇತ್ತೀಚಿನ ಸಂದೇಶಗಳ ಇತಿಹಾಸ',
+        alert_sent: 'ಸಂದೇಶ ಯಶಸ್ವಿಯಾಗಿ ಸಿದ್ಧವಾಯಿತು!',
+        open_wa: 'ವಾಟ್ಸಾಪ್ ತೆರೆಯಿರಿ →'
+      },
+      'ta': {
+        nav_title: 'குடிமக்கள் நீதி தளம்',
+        cmd_center: 'கட்டளை மையம்',
+        portal_heading: 'குடிமக்கள் நீதி தளம் (Citizen Justice Portal)',
+        portal_sub: 'எளிய மக்களுக்கான இலவச சட்ட உதவி மற்றும் பிரிவு 479 BNSS சட்டப்பூர்வ பிணை அறிவிப்புகள்.',
+        rights_hdr: '⚖️ சட்ட உரிமை நிலை',
+        badge_eligible: 'பிரிவு 479 BNSS செயலில் உள்ளது',
+        rights_status: 'சட்டப்பூர்வ பிணைக்கு தகுதியுடையவர் (Bail Eligible)',
+        rights_desc: 'கைதி 428 நாட்கள் காவலில் இருந்துள்ளார். புதிய சட்டத்தின் பிரிவு 479 BNSS கீழ் பிணைக்கு தகுதியுடையவர்.',
+        custody_lbl: 'காவல் நாட்கள்',
+        hearing_lbl: 'அடுத்த விசாரணை தேதி',
+        court_lbl: 'நீதிமன்றம்',
+        aid_lbl: 'இலவச சட்ட உதவி வழக்கறிஞர்:',
+        nalsa_text: 'தேசிய சட்ட சேவைகள் ஆணையம் (NALSA) உதவி எண்: 15100',
+        btn_speak: 'குரலில் கேளுங்கள் (Listen Aloud)',
+        btn_download: 'பிணை உரிமைச் சான்றிதழ் (Download Patra)',
+        pdf_hdr: '📄 நீதிமன்ற ஆவணம் / FIR (PDF) பதிவேற்றம்',
+        pdf_desc: 'எந்தவொரு நீதிமன்ற ஆவணத்தையும் பதிவேற்றவும். ஏஜென்ட் ஃபவுண்டரி பிரிவு 479 BNSS பிணை தகுதியை ஆய்வு செய்யும்:',
+        btn_analyze: 'ஆய்வு செய் (Analyze)',
+        btn_sample: '📂 மாதிரி FIR ஏற்றவும்',
+        cnr_hdr: '🔍 e-Courts 16-இலக்க CNR எண் தேடல்',
+        cnr_desc: 'எந்தவொரு இந்திய நீதிமன்றத்தின் 16-இலக்க CNR எண்ணை உள்ளிடவும்:',
+        btn_search: 'தேடு (Search)',
+        wa_hdr: 'நேரடி வாட்ஸ்அப் சட்ட அறிவிப்பு',
+        wa_tag: 'கடைசி நிலை மக்களுக்கும் நேரடி நீதி',
+        wa_desc: 'நீதிமன்ற தேதிகள் மற்றும் பிணை உரிமைகளை வாட்ஸ்அப் மூலம் உடனடியாக அனுப்பவும்:',
+        wa_name_tag: 'உறவினர் பெயர்:',
+        wa_phone_tag: 'வாட்ஸ்அப் எண்:',
+        privacy_badge: '🔒 தனிஉரிமை பாதுகாக்கப்பட்டது',
+        btn_wa_send: 'வாட்ஸ்அப் தகவல் அனுப்பு',
+        trail_hdr: '📋 சமீபத்திய அறிவிப்பு பட்டியல்',
+        alert_sent: 'தகவல் தயார் செய்யப்பட்டது!',
+        open_wa: 'வாட்ஸ்அப் திறக்கவும் →'
+      },
+      'bn': {
+        nav_title: 'নাগরিক ন্যায় পোর্টাল',
+        cmd_center: 'কমান্ড সেন্টার',
+        portal_heading: 'নাগরিক ন্যায় পোর্টাল (Citizen Justice Portal)',
+        portal_sub: 'সাধারণ নাগরিকদের জন্য বিনামূল্যে আইনি সহায়তা এবং ধারা ৪৭৯ BNSS সংবিধিবদ্ধ জামিন সতর্কতা।',
+        rights_hdr: '⚖️ আইনি অধিকার স্থিতি',
+        badge_eligible: 'ধারা ৪৭৯ BNSS সক্রিয়',
+        rights_status: 'সংবিধিবদ্ধ জামিনের যোগ্য (Statutory Bail Eligible)',
+        rights_desc: 'অভিযুক্ত ব্যক্তি ৪২৮ দিন হেফাজতে সম্পন্ন করেছেন। নতুন আইনের ধারা ৪৭৯ BNSS অনুযায়ী সংবিধিবদ্ধ জামিনের যোগ্য।',
+        custody_lbl: 'হাজতবাসের দিন',
+        hearing_lbl: 'পরবর্তী শুনানির তারিখ',
+        court_lbl: 'আদালত',
+        aid_lbl: 'বিনামূল্যে আইনি সহায়তা:',
+        nalsa_text: 'জাতীয় আইনি পরিষেবা কর্তৃপক্ষ (NALSA) হেল্পলাইন: 15100',
+        btn_speak: 'ভয়েস অডিওতে শুনুন (Listen Aloud)',
+        btn_download: 'জামিন অধিকার পত্র (Download Patra)',
+        pdf_hdr: '📄 আদালত নথি / FIR (PDF) আপলোড ও বিশ্লেষণ',
+        pdf_desc: 'যেকোনো আদালতের রেকর্ড বা FIR আপলোড করুন। এজেন্ট ফাউন্ড্রি ধারা ৪৭৯ BNSS জামিন অধিকার গণনা করবে:',
+        btn_analyze: 'বিশ্লেষণ করুন (Analyze)',
+        btn_sample: '📂 নমুনা FIR লোড করুন',
+        cnr_hdr: '🔍 e-Courts ১৬-সংখ্যার CNR অনুসন্ধান',
+        cnr_desc: 'যেকোনো ভারতীয় আদালতের ১৬-সংখ্যার CNR নম্বর লিখুন:',
+        btn_search: 'অনুসন্ধান (Search)',
+        wa_hdr: 'সরাসরি হোয়াটসঅ্যাপ / SMS আইনি সতর্কতা',
+        wa_tag: 'সাধারণ মানুষের জন্য দ্রুত ন্যায়বিচার',
+        wa_desc: 'আদালতের শুনানির তারিখ ও জামিন অধিকার সরাসরি হোয়াটসঅ্যাপে প্রেরণ করুন:',
+        wa_name_tag: 'পরিজন বা আত্মীয়ের নাম:',
+        wa_phone_tag: 'হোয়াটসঅ্যাপ নম্বর:',
+        privacy_badge: '🔒 গোপনীয়তা সংরক্ষিত',
+        btn_wa_send: 'হোয়াটসঅ্যাপে সতর্কতা পাঠান',
+        trail_hdr: '📋 সম্প্রতি প্রেরিত সতর্কতার তালিকা',
+        alert_sent: 'সতর্কতা প্রস্তুত হয়েছে!',
+        open_wa: 'হোয়াটসঅ্যাপ খুলুন →'
+      }
+    };
+
+    let currentLang = window.osGetActiveLang ? window.osGetActiveLang() : 'en';
     let phoneViewUnmasked = false;
     let currentRawPhone = '7773958375';
     let tokenViewUnmasked = false;
     let currentRawToken = 'dev-operator-token';
+
+    // Apply exhaustive translation
+    window.applyLanguageTranslations = function(lang) {
+      currentLang = lang || 'en';
+      const dict = CITIZEN_I18N[currentLang] || CITIZEN_I18N['en'];
+
+      // Synchronize dropdown
+      const sel = document.getElementById('lang-select');
+      if (sel) sel.value = currentLang;
+
+      // Update text nodes
+      if (document.getElementById('nav-portal-title')) document.getElementById('nav-portal-title').innerText = dict.nav_title;
+      if (document.getElementById('nav-cmd-center')) document.getElementById('nav-cmd-center').innerText = dict.cmd_center;
+      if (document.getElementById('portal-heading')) document.getElementById('portal-heading').innerText = dict.portal_heading;
+      if (document.getElementById('portal-sub')) document.getElementById('portal-sub').innerText = dict.portal_sub;
+
+      if (document.getElementById('lbl-rights-hdr')) document.getElementById('lbl-rights-hdr').innerText = dict.rights_hdr;
+      if (document.getElementById('badge-eligible')) document.getElementById('badge-eligible').innerText = dict.badge_eligible;
+      if (document.getElementById('rights-status-text')) document.getElementById('rights-status-text').innerText = dict.rights_status;
+      if (document.getElementById('rights-desc')) document.getElementById('rights-desc').innerText = dict.rights_desc;
+
+      if (document.getElementById('lbl-custody')) document.getElementById('lbl-custody').innerText = dict.custody_lbl;
+      if (document.getElementById('lbl-hearing')) document.getElementById('lbl-hearing').innerText = dict.hearing_lbl;
+      if (document.getElementById('lbl-court')) document.getElementById('lbl-court').innerText = dict.court_lbl;
+      if (document.getElementById('lbl-aid')) document.getElementById('lbl-aid').innerText = dict.aid_lbl;
+      if (document.getElementById('lbl-nalsa-wrap')) {
+        document.getElementById('lbl-nalsa-wrap').innerHTML = `${dict.nalsa_text.split(':')[0]}: <strong style="color:var(--emerald-accent);">15100</strong>`;
+      }
+
+      if (document.getElementById('btn-speak-lbl')) document.getElementById('btn-speak-lbl').innerText = dict.btn_speak;
+      if (document.getElementById('btn-download-lbl')) document.getElementById('btn-download-lbl').innerText = dict.btn_download;
+      if (document.getElementById('btn-download-adhikar')) {
+        document.getElementById('btn-download-adhikar').href = `/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=${currentLang}`;
+      }
+
+      if (document.getElementById('lbl-pdf-hdr')) document.getElementById('lbl-pdf-hdr').innerText = dict.pdf_hdr;
+      if (document.getElementById('lbl-pdf-desc')) document.getElementById('lbl-pdf-desc').innerHTML = dict.pdf_desc;
+      if (document.getElementById('btn-pdf-analyze')) document.getElementById('btn-pdf-analyze').innerText = dict.btn_analyze;
+      if (document.getElementById('btn-pdf-sample')) document.getElementById('btn-pdf-sample').innerText = dict.btn_sample;
+
+      if (document.getElementById('lbl-cnr-hdr')) document.getElementById('lbl-cnr-hdr').innerText = dict.cnr_hdr;
+      if (document.getElementById('lbl-cnr-desc')) document.getElementById('lbl-cnr-desc').innerText = dict.cnr_desc;
+      if (document.getElementById('btn-cnr-search')) document.getElementById('btn-cnr-search').innerText = dict.btn_search;
+
+      if (document.getElementById('lbl-wa-hdr')) document.getElementById('lbl-wa-hdr').innerText = dict.wa_hdr;
+      if (document.getElementById('lbl-wa-tag')) document.getElementById('lbl-wa-tag').innerText = dict.wa_tag;
+      if (document.getElementById('lbl-wa-desc')) document.getElementById('lbl-wa-desc').innerText = dict.wa_desc;
+      if (document.getElementById('lbl-wa-name-tag')) document.getElementById('lbl-wa-name-tag').innerText = dict.wa_name_tag;
+      if (document.getElementById('lbl-wa-phone-tag')) document.getElementById('lbl-wa-phone-tag').innerText = dict.wa_phone_tag;
+      if (document.getElementById('lbl-privacy-badge')) document.getElementById('lbl-privacy-badge').innerText = dict.privacy_badge;
+      if (document.getElementById('btn-wa-send-text')) document.getElementById('btn-wa-send-text').innerText = dict.btn_wa_send;
+      if (document.getElementById('lbl-trail-hdr')) document.getElementById('lbl-trail-hdr').innerText = dict.trail_hdr;
+    };
+
+    function changeLanguage(newLang) {
+      if (window.osSetGlobalLang) {
+        window.osSetGlobalLang(newLang);
+      } else {
+        currentLang = newLang;
+        window.applyLanguageTranslations(newLang);
+      }
+    }
 
     function updatePhoneDisplay() {
       const disp = document.getElementById('wa-phone-display-text');
@@ -539,7 +804,7 @@
         document.getElementById('wa-phone-edit-wrap').style.display = 'none';
         document.getElementById('wa-phone-display-wrap').style.display = 'flex';
       } else {
-        alert('कृपया वैध 10-अंकीय मोबाइल नंबर दर्ज करें.');
+        alert('Please enter a valid 10-digit mobile number.');
       }
     }
 
@@ -561,45 +826,48 @@
     }
 
     function editTokenPrompt() {
-      const newToken = prompt('नया एडमिन सुरक्षा टोकन दर्ज करें (Enter Admin Security Token):', currentRawToken);
+      const newToken = prompt('Enter Admin Security Token:', currentRawToken);
       if (newToken && newToken.trim().length > 0) {
         currentRawToken = newToken.trim();
         tokenViewUnmasked = false;
         updateTokenDisplay();
-        alert('सुरक्षा टोकन सफलतापूर्वक अपडेट एवं मास्क किया गया!');
+        alert('Security token updated and masked.');
       }
     }
 
-    async function loadCitizenPortal() {
-      const activeCaseId = osGetActiveCase();
-      const res = await fetch(`/api/citizen/summary?case_id=${encodeURIComponent(activeCaseId)}&lang=${currentLang}`);
-      const data = await res.json();
+    // Voice Speech Audio Guidance
+    function speakRightsAdvice() {
+      const textToRead = document.getElementById('rights-desc').innerText;
+      const speakBtn = document.getElementById('btn-speak-lbl');
+      const originalText = speakBtn.innerText;
 
-      document.getElementById('portal-heading').innerText = data.portal_header;
-      document.getElementById('portal-sub').innerText = data.tagline;
+      const speakingLabels = {
+        'en': '🔊 Speaking...',
+        'hi': '🔊 बोल रहा है...',
+        'mr': '🔊 बोलत आहे...',
+        'kn': '🔊 ಮಾತನಾಡುತ್ತಿದೆ...',
+        'ta': '🔊 பேசுகிறது...',
+        'bn': '🔊 কথা বলছে...'
+      };
 
-      document.getElementById('val-custody').innerText = `${data.custody_days} Days`;
-      document.getElementById('val-hearing').innerText = data.next_hearing_date || 'TBD';
-      document.getElementById('val-court').innerText = data.court;
-      document.getElementById('val-counsel').innerText = data.lead_counsel;
-
-      document.getElementById('lbl-custody').innerText = data.labels.undertrial_status;
-      document.getElementById('lbl-hearing').innerText = data.labels.next_hearing;
-      document.getElementById('lbl-court').innerText = data.labels.court;
-      document.getElementById('lbl-aid').innerText = data.labels.legal_aid;
-
-      document.getElementById('rights-desc').innerText = data.citizen_advice;
-
-      loadAlertsTrail();
-    }
-
-    function changeLanguage(newLang) {
-      currentLang = newLang;
-      loadCitizenPortal();
+      if (window.osPlayVoiceGuidance) {
+        window.osPlayVoiceGuidance(
+          textToRead,
+          currentLang,
+          () => {
+            speakBtn.innerText = speakingLabels[currentLang] || '🔊 Speaking...';
+            document.getElementById('btn-speak-voice').style.boxShadow = '0 0 16px rgba(56, 189, 248, 0.8)';
+          },
+          () => {
+            speakBtn.innerText = originalText;
+            document.getElementById('btn-speak-voice').style.boxShadow = 'none';
+          }
+        );
+      }
     }
 
     async function sendWhatsAppAlert() {
-      const activeCaseId = osGetActiveCase();
+      const activeCaseId = window.osGetActiveCase ? window.osGetActiveCase() : 'CASE-2024-DEL-0482';
       const phone = currentRawPhone || document.getElementById('wa-phone').value;
       const name = document.getElementById('wa-name').value;
 
@@ -634,52 +902,18 @@
       const msg = document.getElementById('cnr-msg');
       msg.style.display = 'block';
       msg.style.color = 'var(--emerald-accent)';
-      msg.innerHTML = `<strong>✅ केस जुड़ा:</strong> ${data.case.title} (${data.case.case_id}) - डिजिटल ट्विन तैयार!`;
+      msg.innerHTML = `<strong>✅ Case Linked:</strong> ${data.case.title} (${data.case.case_id}) - Digital Twin Ready!`;
       
       setTimeout(() => {
-        osSwitchCase(data.case.case_id);
+        if (window.osSwitchCase) window.osSwitchCase(data.case.case_id);
       }, 1500);
-    }
-
-    async function loadAlertsTrail() {
-      const res = await fetch('/api/citizen/alerts');
-      const data = await res.json();
-      const trail = document.getElementById('alerts-trail');
-      if (data.alerts && data.alerts.length > 0) {
-        trail.innerHTML = data.alerts.slice(0, 3).map(a => `
-          <div style="padding:8px 0; border-bottom:1px solid var(--border-subtle);">
-            <div style="display:flex; justify-content:space-between; color:#fff; font-weight:600;">
-              <span>${a.phone} (${a.recipient})</span>
-              <span style="color:var(--emerald-accent); font-family:'JetBrains Mono'; font-size:11px;">${a.status}</span>
-            </div>
-            <div style="font-size:11px; color:var(--text-dim); margin-top:2px;">${a.timestamp.substring(11, 19)} UTC • ${a.type}</div>
-          </div>
-        `).join('');
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', loadCitizenPortal);
-
-    function speakRightsAdvice() {
-      const textToRead = document.getElementById('rights-desc').innerText;
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(textToRead);
-        if (currentLang === 'mr') utterance.lang = 'mr-IN';
-        else if (currentLang === 'hi') utterance.lang = 'hi-IN';
-        else utterance.lang = 'en-IN';
-        utterance.rate = 0.95;
-        window.speechSynthesis.speak(utterance);
-      } else {
-        alert('Browser audio speech not supported.');
-      }
     }
 
     async function uploadCourtPDF() {
       const fileInput = document.getElementById('pdf-file-input');
       const file = fileInput.files ? fileInput.files[0] : null;
       if (!file) {
-        alert('कृपया पहले PDF या कोर्ट दस्तावेज़ चुनें.');
+        alert('Please choose a PDF court document or FIR first.');
         return;
       }
 
@@ -715,18 +949,18 @@
 
           document.getElementById('btn-download-adhikar').href = `/api/citizen/download-adhikar-patra?accused=${encodeURIComponent(data.extracted_case_data.accused_name)}&custody=${data.extracted_case_data.custody_days}&lang=${currentLang}`;
         } else {
-          alert('अपलोड असफल: ' + (data.detail || 'त्रुटि हुई'));
+          alert('Upload failed: ' + (data.detail || 'Audit error'));
         }
       } catch (err) {
         prog.style.display = 'none';
-        alert('त्रुटि: ' + err.message);
+        alert('Error: ' + err.message);
       }
     }
 
     async function loadSampleFIRDemo() {
       const prog = document.getElementById('pdf-progress');
       prog.style.display = 'block';
-      prog.innerText = '📂 नमूना FIR (0482/2023 - State v. Rajesh Kumar) लोड हो रहा है...';
+      prog.innerText = '📂 Loading Sample FIR (0482/2023 - State v. Rajesh Kumar)...';
 
       const fd = new FormData();
       const blob = new Blob([
@@ -766,9 +1000,31 @@
         document.getElementById('btn-download-adhikar').href = `/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=${currentLang}`;
       } catch (err) {
         prog.style.display = 'none';
-        alert('त्रुटि: ' + err.message);
+        alert('Error: ' + err.message);
       }
     }
+
+    async function loadAlertsTrail() {
+      const res = await fetch('/api/citizen/alerts');
+      const data = await res.json();
+      const trail = document.getElementById('alerts-trail');
+      if (data.alerts && data.alerts.length > 0) {
+        trail.innerHTML = data.alerts.slice(0, 3).map(a => `
+          <div style="padding:8px 0; border-bottom:1px solid var(--border-subtle);">
+            <div style="display:flex; justify-content:space-between; color:#fff; font-weight:600;">
+              <span>${a.phone} (${a.recipient})</span>
+              <span style="color:var(--emerald-accent); font-family:'JetBrains Mono'; font-size:11px;">${a.status}</span>
+            </div>
+            <div style="font-size:11px; color:var(--text-dim); margin-top:2px;">${a.timestamp.substring(11, 19)} UTC • ${a.type}</div>
+          </div>
+        `).join('');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      window.applyLanguageTranslations(currentLang);
+      loadAlertsTrail();
+    });
   </script>
 </body>
 </html>
