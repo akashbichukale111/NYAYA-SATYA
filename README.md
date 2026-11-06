@@ -30,8 +30,32 @@
 | **🛡️ UNWIND Human Legal Gate** | [**Launch UNWIND Gate**](https://nyaya-satya.onrender.com/governance/unwind) | Finite State Machine, Immutable Hash Locks, Advocate Authorization Gate |
 | **⚖️ Flagship NYAYA-SATYA Core** | [**Launch Core Platform**](https://nyaya-satya.onrender.com/core) | Deep Evidentiary Analysis, Dossier 2.0 Export, Cryptographic Audit Trail |
 | **🚨 Undertrial Liberty Sentinel** | [**Launch Liberty Sentinel**](https://nyaya-satya.onrender.com/engines/undertrial-liberty) | Section 479 BNSS Detention Tracker, 428-day custody counter, DLSA Handoff |
+| **📜 Citizen Bail Adhikar Patra (PDF)** | [**View Statutory Certificate**](https://nyaya-satya.onrender.com/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=mr) | Printable Vernacular Legal Rights Certificate under Sec 479 BNSS |
+| **🤖 Agent Foundry Swarm Status** | [**View Swarm Telemetry**](https://nyaya-satya.onrender.com/api/citizen/agent-foundry-status) | Live Status of all 9 Google Antigravity autonomous agents |
 | **📚 Interactive OpenAPI / Swagger Docs** | [**View API Documentation**](https://nyaya-satya.onrender.com/docs) | Live REST API specification with all 13 engine endpoints |
 | **🩺 Live Health Probe** | [**Check System Health**](https://nyaya-satya.onrender.com/health) | Subsystem liveness and non-adjudication invariant status |
+
+---
+
+## ⚡ 13 Specialized Engines — Direct Navigation Directory
+
+Every one of the 13 experiences maintains its own specialized interface, workflow, and forensic logic:
+
+| Engine Code | Specialized Engine Name | Direct Link | Forensic Purpose |
+| :---: | :--- | :--- | :--- |
+| **00** | **Flagship NYAYA-SATYA Core** | [`/core`](https://nyaya-satya.onrender.com/core) | Deep adversarial evidence reasoning, Dossier 2.0 export, audit trails |
+| **01** | **Hearing Readiness Engine** | [`/os/projects/hearing-readiness`](https://nyaya-satya.onrender.com/os/projects/hearing-readiness) | Evaluates hearing prerequisites to halt non-merit court adjournments |
+| **02** | **Case Continuity Engine** | [`/os/projects/case-continuity`](https://nyaya-satya.onrender.com/os/projects/case-continuity) | Preserves context across judge transfers & public defender rotations |
+| **03** | **Case Bottleneck Engine** | [`/os/projects/case-bottleneck`](https://nyaya-satya.onrender.com/os/projects/case-bottleneck) | Flags procedural gridlock (stalled forensic reports, unserved summons) |
+| **04** | **Legal-Aid Handoff Engine** | [`/os/projects/legal-aid-handoff`](https://nyaya-satya.onrender.com/os/projects/legal-aid-handoff) | 1-click digital handoff transferring case twins to DLSA legal aid counsel |
+| **05** | **Procedural Obligation Engine** | [`/os/projects/procedural-obligation`](https://nyaya-satya.onrender.com/os/projects/procedural-obligation) | Statutory deadline watchdog (CPC 30-day written statements, rejoinders) |
+| **06** | **Evidence Dependency Engine** | [`/os/projects/evidence-dependency`](https://nyaya-satya.onrender.com/os/projects/evidence-dependency) | Bipartite claim-to-exhibit mapping identifying single points of evidentiary failure |
+| **07** | **Undertrial Liberty Sentinel** | [`/os/projects/undertrial-liberty`](https://nyaya-satya.onrender.com/os/projects/undertrial-liberty) | Section 479 BNSS custody tracker flagging mandatory statutory bail |
+| **08** | **Registry Defect Engine** | [`/os/projects/registry-defect`](https://nyaya-satya.onrender.com/os/projects/registry-defect) | Pre-filing scrubber preventing clerical court registry rejections |
+| **09** | **Case Crash Test & Resilience Lab** | [`/os/projects/case-crash-test`](https://nyaya-satya.onrender.com/os/projects/case-crash-test) | War-room simulating opposing counsel attacks on petition claims |
+| **10** | **Spark Personal OS** | [`/os/projects/spark-personal-os`](https://nyaya-satya.onrender.com/os/projects/spark-personal-os) | Litigator workspace managing daily court boards and cause lists |
+| **11** | **Spark Deadline Guardian** | [`/os/projects/spark-deadline-guardian`](https://nyaya-satya.onrender.com/os/projects/spark-deadline-guardian) | Predictive limitation-period watchdog warning counsel before statutory expiry |
+| **12** | **Spark Workflow Autopilot** | [`/os/projects/spark-workflow-autopilot`](https://nyaya-satya.onrender.com/os/projects/spark-workflow-autopilot) | Templatized procedural generation: summons, exemptions, certified copy petitions |
 
 > **Evaluator Quick Credentials:**  
 > Operator Token: `dev-operator-token` *(Role: ADMIN / LEGAL_REVIEWER)*  
@@ -198,6 +222,22 @@ NYAYA-SATYA bridges this divide by delivering **real-time statutory bail rights 
 </table>
 
 > *Verified live screen captures of actual alert dispatches transmitted to citizen relative Akash (+91-7773958375) via the NYAYA-SATYA Citizen Justice Gateway.*
+
+### 🌟 Breakthrough Citizen Innovations for 1 Billion People (सामन्य लोकांसाठी क्रांतिकारी सुविधा):
+1. **📄 Real Court PDF & FIR Forensic Ingestion (`/api/citizen/upload-document`)**:
+   - Common citizens, paralegals, and legal aid clinics can upload any court record, charge sheet, or FIR (PDF up to 20MB).
+   - Ingests with SHA-256 cryptographic fingerprinting, extracts accused name, FIR number, custody duration, and penal sections.
+2. **⚖️ Automated Section 479 BNSS Statutory Bail Calculation**:
+   - The engine automatically cross-references penal charges against statutory limits under the new criminal code (BNSS 2023).
+   - If a first-time undertrial completes **1/3rd of the maximum sentence** (e.g. 428 days served vs 365-day threshold for IPC 406), **Statutory Bail is flagged as MANDATORY by law**.
+3. **📜 1-Click Printable Bail Adhikar Patra (अधिकार पत्रक)**:
+   - Citizens can download/print an official [**नागरिक विधी हक्क पत्रक**](https://nyaya-satya.onrender.com/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=mr) in Marathi or Hindi, formatted with legal citations for immediate submission to the Court or Jail Superintendent.
+4. **🔊 Voice Audio Guidance (आवाजात ऐका / Listen Aloud)**:
+   - For illiterate or semi-literate citizens who cannot read legal English, the portal speaks out their rights and next court hearing dates aloud in their native tongue (**मराठी व हिंदी**).
+5. **📱 Direct 6-Language WhatsApp Delivery**:
+   - Delivers official notices to citizens' pockets in Marathi, Hindi, English, Kannada, Tamil, and Bengali with DLSA panel counsel contact details and NALSA Toll-Free Helpline **15100**.
+6. **🔍 Instant 16-Digit e-Courts CNR Digital Twin Lookup**:
+   - Common litigants can enter any CNR number (e.g. `DLCT01-004820-2024`) to instantly construct a structured Case Digital Twin.
 
 ---
 

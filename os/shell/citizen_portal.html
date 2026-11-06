@@ -340,6 +340,55 @@
               राष्ट्रीय विधी सेवा प्राधिकरण (NALSA) मोफत हेल्पलाइन: <strong style="color:var(--emerald-accent);">15100</strong>
             </div>
           </div>
+
+          <!-- Citizen Voice & Adhikar Patra Download Actions -->
+          <div style="display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;">
+            <button onclick="speakRightsAdvice()" style="flex:1; background:linear-gradient(135deg, #1e3a8a, #3b82f6); color:#fff; border:none; padding:10px 14px; border-radius:6px; font-weight:700; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
+              <span>🔊</span> <span id="btn-speak-lbl">आवाजात ऐका (Listen Aloud)</span>
+            </button>
+            <a id="btn-download-adhikar" href="/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=mr" target="_blank" style="flex:1.2; background:linear-gradient(135deg, #047857, #10b981); color:#fff; text-decoration:none; padding:10px 14px; border-radius:6px; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; gap:6px;">
+              <span>📜</span> <span>जामीन अधिकार पत्रक (Download Patra)</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Real Court Record / PDF Ingestion Card -->
+        <div class="card" style="margin-top:20px; border-color: rgba(56, 189, 248, 0.3);">
+          <div class="card-hdr">
+            <span style="color:var(--cyan-accent);">📄 कोर्ट डॉक्युमेंट / FIR / याचिका (PDF) अपलोड व फॉरेन्सिक विश्लेषण</span>
+            <span style="font-size:10px; background:rgba(56,189,248,0.2); color:#bae6fd; padding:2px 8px; border-radius:4px;">AGENT FOUNDRY ENABLED</span>
+          </div>
+          <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">
+            कोणतीही न्यायालयीन FIR, चार्जशीट किंवा जामीन याचिका (PDF) अपलोड करा. <strong>Google Antigravity Agent Foundry</strong> मधील ९ एजंट्स पुराव्यांचे विश्लेषण करून कलम ४७९ BNSS अंतर्गत जामीन हक्क तपासतील:
+          </p>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+            <input type="file" id="pdf-file-input" accept=".pdf,.txt,.doc,.docx" class="input-field" style="margin-top:0; flex:1;">
+            <button class="btn-cnr" onclick="uploadCourtPDF()" style="background:var(--cyan-accent); color:#030712;">विश्लेषण करा (Analyze)</button>
+            <button class="btn-cnr" onclick="loadSampleFIRDemo()" style="background:var(--gold-primary); color:#030712;">📂 नमुना FIR लोड करा</button>
+          </div>
+
+          <div id="pdf-progress" style="display:none; margin-top:12px; font-size:12px; color:var(--cyan-accent); font-weight:600;">
+            ⏳ Google Antigravity Agent Swarm कागदपत्र तपासत आहे... (SHA-256 Hashing & Extraction)...
+          </div>
+
+          <div id="pdf-result-card" style="display:none; margin-top:16px; background:#020617; border:1px solid #1e293b; border-radius:8px; padding:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1e293b; padding-bottom:8px; margin-bottom:12px;">
+              <span style="font-weight:700; color:#fff;" id="pdf-res-filename">FIR_No_0482_2023.pdf</span>
+              <span style="font-family:'JetBrains Mono'; font-size:11px; color:#10b981;" id="pdf-res-hash">SHA-256 Verified</span>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:12.5px; margin-bottom:12px;">
+              <div><strong>आरोपी (Accused):</strong> <span id="pdf-res-accused" style="color:#f8fafc;">Rajesh Kumar</span></div>
+              <div><strong>FIR क्र.:</strong> <span id="pdf-res-fir" style="color:#f8fafc;">0482/2023</span></div>
+              <div><strong>कोठडी (Custody):</strong> <span id="pdf-res-custody" style="color:#38bdf8; font-weight:700;">428 Days</span></div>
+              <div><strong>कलम ४७९ BNSS स्थिती:</strong> <span id="pdf-res-status" style="color:#34d399; font-weight:700;">वैधानिक जामीन पात्र</span></div>
+            </div>
+
+            <div style="font-size:11.5px; color:#94a3b8; background:rgba(15,23,42,0.8); border:1px solid #334155; border-radius:6px; padding:10px;" id="pdf-res-swarm">
+              <!-- Agent trace -->
+            </div>
+          </div>
         </div>
 
         <!-- 16-Digit CNR Lookup for Ordinary Citizens -->
@@ -503,6 +552,116 @@
     }
 
     document.addEventListener('DOMContentLoaded', loadCitizenPortal);
+
+    function speakRightsAdvice() {
+      const textToRead = document.getElementById('rights-desc').innerText;
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(textToRead);
+        if (currentLang === 'mr') utterance.lang = 'mr-IN';
+        else if (currentLang === 'hi') utterance.lang = 'hi-IN';
+        else utterance.lang = 'en-IN';
+        utterance.rate = 0.95;
+        window.speechSynthesis.speak(utterance);
+      } else {
+        alert('Browser audio speech not supported.');
+      }
+    }
+
+    async function uploadCourtPDF() {
+      const fileInput = document.getElementById('pdf-file-input');
+      const file = fileInput.files ? fileInput.files[0] : null;
+      if (!file) {
+        alert('कृपया प्रथम PDF किंवा कोर्ट डॉक्युमेंट निवडा.');
+        return;
+      }
+
+      const prog = document.getElementById('pdf-progress');
+      prog.style.display = 'block';
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const res = await fetch(`/api/citizen/upload-document?language=${currentLang}`, {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        prog.style.display = 'none';
+
+        if (res.ok) {
+          const card = document.getElementById('pdf-result-card');
+          card.style.display = 'block';
+          document.getElementById('pdf-res-filename').innerText = data.file_metadata.filename;
+          document.getElementById('pdf-res-hash').innerText = 'SHA-256: ' + data.file_metadata.sha256.substring(0, 16) + '... (Verified)';
+          document.getElementById('pdf-res-accused').innerText = data.extracted_case_data.accused_name;
+          document.getElementById('pdf-res-fir').innerText = data.extracted_case_data.fir_number;
+          document.getElementById('pdf-res-custody').innerText = `${data.extracted_case_data.custody_days} Days`;
+          document.getElementById('pdf-res-status').innerText = data.statutory_bail_audit.legal_status;
+
+          let swarmHtml = '<strong>🤖 Google Antigravity Agent Swarm Trace:</strong><br>';
+          data.agent_foundry_swarm_execution.forEach(a => {
+            swarmHtml += `<div style="margin-top:4px;">• <strong>${a.agent}:</strong> <span style="color:#10b981;">[${a.status}]</span> ${a.action}</div>`;
+          });
+          document.getElementById('pdf-res-swarm').innerHTML = swarmHtml;
+
+          document.getElementById('btn-download-adhikar').href = `/api/citizen/download-adhikar-patra?accused=${encodeURIComponent(data.extracted_case_data.accused_name)}&custody=${data.extracted_case_data.custody_days}&lang=${currentLang}`;
+        } else {
+          alert('अपलोड अयशस्वी: ' + (data.detail || 'त्रुटी आली'));
+        }
+      } catch (err) {
+        prog.style.display = 'none';
+        alert('त्रुटी: ' + err.message);
+      }
+    }
+
+    async function loadSampleFIRDemo() {
+      const prog = document.getElementById('pdf-progress');
+      prog.style.display = 'block';
+      prog.innerText = '📂 नमुना FIR (0482/2023 - State v. Rajesh Kumar) तपासत आहे...';
+
+      const fd = new FormData();
+      const blob = new Blob([
+        'DELHI POLICE -- FIRST INFORMATION REPORT\n' +
+        'P.S. Kashmere Gate | FIR No. 0482/2023 | CNR: DLCT01-004820-2024\n' +
+        'Accused: Rajesh Kumar S/o Late Ram Lal Kumar\n' +
+        'Arrested: 16-March-2023 | Continuous detention: 428 Days in custody\n' +
+        'Offence: IPC 406 (Criminal Breach of Trust - Max 3 years), IPC 420\n' +
+        'Exhibit E-01: Dispatch manifest 12-March vs Exhibit E-02: Freight docket 14-March\n' +
+        'Finding: Accused is first-time undertrial. Statutory bail under Sec 479 BNSS mandatory.'
+      ], { type: 'application/pdf' });
+      fd.append('file', blob, 'FIR_No_0482_2023_State_v_Rajesh_Kumar.pdf');
+
+      try {
+        const res = await fetch(`/api/citizen/upload-document?language=${currentLang}`, {
+          method: 'POST',
+          body: fd
+        });
+        const data = await res.json();
+        prog.style.display = 'none';
+
+        const card = document.getElementById('pdf-result-card');
+        card.style.display = 'block';
+        document.getElementById('pdf-res-filename').innerText = 'FIR_No_0482_2023_State_v_Rajesh_Kumar.pdf';
+        document.getElementById('pdf-res-hash').innerText = 'SHA-256: ' + data.file_metadata.sha256.substring(0, 16) + '... (Verified)';
+        document.getElementById('pdf-res-accused').innerText = data.extracted_case_data.accused_name;
+        document.getElementById('pdf-res-fir').innerText = data.extracted_case_data.fir_number;
+        document.getElementById('pdf-res-custody').innerText = `${data.extracted_case_data.custody_days} Days`;
+        document.getElementById('pdf-res-status').innerText = data.statutory_bail_audit.legal_status;
+
+        let swarmHtml = '<strong>🤖 Google Antigravity Agent Swarm Trace:</strong><br>';
+        data.agent_foundry_swarm_execution.forEach(a => {
+          swarmHtml += `<div style="margin-top:4px;">• <strong>${a.agent}:</strong> <span style="color:#10b981;">[${a.status}]</span> ${a.action}</div>`;
+        });
+        document.getElementById('pdf-res-swarm').innerHTML = swarmHtml;
+
+        document.getElementById('btn-download-adhikar').href = `/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=${currentLang}`;
+      } catch (err) {
+        prog.style.display = 'none';
+        alert('त्रुटी: ' + err.message);
+      }
+    }
   </script>
 </body>
 </html>
