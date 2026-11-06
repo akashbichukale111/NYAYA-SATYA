@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: nyaya-satya
+    runtime: python
+    plan: free
+    buildCommand: pip install -e . && pip install uvicorn fastapi httpx pydantic
+    startCommand: python -m uvicorn os.gateway.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: ENVIRONMENT
+        value: PRODUCTION
+      - key: UNWIND_OPERATOR_TOKENS
+        value: dev-operator-token:ADMIN

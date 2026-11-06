@@ -3,7 +3,7 @@
 
 > **"Don't just explain the case. Understand it, attack it, stress-test it, repair it, re-attack it, and deliver justice to the last mile."**
 
-[![Live Public Deployment](https://img.shields.io/badge/Live%20Public%20Demo-ONLINE%20(Cloudflare%20Edge)-success?style=for-the-badge&logo=cloudflare)](https://teens-questionnaire-fields-discrete.trycloudflare.com/dashboard)
+[![Live Public Deployment](https://img.shields.io/badge/Live%20Public%20Demo-ONLINE%20(Cloudflare%20Edge)-success?style=for-the-badge&logo=cloudflare)](https://mathematics-controllers-blacks-moms.trycloudflare.com/dashboard)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115%2B-009688.svg)](https://fastapi.tiangolo.com)
 [![Google Antigravity Agent Foundry](https://img.shields.io/badge/Google%20Antigravity-Agent%20Foundry%20Enabled-orange.svg)](https://deepmind.google)
@@ -17,25 +17,31 @@
 ## 🌐 🏆 LIVE PUBLIC DEPLOYMENT & EVALUATOR COCKPIT
 
 > **PUBLIC ACCESS NOTICE:**  
-> The entire NYAYA-SATYA platform is deployed live on the public internet via Cloudflare Edge. **Hackathon judges and evaluators can click any link below to experience the live production platform directly on the web:**
+> The NYAYA-SATYA platform is deployed live on the public internet via Cloudflare Edge. **Hackathon judges and evaluators can click any link below to experience the live production platform directly on the web:**
 
 ### 🚀 Direct Live Web Links:
 | Portal / Experience | Live Public Web URL | What Judges & Evaluators Will See |
 | :--- | :--- | :--- |
-| **🎛️ Unified OS Master Cockpit** | [**Launch Master Cockpit**](https://teens-questionnaire-fields-discrete.trycloudflare.com/dashboard) | 13-Experience Navigation Hub, Real-Time Telemetry, Case Switcher |
-| **🇮🇳 Citizen Justice Portal** | [**Launch Citizen Justice**](https://teens-questionnaire-fields-discrete.trycloudflare.com/citizen) | 6 Indic Languages, Sec 479 BNSS Bail Calculator, 1-Click WhatsApp Direct Dispatch |
-| **🌐 Case Digital Twin Graph** | [**Launch Twin Explorer**](https://teens-questionnaire-fields-discrete.trycloudflare.com/twin) | Interactive Bipartite Knowledge Graph, Entity Citations, Evidence Provenance |
-| **⚔️ TARKA-VYUH Adversarial Arena** | [**Launch TARKA-VYUH**](https://teens-questionnaire-fields-discrete.trycloudflare.com/governance/tarka-vyuh) | Adversarial Gauntlet, Jenga Fragility, Causal Blast-Radius Simulator |
-| **🛡️ UNWIND Human Legal Gate** | [**Launch UNWIND Gate**](https://teens-questionnaire-fields-discrete.trycloudflare.com/governance/unwind) | Finite State Machine, Immutable Hash Locks, Advocate Authorization Gate |
-| **⚖️ Flagship NYAYA-SATYA Core** | [**Launch Core Platform**](https://teens-questionnaire-fields-discrete.trycloudflare.com/core) | Deep Evidentiary Analysis, Dossier 2.0 Export, Cryptographic Audit Trail |
-| **🚨 Undertrial Liberty Sentinel** | [**Launch Liberty Sentinel**](https://teens-questionnaire-fields-discrete.trycloudflare.com/engines/undertrial-liberty) | Section 479 BNSS Detention Tracker, 428-day custody counter, DLSA Handoff |
-| **📚 Interactive OpenAPI / Swagger Docs** | [**View API Documentation**](https://teens-questionnaire-fields-discrete.trycloudflare.com/docs) | Live REST API specification with all 13 engine endpoints |
-| **🩺 Live Health Probe** | [**Check System Health**](https://teens-questionnaire-fields-discrete.trycloudflare.com/health) | Subsystem liveness and non-adjudication invariant status |
+| **🎛️ Unified OS Master Cockpit** | [**Launch Master Cockpit**](https://mathematics-controllers-blacks-moms.trycloudflare.com/dashboard) | 13-Experience Navigation Hub, Real-Time Telemetry, Case Switcher |
+| **🇮🇳 Citizen Justice Portal** | [**Launch Citizen Justice**](https://mathematics-controllers-blacks-moms.trycloudflare.com/citizen) | 6 Indic Languages, Sec 479 BNSS Bail Calculator, 1-Click WhatsApp Direct Dispatch |
+| **🌐 Case Digital Twin Graph** | [**Launch Twin Explorer**](https://mathematics-controllers-blacks-moms.trycloudflare.com/twin) | Interactive Bipartite Knowledge Graph, Entity Citations, Evidence Provenance |
+| **⚔️ TARKA-VYUH Adversarial Arena** | [**Launch TARKA-VYUH**](https://mathematics-controllers-blacks-moms.trycloudflare.com/governance/tarka-vyuh) | Adversarial Gauntlet, Jenga Fragility, Causal Blast-Radius Simulator |
+| **🛡️ UNWIND Human Legal Gate** | [**Launch UNWIND Gate**](https://mathematics-controllers-blacks-moms.trycloudflare.com/governance/unwind) | Finite State Machine, Immutable Hash Locks, Advocate Authorization Gate |
+| **⚖️ Flagship NYAYA-SATYA Core** | [**Launch Core Platform**](https://mathematics-controllers-blacks-moms.trycloudflare.com/core) | Deep Evidentiary Analysis, Dossier 2.0 Export, Cryptographic Audit Trail |
+| **🚨 Undertrial Liberty Sentinel** | [**Launch Liberty Sentinel**](https://mathematics-controllers-blacks-moms.trycloudflare.com/engines/undertrial-liberty) | Section 479 BNSS Detention Tracker, 428-day custody counter, DLSA Handoff |
+| **📚 Interactive OpenAPI / Swagger Docs** | [**View API Documentation**](https://mathematics-controllers-blacks-moms.trycloudflare.com/docs) | Live REST API specification with all 13 engine endpoints |
+| **🩺 Live Health Probe** | [**Check System Health**](https://mathematics-controllers-blacks-moms.trycloudflare.com/health) | Subsystem liveness and non-adjudication invariant status |
 
 > **Evaluator Quick Credentials:**  
 > Operator Token: `dev-operator-token` *(Role: ADMIN / LEGAL_REVIEWER)*  
 > Active Pre-Loaded Case: `CASE-2024-DEL-0482` *(State v. Rajesh Kumar - Tis Hazari District Court)*  
 > e-Courts CNR Lookup Sample: `DLCT01-004820-2024`
+
+### ☁️ 24/7 Permanent Cloud Deployment Support (Render & Railway)
+To guarantee uninterrupted 24/7/365 availability even when evaluation occurs offline:
+- The repository contains pre-configured [`render.yaml`](render.yaml) and [`Procfile`](Procfile).
+- **1-Click Cloud Deploy**: Connect [`https://github.com/akashbichukale111/NYAYA-SATYA`](https://github.com/akashbichukale111/NYAYA-SATYA) to Render.com or Railway.app to obtain a permanent, unexpiring custom HTTPS domain (e.g. `https://nyaya-satya.onrender.com`).
+
 
 ---
 
@@ -397,7 +403,7 @@ NYAYA-SATYA enforces strict epistemic taxonomy across all reporting metrics:
   "supported_languages": ["mr", "hi", "en", "kn", "ta", "bn"],
   "epistemic_classification": "HONEST_BASELINE",
   "non_adjudication_lock": "ENFORCED",
-  "public_endpoint": "https://teens-questionnaire-fields-discrete.trycloudflare.com"
+  "public_endpoint": "https://mathematics-controllers-blacks-moms.trycloudflare.com"
 }
 ```
 
