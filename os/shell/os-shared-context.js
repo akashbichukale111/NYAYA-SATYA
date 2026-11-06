@@ -184,13 +184,13 @@
       widget.style.cssText = 'display:flex; align-items:center; gap:6px; background:#121b2a; border:1px solid #2e4466; border-radius:6px; padding:3px 8px; margin-right:10px;';
       widget.innerHTML = `
         <span style="font-size:11px; color:#d4af37; font-weight:700;">🌐</span>
-        <select class="nyaya-lang-select" onchange="osSetGlobalLang(this.value)" style="background:transparent; color:#fff; border:none; font-size:11.5px; font-weight:600; cursor:pointer; outline:none;">
-          <option value="en" ${activeLang === 'en' ? 'selected' : ''}>English</option>
-          <option value="hi" ${activeLang === 'hi' ? 'selected' : ''}>हिंदी (Hindi)</option>
-          <option value="mr" ${activeLang === 'mr' ? 'selected' : ''}>मराठी (Marathi)</option>
-          <option value="kn" ${activeLang === 'kn' ? 'selected' : ''}>ಕನ್ನಡ (Kannada)</option>
-          <option value="ta" ${activeLang === 'ta' ? 'selected' : ''}>தமிழ் (Tamil)</option>
-          <option value="bn" ${activeLang === 'bn' ? 'selected' : ''}>বাংলা (Bengali)</option>
+        <select class="nyaya-lang-select" onchange="osSetGlobalLang(this.value)" style="background:#0c121c; color:#f0f4f8; border:none; font-size:11.5px; font-weight:600; cursor:pointer; outline:none;">
+          <option value="en" style="background:#0c121c; color:#f0f4f8;" ${activeLang === 'en' ? 'selected' : ''}>English (Default)</option>
+          <option value="hi" style="background:#0c121c; color:#f0f4f8;" ${activeLang === 'hi' ? 'selected' : ''}>हिंदी (Hindi)</option>
+          <option value="mr" style="background:#0c121c; color:#f0f4f8;" ${activeLang === 'mr' ? 'selected' : ''}>मराठी (Marathi)</option>
+          <option value="kn" style="background:#0c121c; color:#f0f4f8;" ${activeLang === 'kn' ? 'selected' : ''}>ಕನ್ನಡ (Kannada)</option>
+          <option value="ta" style="background:#0c121c; color:#f0f4f8;" ${activeLang === 'ta' ? 'selected' : ''}>தமிழ் (Tamil)</option>
+          <option value="bn" style="background:#0c121c; color:#f0f4f8;" ${activeLang === 'bn' ? 'selected' : ''}>বাংলা (Bengali)</option>
         </select>
       `;
       masterRight.insertBefore(widget, masterRight.firstChild);

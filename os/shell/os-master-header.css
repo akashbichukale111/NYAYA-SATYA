@@ -140,3 +140,10 @@
 .os-core-btn:hover {
   opacity: 0.9;
 }
+
+select.nyaya-lang-select option,
+select option {
+  background: #0c121c !important;
+  color: #f0f4f8 !important;
+  padding: 6px 10px;
+}
