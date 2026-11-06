@@ -104,8 +104,8 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
 class WhatsAppAlertRequest(BaseModel):
     phone_number: str = Field("7773958375", description="Recipient 10-digit phone number")
     case_id: str = Field(..., description="Active Case ID")
-    language: str = Field("mr", description="Language code: mr, hi, en, kn, ta, bn")
-    recipient_name: str = Field("Akash (नाव / Relative)", description="Name of relative or undertrial")
+    language: str = Field("hi", description="Language code: hi, en, mr, kn, ta, bn")
+    recipient_name: str = Field("Akash (Relative of Undertrial)", description="Name of relative or undertrial")
 
 
 class CNRSearchRequest(BaseModel):
@@ -119,9 +119,20 @@ CITIZEN_ALERT_LOG: List[Dict[str, Any]] = [
         "phone": "+91-7773958375",
         "recipient": "Akash (Family of Undertrial)",
         "case_id": "CASE-2024-DEL-0482",
+        "language": "hi",
+        "type": "SEC_479_BNSS_BAIL_ELIGIBILITY",
+        "message_preview": "न्याय-सत्य विधिक सूचना: राजेश कुमार की ४२८ दिनों की हिरासत पूर्ण हो चुकी है। BNSS धारा ४७९ के तहत वैधानिक जमानत (Statutory Bail) अनिवार्य है। डीएलएसए निःशुल्क वकील हेल्पलाइन: 15100.",
+        "status": "DELIVERED",
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    },
+    {
+        "alert_id": "ALT-INIT-02",
+        "phone": "+91-7773958375",
+        "recipient": "Akash (Family of Undertrial)",
+        "case_id": "CASE-2024-DEL-0482",
         "language": "mr",
         "type": "SEC_479_BNSS_BAIL_ELIGIBILITY",
-        "message_preview": "न्याय-सत्य सूचना: राजेश कुमार यांची ४२८ दिवसांची कोठडी पूर्ण झाली असून नवीन BNS कलम ४७९ अन्वये ते वैधानिक जामिनास (Statutory Bail) पात्र आहेत. मोफत वकील संपर्क: लीगल एड कक्ष नं. १२, तीस हजारी कोर्ट.",
+        "message_preview": "न्याय-सत्य सूचना: राजेश कुमार यांची ४२८ दिवसांची कोठडी पूर्ण झाली असून BNSS कलम ४७९ अन्वये ते वैधानिक जामिनास (Statutory Bail) पात्र आहेत. मोफत वकील हेल्पलाइन: 15100.",
         "status": "DELIVERED",
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
@@ -131,14 +142,14 @@ CITIZEN_ALERT_LOG: List[Dict[str, Any]] = [
 @router.get("/summary")
 def get_citizen_summary(
     case_id: Optional[str] = None,
-    lang: str = Query("mr", description="Language: mr (Marathi), hi (Hindi), en (English), kn (Kannada), ta (Tamil), bn (Bengali)")
+    lang: str = Query("hi", description="Language: hi (Hindi), en (English), mr (Marathi), kn (Kannada), ta (Tamil), bn (Bengali)")
 ):
     """Returns citizen-friendly case briefing in the selected Indian language."""
     active_case = case_store.get_case(case_id) if case_id else case_store.get_active_case()
     if not active_case:
         active_case = case_store.get_active_case()
 
-    t = TRANSLATIONS.get(lang.lower(), TRANSLATIONS["en"])
+    t = TRANSLATIONS.get(lang.lower(), TRANSLATIONS["hi"])
 
     # Determine liberty/bail eligibility
     is_bail_eligible = False
@@ -154,11 +165,11 @@ def get_citizen_summary(
     if is_bail_eligible:
         citizen_advice = t["bail_eligible"]
         status_color = "#10b981"
-        action_required = "कलम ४७९ अंतर्गत तात्काळ जामीन अर्ज दाखल करा (File Statutory Bail)"
+        action_required = "धारा 479 BNSS के अंतर्गत तत्काल जमानत याचिका दाखिल करें (File Statutory Bail)" if lang.lower() == "hi" else ("कलम ४७९ अंतर्गत तात्काळ जामीन अर्ज दाखल करा" if lang.lower() == "mr" else "File Immediate Statutory Bail Petition under Sec 479 BNSS")
     else:
         citizen_advice = t["bail_pending"]
         status_color = "#f59e0b"
-        action_required = "पुढील सुनावणीसाठी हजर राहा (Appear for Hearing)"
+        action_required = "अगली सुनवाई के लिए उपस्थित रहें (Appear for Hearing)" if lang.lower() == "hi" else ("पुढील सुनावणीसाठी हजर राहा" if lang.lower() == "mr" else "Appear for next scheduled hearing")
 
     return {
         "case_id": active_case.case_id,
@@ -474,15 +485,63 @@ def download_statutory_bail_letter(
     accused: str = Query("Rajesh Kumar", description="Name of Accused"),
     custody: int = Query(428, description="Days in custody"),
     fir: str = Query("0482/2023", description="FIR Number"),
-    lang: str = Query("mr", description="Language: mr or hi")
+    lang: str = Query("hi", description="Language: hi or mr")
 ):
-    """Produces a printable, downloadable Official Citizen Statutory Rights Certificate (अधिकार पत्रक)
-    in Marathi or Hindi under Section 479 BNSS for immediate submission to Jail Superintendent or Court."""
+    """Produces a printable, downloadable Official Citizen Statutory Rights Certificate (अधिकार पत्र)
+    in Hindi or Marathi under Section 479 BNSS for immediate submission to Jail Superintendent or Court."""
     
     is_mr = lang.lower() == "mr"
     
-    title = "नागरिक विधी हक्क पत्रक — वैधानिक जामीन पात्रता प्रमाणपत्र" if is_mr else "नागरिक विधिक अधिकार पत्र — वैधानिक जमानत पात्रता प्रमाण-पत्र"
-    subtitle = "नवीन फौजदारी कायदा (भारतीय नागरिक सुरक्षा संहिता - BNSS २०२३ चे कलम ४७९ अन्वये)" if is_mr else "नया आपराधिक कानून (भारतीय नागरिक सुरक्षा संहिता - BNSS 2023 की धारा 479 के तहत)"
+    if is_mr:
+        title = "नागरिक विधी हक्क पत्रक — वैधानिक जामीन पात्रता प्रमाणपत्र"
+        subtitle = "नवीन फौजदारी कायदा (भारतीय नागरिक सुरक्षा संहिता - BNSS २०२३ चे कलम ४७९ अन्वये)"
+        badge = "वैधानिक जामीन पात्रता सिद्ध — अधिकार पत्रक"
+        btn_print = "🖨️ हे पत्रक प्रिंट करा / PDF सेव्ह करा (Print to PDF)"
+        recipient = """१. मा. अधीक्षक, मध्यवर्ती कारागृह तिहार / संबंधित जेल अधीक्षक<br>
+२. मा. सचिव, जिल्हा विधी सेवा प्राधिकरण (DLSA / NALSA Helpline: 15100)"""
+        lbl_accused = "आरोपी / कैद्याचे नाव (Name):"
+        lbl_fir = "गुन्हा / FIR क्रमांक:"
+        lbl_fir_val = f"FIR No. {fir} (P.S. Kashmere Gate / संबंधित ठाणे)"
+        lbl_law = "लागू कायदा व कलमे:"
+        lbl_law_val = "IPC 406 (विश्वासघात - कमाल शिक्षा ३ वर्षे), IPC 420"
+        lbl_custody = "कोठडीतील प्रत्यक्ष कालावधी (Custody):"
+        lbl_custody_val = f"{custody} दिवस (Days)"
+        lbl_limit = "कलम ४७९ BNSS १/३ मर्यादा:"
+        lbl_limit_val = "३६५ दिवस (कमाल ३ वर्षांपैकी १/३ कालावधी)"
+        lbl_status = "अधिकार स्थिती (Legal Status):"
+        lbl_status_val = "पात्र — वैधानिक जामीन अनिवार्य (STATUTORY BAIL ACTIVE)"
+        cert_head = "कायदेशीर प्रमाणीकरण (LEGAL STATUTORY PROVISION):"
+        cert_body = f"""भारतीय नागरिक सुरक्षा संहिता (BNSS) २०२३ च्या <strong>कलम ४७९(१) च्या पहिल्या परंतुका (First Proviso)</strong> अन्वये, जर आरोपी प्रथमच गुन्हा दाखल झालेला अंडरट्रायल असेल आणि त्याने गुन्ह्यासाठी विहित कमाल शिक्षेचा <strong>एक-तृतीयांश (१/३) कालावधी</strong> कोठडीत पूर्ण केला असेल, तर त्यास <strong>न्यायालयाने जामिनावर मुक्त करणे अनिवार्य (Mandatory)</strong> आहे.<br><br>
+सदर आरोपीने <strong>३६५ दिवसांऐवजी {custody} दिवस</strong> कोठडीत पूर्ण केल्यामुळे ते ६३ दिवसांहून अधिक काळापासून कायदेशीर वैधानिक जामिनास पात्र आहेत."""
+        dlsa_head = "विधी सेवा प्राधिकरण (DLSA):"
+        dlsa_sub = "मोफत वकील: पॅनल लीगल एड अधिवक्ता"
+        submitter_head = "सादरकर्ता / कैद्याचे नातेवाईक:"
+        footer_sub = "NYAYA-SATYA Code for Billion Platform — पुरावा व हक्क आधारित पारदर्शक न्याय प्रणाली."
+    else:
+        title = "नागरिक विधिक अधिकार पत्र — वैधानिक जमानत पात्रता प्रमाण-पत्र"
+        subtitle = "नया आपराधिक कानून (भारतीय नागरिक सुरक्षा संहिता - BNSS 2023 की धारा 479 के तहत)"
+        badge = "वैधानिक जमानत पात्रता सिद्ध — अधिकार पत्र"
+        btn_print = "🖨️ यह पत्र प्रिंट करें / PDF सुरक्षित करें (Print to PDF)"
+        recipient = """१. माननीय अधीक्षक, केंद्रीय कारागार तिहाड़ / संबंधित जेल अधीक्षक<br>
+२. माननीय सचिव, जिला विधिक सेवा प्राधिकरण (DLSA / NALSA Helpline: 15100)"""
+        lbl_accused = "अभियुक्त / कैदी का नाम (Accused Name):"
+        lbl_fir = "अपराध / FIR संख्या (FIR No.):"
+        lbl_fir_val = f"FIR No. {fir} (थाना कश्मीरी गेट / संबंधित थाना)"
+        lbl_law = "लागू कानून एवं धाराएं (Applicable Laws):"
+        lbl_law_val = "IPC 406 (अमानत में खयानत - अधिकतम सजा 3 वर्ष), IPC 420"
+        lbl_custody = "हिरासत में बिताई गई वास्तविक अवधि (Custody):"
+        lbl_custody_val = f"{custody} दिन (Days)"
+        lbl_limit = "धारा 479 BNSS 1/3 सीमा (Statutory Ceiling):"
+        lbl_limit_val = "365 दिन (अधिकतम 3 वर्ष की सजा का 1/3 भाग)"
+        lbl_status = "अधिकार स्थिति (Legal Status):"
+        lbl_status_val = "पात्र — वैधानिक जमानत अनिवार्य (STATUTORY BAIL MANDATORY)"
+        cert_head = "विधिक प्रमाणीकरण (LEGAL STATUTORY PROVISION):"
+        cert_body = f"""भारतीय नागरिक सुरक्षा संहिता (BNSS) 2023 की <strong>धारा 479(1) के प्रथम परंतुक (First Proviso)</strong> के अनुसार, यदि अभियुक्त प्रथम बार अपराध का विचाराधीन कैदी है और उसने अपराध के लिए निर्धारित अधिकतम सजा का <strong>एक-तिहाई (1/3) भाग</strong> हिरासत में पूरा कर लिया है, तो न्यायालय द्वारा उसे <strong>जमानत पर रिहा किया जाना अनिवार्य (Mandatory)</strong> है।<br><br>
+उक्त अभियुक्त ने <strong>365 दिनों के स्थान पर {custody} दिन</strong> हिरासत में पूरे कर लिए हैं, अतः वह 63 दिनों से अधिक समय से वैधानिक जमानत का पूर्ण हकदार है।"""
+        dlsa_head = "जिला विधिक सेवा प्राधिकरण (DLSA):"
+        dlsa_sub = "निःशुल्क कानूनी सहायता: पैनल लीगल एड अधिवक्ता"
+        submitter_head = "प्रस्तुतकर्ता / कैदी के परिजन:"
+        footer_sub = "NYAYA-SATYA Code for Billion Platform — प्रमाण एवं विधिक अधिकार आधारित पारदर्शी न्याय प्रणाली."
     
     html = f"""<!DOCTYPE html>
 <html lang="{lang}">
@@ -508,68 +567,66 @@ def download_statutory_bail_letter(
 <body>
 
 <div class="no-print" style="text-align: right; margin-bottom: 15px;">
-  <button class="print-btn" onclick="window.print()">🖨️ हे पत्रक प्रिंट करा / PDF सेव्ह करा (Print to PDF)</button>
+  <button class="print-btn" onclick="window.print()">{btn_print}</button>
 </div>
 
 <div class="header">
   <div class="emblem">🏛️ सत्यमेव जयते 🏛️</div>
   <h2 style="margin: 5px 0;">{title}</h2>
   <div style="font-size: 12pt; color: #334155;">{subtitle}</div>
-  <div class="badge">वैधानिक जामीन पात्रता सिद्ध — अधिकार पत्रक</div>
+  <div class="badge">{badge}</div>
 </div>
 
-<p><strong>प्रति:</strong><br>
-१. मा. अधीक्षक, मध्यवर्ती कारागृह तिहार / संबंधित जेल अधीक्षक<br>
-२. मा. सचिव, जिल्हा विधी सेवा प्राधिकरण (DLSA / NALSA Helpline: 15100)</p>
+<p><strong>प्रति / To:</strong><br>
+{recipient}</p>
 
 <table class="table">
   <tr>
-    <td class="lbl">आरोपी / कैद्याचे नाव (Name):</td>
+    <td class="lbl">{lbl_accused}</td>
     <td><strong>{accused}</strong></td>
   </tr>
   <tr>
-    <td class="lbl">गुन्हा / FIR क्रमांक:</td>
-    <td><strong>FIR No. {fir} (P.S. Kashmere Gate / संबंधित ठाणे)</strong></td>
+    <td class="lbl">{lbl_fir}</td>
+    <td><strong>{lbl_fir_val}</strong></td>
   </tr>
   <tr>
-    <td class="lbl">लागू कायदा व कलमे:</td>
-    <td>IPC 406 (विश्वासघात - कमाल शिक्षा ३ वर्षे), IPC 420</td>
+    <td class="lbl">{lbl_law}</td>
+    <td>{lbl_law_val}</td>
   </tr>
   <tr>
-    <td class="lbl">कोठडीतील प्रत्यक्ष कालावधी (Custody):</td>
-    <td><span class="highlight">{custody} दिवस (Days)</span></td>
+    <td class="lbl">{lbl_custody}</td>
+    <td><span class="highlight">{lbl_custody_val}</span></td>
   </tr>
   <tr>
-    <td class="lbl">कलम ४७९ BNSS १/३ मर्यादा:</td>
-    <td>३६५ दिवस (कमाल ३ वर्षांपैकी १/३ कालावधी)</td>
+    <td class="lbl">{lbl_limit}</td>
+    <td>{lbl_limit_val}</td>
   </tr>
   <tr>
-    <td class="lbl">अधिकार स्थिती (Legal Status):</td>
-    <td><strong style="color: #047857;">पात्र — वैधानिक जामीन अनिवार्य (STATUTORY BAIL ACTIVE)</strong></td>
+    <td class="lbl">{lbl_status}</td>
+    <td><strong style="color: #047857;">{lbl_status_val}</strong></td>
   </tr>
 </table>
 
 <div class="cert">
-  <strong>कायदेशीर प्रमाणीकरण (LEGAL STATUTORY PROVISION):</strong><br>
-  भारतीय नागरिक सुरक्षा संहिता (BNSS) २०२३ च्या <strong>कलम ४७९(१) च्या पहिल्या परंतुका (First Proviso)</strong> अन्वये, जर आरोपी प्रथमच गुन्हा दाखल झालेला अंडरट्रायल असेल आणि त्याने गुन्ह्यासाठी विहित कमाल शिक्षेचा <strong>एक-तृतीयांश (१/३) कालावधी</strong> कोठडीत पूर्ण केला असेल, तर त्यास <strong>न्यायालयाने जामिनावर मुक्त करणे अनिवार्य (Mandatory)</strong> आहे.<br><br>
-  सदर आरोपीने <strong>३६५ दिवसांऐवजी {custody} दिवस</strong> कोठडीत पूर्ण केल्यामुळे ते ६३ दिवसांहून अधिक काळापासून कायदेशीर वैधानिक जामिनास पात्र आहेत.
+  <strong>{cert_head}</strong><br>
+  {cert_body}
 </div>
 
 <div class="actions">
   <div>
-    <strong>विधी सेवा प्राधिकरण (DLSA):</strong><br>
-    टोल-फ्री हेल्पलाइन: <strong>15100</strong><br>
-    मोफत वकील: पॅनल लीगल एड अधिवक्ता
+    <strong>{dlsa_head}</strong><br>
+    टोल-फ्री हेल्पलाइन / Toll-Free: <strong>15100</strong><br>
+    {dlsa_sub}
   </div>
   <div style="text-align: right;">
-    <strong>सादरकर्ता / कैद्याचे नातेवाईक:</strong><br>
-    तारीख: <strong>{datetime.now().strftime('%d-%m-%Y')}</strong><br>
-    स्वाक्षरी / अंगठा: _________________
+    <strong>{submitter_head}</strong><br>
+    दिनांक / Date: <strong>{datetime.now().strftime('%d-%m-%Y')}</strong><br>
+    हस्ताक्षर / अंगूठा (Signature/Thumb): _________________
   </div>
 </div>
 
 <div style="margin-top: 35px; border-top: 1px dashed #94a3b8; padding-top: 10px; font-size: 9pt; color: #64748b; text-align: center;">
-  NYAYA-SATYA Code for Billion Platform — पुरावा व हक्क आधारित पारदर्शक न्याय प्रणाली.<br>
+  {footer_sub}<br>
   Cryptographic Verification Digest: {hashlib.sha256((accused + str(custody)).encode()).hexdigest()[:24]}
 </div>
 

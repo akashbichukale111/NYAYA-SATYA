@@ -279,16 +279,16 @@
           <span id="portal-heading">नागरिक न्याय कक्ष (Citizen Justice Portal)</span>
         </h1>
         <p class="hero-sub" id="portal-sub">
-          भारतातील १०० कोटी नागरिकांसाठी आणि अंडरट्रायल कुटुंबीयांसाठी थेट कायदेशीर हक्क माहिती आणि मोबाइल अलर्ट्स.
+          भारत के 100 करोड़ नागरिकों एवं विचाराधीन कैदियों के परिवारों के लिए सीधे विधिक अधिकार एवं मोबाइल अलर्ट्स।
         </p>
       </div>
 
       <div class="lang-switcher-box">
         <span style="font-size:12px; color:var(--text-dim); font-weight:700;">भाषा / LANGUAGE:</span>
         <select id="lang-select" class="lang-select" onchange="changeLanguage(this.value)">
-          <option value="mr" selected>मराठी (Marathi)</option>
-          <option value="hi">हिंदी (Hindi)</option>
+          <option value="hi" selected>हिंदी (Hindi)</option>
           <option value="en">English</option>
+          <option value="mr">मराठी (Marathi)</option>
           <option value="kn">ಕನ್ನಡ (Kannada)</option>
           <option value="ta">தமிழ் (Tamil)</option>
           <option value="bn">বাংলা (Bengali)</option>
@@ -303,7 +303,7 @@
         <!-- Instant Rights & Bail Eligibility Status -->
         <div class="card" style="border-color: rgba(16, 185, 129, 0.4);">
           <div class="card-hdr">
-            <span style="color:var(--emerald-accent);">⚖️ कायदेशीर हक्क स्थिती (Legal Rights Status)</span>
+            <span style="color:var(--emerald-accent);">⚖️ विधिक अधिकार स्थिति (Legal Rights Status)</span>
             <span id="badge-eligible" style="font-family:'JetBrains Mono'; font-size:11px; background:rgba(16,185,129,0.2); color:#86efac; padding:3px 8px; border-radius:4px;">
               SEC 479 BNSS ACTIVE
             </span>
@@ -311,20 +311,20 @@
 
           <div class="rights-alert-box" id="rights-box">
             <div class="rights-title" id="rights-title">
-              <span>✅</span> <span id="rights-status-text">जामीन हक्क सक्रिय (Statutory Bail Eligible)</span>
+              <span>✅</span> <span id="rights-status-text">ज़मानत अधिकार सक्रिय (Statutory Bail Eligible)</span>
             </div>
             <div class="rights-desc" id="rights-desc">
-              आरोपीने कोठडीत ४२८ दिवस पूर्ण केले आहेत (कमाल शिक्षेच्या ३९%). भारतीय नागरिक सुरक्षा संहिता २०२३ च्या कलम ४७९ अन्वये ते वैधानिक जामिनास पात्र आहेत.
+              अभियुक्त ने हिरासत में 428 दिन पूरे कर लिए हैं (अधिकतम सजा का 39%)। भारतीय नागरिक सुरक्षा संहिता (BNSS) 2023 की धारा 479 के तहत वे वैधानिक जमानत के पात्र हैं।
             </div>
           </div>
 
           <div class="metric-row">
             <div class="metric-box">
-              <div class="metric-lbl" id="lbl-custody">कोठडीतील दिवस</div>
+              <div class="metric-lbl" id="lbl-custody">हिरासत में दिन</div>
               <div class="metric-val" id="val-custody" style="color:var(--cyan-accent);">428 Days</div>
             </div>
             <div class="metric-box">
-              <div class="metric-lbl" id="lbl-hearing">पुढील तारीख</div>
+              <div class="metric-lbl" id="lbl-hearing">अगली पेशी तारीख</div>
               <div class="metric-val" id="val-hearing" style="color:var(--gold-primary);">18-10-2024</div>
             </div>
             <div class="metric-box">
@@ -334,20 +334,20 @@
           </div>
 
           <div style="background:var(--bg-card); padding:14px; border-radius:6px; border:1px solid var(--border-subtle); margin-top:12px;">
-            <div style="font-size:12px; color:var(--text-dim); text-transform:uppercase; margin-bottom:4px;" id="lbl-aid">मोफत वकील सहाय्य (Free Legal Aid):</div>
+            <div style="font-size:12px; color:var(--text-dim); text-transform:uppercase; margin-bottom:4px;" id="lbl-aid">निःशुल्क कानूनी सहायता (Free Legal Aid):</div>
             <div style="font-size:14px; font-weight:700; color:#fff;" id="val-counsel">Adv. Meenakshi Sundaram (DLSA Appointed)</div>
             <div style="font-size:12px; color:var(--text-muted); margin-top:4px;">
-              राष्ट्रीय विधी सेवा प्राधिकरण (NALSA) मोफत हेल्पलाइन: <strong style="color:var(--emerald-accent);">15100</strong>
+              राष्ट्रीय विधिक सेवा प्राधिकरण (NALSA) निःशुल्क हेल्पलाइन: <strong style="color:var(--emerald-accent);">15100</strong>
             </div>
           </div>
 
           <!-- Citizen Voice & Adhikar Patra Download Actions -->
           <div style="display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;">
             <button onclick="speakRightsAdvice()" style="flex:1; background:linear-gradient(135deg, #1e3a8a, #3b82f6); color:#fff; border:none; padding:10px 14px; border-radius:6px; font-weight:700; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
-              <span>🔊</span> <span id="btn-speak-lbl">आवाजात ऐका (Listen Aloud)</span>
+              <span>🔊</span> <span id="btn-speak-lbl">आवाज़ में सुनें (Listen Aloud)</span>
             </button>
-            <a id="btn-download-adhikar" href="/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=mr" target="_blank" style="flex:1.2; background:linear-gradient(135deg, #047857, #10b981); color:#fff; text-decoration:none; padding:10px 14px; border-radius:6px; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; gap:6px;">
-              <span>📜</span> <span>जामीन अधिकार पत्रक (Download Patra)</span>
+            <a id="btn-download-adhikar" href="/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=hi" target="_blank" style="flex:1.2; background:linear-gradient(135deg, #047857, #10b981); color:#fff; text-decoration:none; padding:10px 14px; border-radius:6px; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; gap:6px;">
+              <span>📜</span> <span>ज़मानत अधिकार पत्र (Download Adhikar Patra)</span>
             </a>
           </div>
         </div>
@@ -355,21 +355,21 @@
         <!-- Real Court Record / PDF Ingestion Card -->
         <div class="card" style="margin-top:20px; border-color: rgba(56, 189, 248, 0.3);">
           <div class="card-hdr">
-            <span style="color:var(--cyan-accent);">📄 कोर्ट डॉक्युमेंट / FIR / याचिका (PDF) अपलोड व फॉरेन्सिक विश्लेषण</span>
+            <span style="color:var(--cyan-accent);">📄 कोर्ट दस्तावेज़ / FIR / याचिका (PDF) अपलोड एवं फॉरेन्सिक विश्लेषण</span>
             <span style="font-size:10px; background:rgba(56,189,248,0.2); color:#bae6fd; padding:2px 8px; border-radius:4px;">AGENT FOUNDRY ENABLED</span>
           </div>
           <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">
-            कोणतीही न्यायालयीन FIR, चार्जशीट किंवा जामीन याचिका (PDF) अपलोड करा. <strong>Google Antigravity Agent Foundry</strong> मधील ९ एजंट्स पुराव्यांचे विश्लेषण करून कलम ४७९ BNSS अंतर्गत जामीन हक्क तपासतील:
+            कोई भी अदालती FIR, चार्जशीट या जमानत याचिका (PDF) अपलोड करें। <strong>Google Antigravity Agent Foundry</strong> के 9 स्वायत्त एजेंट्स साक्ष्यों का विश्लेषण कर धारा 479 BNSS के अंतर्गत जमानत अधिकार की गणना करेंगे:
           </p>
 
           <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
             <input type="file" id="pdf-file-input" accept=".pdf,.txt,.doc,.docx" class="input-field" style="margin-top:0; flex:1;">
-            <button class="btn-cnr" onclick="uploadCourtPDF()" style="background:var(--cyan-accent); color:#030712;">विश्लेषण करा (Analyze)</button>
-            <button class="btn-cnr" onclick="loadSampleFIRDemo()" style="background:var(--gold-primary); color:#030712;">📂 नमुना FIR लोड करा</button>
+            <button class="btn-cnr" onclick="uploadCourtPDF()" style="background:var(--cyan-accent); color:#030712;">विश्लेषण करें (Analyze)</button>
+            <button class="btn-cnr" onclick="loadSampleFIRDemo()" style="background:var(--gold-primary); color:#030712;">📂 नमूना FIR लोड करें (Load Sample FIR)</button>
           </div>
 
           <div id="pdf-progress" style="display:none; margin-top:12px; font-size:12px; color:var(--cyan-accent); font-weight:600;">
-            ⏳ Google Antigravity Agent Swarm कागदपत्र तपासत आहे... (SHA-256 Hashing & Extraction)...
+            ⏳ Google Antigravity Agent Swarm दस्तावेज़ की जांच कर रहा है... (SHA-256 Hashing & Extraction)...
           </div>
 
           <div id="pdf-result-card" style="display:none; margin-top:16px; background:#020617; border:1px solid #1e293b; border-radius:8px; padding:16px;">
@@ -379,10 +379,10 @@
             </div>
 
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:12.5px; margin-bottom:12px;">
-              <div><strong>आरोपी (Accused):</strong> <span id="pdf-res-accused" style="color:#f8fafc;">Rajesh Kumar</span></div>
-              <div><strong>FIR क्र.:</strong> <span id="pdf-res-fir" style="color:#f8fafc;">0482/2023</span></div>
-              <div><strong>कोठडी (Custody):</strong> <span id="pdf-res-custody" style="color:#38bdf8; font-weight:700;">428 Days</span></div>
-              <div><strong>कलम ४७९ BNSS स्थिती:</strong> <span id="pdf-res-status" style="color:#34d399; font-weight:700;">वैधानिक जामीन पात्र</span></div>
+              <div><strong>अभियुक्त (Accused):</strong> <span id="pdf-res-accused" style="color:#f8fafc;">Rajesh Kumar</span></div>
+              <div><strong>FIR क्र. (FIR No.):</strong> <span id="pdf-res-fir" style="color:#f8fafc;">0482/2023</span></div>
+              <div><strong>हिरासत (Custody):</strong> <span id="pdf-res-custody" style="color:#38bdf8; font-weight:700;">428 Days</span></div>
+              <div><strong>धारा 479 BNSS स्थिति:</strong> <span id="pdf-res-status" style="color:#34d399; font-weight:700;">वैधानिक जमानत पात्र (Statutory Bail Active)</span></div>
             </div>
 
             <div style="font-size:11.5px; color:#94a3b8; background:rgba(15,23,42,0.8); border:1px solid #334155; border-radius:6px; padding:10px;" id="pdf-res-swarm">
@@ -394,14 +394,14 @@
         <!-- 16-Digit CNR Lookup for Ordinary Citizens -->
         <div class="card">
           <div class="card-hdr">
-            <span>🔍 e-Courts CNR नंबरवरून केस शोधा (16-Digit Search)</span>
+            <span>🔍 e-Courts CNR नंबर से केस खोजें (16-Digit Search)</span>
           </div>
           <p style="font-size:13px; color:var(--text-muted);">
-            कोणत्याही भारतीय न्यायालयाचा १६-अंकी CNR नंबर टाका (उदा. DLCT01-004820-2024). सिस्टम आपोआप डिजिटल ट्विन तयार करेल:
+            किसी भी भारतीय न्यायालय का 16-अंकीय CNR नंबर दर्ज करें (उदा. DLCT01-004820-2024)। सिस्टम स्वचालित रूप से केस डिजिटल ट्विन तैयार करेगा:
           </p>
           <div class="cnr-input-group">
             <input type="text" id="cnr-input" class="input-field" placeholder="DLCT01-004820-2024" value="DLCT01-004820-2024" style="margin-top:0;">
-            <button class="btn-cnr" onclick="searchCNR()">तपासा (Search)</button>
+            <button class="btn-cnr" onclick="searchCNR()">खोजें (Search)</button>
           </div>
           <div id="cnr-msg" style="margin-top:10px; font-size:12px; display:none;"></div>
         </div>
@@ -413,23 +413,23 @@
           <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
             <span style="font-size:24px;">📱</span>
             <div>
-              <h3 style="font-size:16px; font-weight:800; color:#fff;">थेट व्हॉट्सॲप / SMS विधी अलर्ट</h3>
+              <h3 style="font-size:16px; font-weight:800; color:#fff;">सीधे व्हाट्सएप / SMS विधिक अलर्ट</h3>
               <span style="font-size:11.5px; color:var(--whatsapp-green); font-weight:600;">Last-Mile Delivery for Citizens</span>
             </div>
           </div>
 
           <p style="font-size:13px; color:var(--text-muted); line-height:1.5;">
-            गरीब किंवा ग्रामीण पक्षकारांना कोर्टाच्या तारखा आणि जामीन हक्क थेट व्हॉट्सॲपवर पाठवा:
+            गरीब या ग्रामीण पक्षकारों को कोर्ट की तारीखें और जमानत अधिकार सीधे व्हाट्सएप पर भेजें:
           </p>
 
           <div style="margin-top:14px;">
-            <label style="font-size:12px; color:var(--text-dim); text-transform:uppercase;">पक्षकार / नातेवाईकाचे नाव:</label>
+            <label style="font-size:12px; color:var(--text-dim); text-transform:uppercase;">पक्षकार / परिजन का नाम:</label>
             <input type="text" id="wa-name" class="input-field" value="Akash (Relative of Undertrial)">
           </div>
 
           <div style="margin-top:12px;">
             <label style="font-size:12px; color:var(--text-dim); text-transform:uppercase; display:flex; justify-content:space-between; align-items:center;">
-              <span>व्हॉट्सॲप / मोबाइल नंबर:</span>
+              <span>व्हाट्सएप / मोबाइल नंबर:</span>
               <span style="font-size:11px; color:#10b981; font-weight:600;">🔒 Privacy Masked</span>
             </label>
             
@@ -469,14 +469,14 @@
 
           <button class="wa-btn" onclick="sendWhatsAppAlert()">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
-            व्हॉट्सॲप अलर्ट पाठवा (Send WhatsApp Alert)
+            व्हाट्सएप अलर्ट भेजें (Send WhatsApp Alert)
           </button>
 
           <div id="wa-result-box" style="margin-top:14px; display:none; background:rgba(0,0,0,0.4); padding:12px; border-radius:6px; border:1px solid rgba(37,211,102,0.3);">
-            <div style="font-size:12px; color:var(--whatsapp-green); font-weight:700;" id="wa-success-lbl">अलर्ट तयार झाला!</div>
+            <div style="font-size:12px; color:var(--whatsapp-green); font-weight:700;" id="wa-success-lbl">अलर्ट तैयार हुआ (Alert Generated)!</div>
             <div style="font-size:11.5px; color:var(--text-muted); margin:6px 0;" id="wa-msg-preview"></div>
             <a id="wa-direct-anchor" href="#" target="_blank" style="color:var(--cyan-accent); font-size:12px; font-weight:700; text-decoration:none;">
-              थेट व्हॉट्सॲप उघडा (Open in WhatsApp) →
+              सीधे व्हाट्सएप खोलें (Open in WhatsApp) →
             </a>
           </div>
         </div>
@@ -484,7 +484,7 @@
         <!-- Recent Alerts Audit -->
         <div class="card" style="margin-top:20px;">
           <div class="card-hdr">
-            <span>📋 अलीकडील पाठवलेले अलर्ट्स (Alerts Trail)</span>
+            <span>📋 हाल ही में भेजे गए अलर्ट्स (Alerts Trail)</span>
           </div>
           <div id="alerts-trail" style="font-size:12px; color:var(--text-muted);">
             <!-- Rendered dynamically -->
@@ -496,7 +496,7 @@
 
   <script src="/os-shared-context.js"></script>
   <script>
-    let currentLang = 'mr';
+    let currentLang = 'hi';
     let phoneViewUnmasked = false;
     let currentRawPhone = '7773958375';
     let tokenViewUnmasked = false;
@@ -539,7 +539,7 @@
         document.getElementById('wa-phone-edit-wrap').style.display = 'none';
         document.getElementById('wa-phone-display-wrap').style.display = 'flex';
       } else {
-        alert('कृपया वैध १०-अंकी मोबाइल नंबर प्रविष्ट करा.');
+        alert('कृपया वैध 10-अंकीय मोबाइल नंबर दर्ज करें.');
       }
     }
 
@@ -561,12 +561,12 @@
     }
 
     function editTokenPrompt() {
-      const newToken = prompt('नवीन ॲडमिन सुरक्षा टोकन टाका (Enter Admin Security Token):', currentRawToken);
+      const newToken = prompt('नया एडमिन सुरक्षा टोकन दर्ज करें (Enter Admin Security Token):', currentRawToken);
       if (newToken && newToken.trim().length > 0) {
         currentRawToken = newToken.trim();
         tokenViewUnmasked = false;
         updateTokenDisplay();
-        alert('सुरक्षा टोकन अद्ययावत केले आणि मास्क केले!');
+        alert('सुरक्षा टोकन सफलतापूर्वक अपडेट एवं मास्क किया गया!');
       }
     }
 
@@ -634,7 +634,7 @@
       const msg = document.getElementById('cnr-msg');
       msg.style.display = 'block';
       msg.style.color = 'var(--emerald-accent)';
-      msg.innerHTML = `<strong>✅ केस जोडली:</strong> ${data.case.title} (${data.case.case_id}) - डिजिटल ट्विन तयार!`;
+      msg.innerHTML = `<strong>✅ केस जुड़ा:</strong> ${data.case.title} (${data.case.case_id}) - डिजिटल ट्विन तैयार!`;
       
       setTimeout(() => {
         osSwitchCase(data.case.case_id);
@@ -679,7 +679,7 @@
       const fileInput = document.getElementById('pdf-file-input');
       const file = fileInput.files ? fileInput.files[0] : null;
       if (!file) {
-        alert('कृपया प्रथम PDF किंवा कोर्ट डॉक्युमेंट निवडा.');
+        alert('कृपया पहले PDF या कोर्ट दस्तावेज़ चुनें.');
         return;
       }
 
@@ -715,18 +715,18 @@
 
           document.getElementById('btn-download-adhikar').href = `/api/citizen/download-adhikar-patra?accused=${encodeURIComponent(data.extracted_case_data.accused_name)}&custody=${data.extracted_case_data.custody_days}&lang=${currentLang}`;
         } else {
-          alert('अपलोड अयशस्वी: ' + (data.detail || 'त्रुटी आली'));
+          alert('अपलोड असफल: ' + (data.detail || 'त्रुटि हुई'));
         }
       } catch (err) {
         prog.style.display = 'none';
-        alert('त्रुटी: ' + err.message);
+        alert('त्रुटि: ' + err.message);
       }
     }
 
     async function loadSampleFIRDemo() {
       const prog = document.getElementById('pdf-progress');
       prog.style.display = 'block';
-      prog.innerText = '📂 नमुना FIR (0482/2023 - State v. Rajesh Kumar) तपासत आहे...';
+      prog.innerText = '📂 नमूना FIR (0482/2023 - State v. Rajesh Kumar) लोड हो रहा है...';
 
       const fd = new FormData();
       const blob = new Blob([
@@ -766,7 +766,7 @@
         document.getElementById('btn-download-adhikar').href = `/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=${currentLang}`;
       } catch (err) {
         prog.style.display = 'none';
-        alert('त्रुटी: ' + err.message);
+        alert('त्रुटि: ' + err.message);
       }
     }
   </script>

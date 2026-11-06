@@ -61,7 +61,7 @@ To comprehensively address all provisional evaluator feedback, NYAYA-SATYA has u
 | **🛡️ UNWIND Human Legal Gate** | [**Launch UNWIND Gate**](https://nyaya-satya.onrender.com/governance/unwind) | Finite State Machine, Immutable Hash Locks, Advocate Authorization Gate |
 | **⚖️ Flagship NYAYA-SATYA Core** | [**Launch Core Platform**](https://nyaya-satya.onrender.com/core) | Deep Evidentiary Analysis, Dossier 2.0 Export, Cryptographic Audit Trail |
 | **🚨 Undertrial Liberty Sentinel** | [**Launch Liberty Sentinel**](https://nyaya-satya.onrender.com/engines/undertrial-liberty) | Section 479 BNSS Detention Tracker, 428-day custody counter, DLSA Handoff |
-| **📜 Citizen Bail Adhikar Patra (PDF)** | [**View Statutory Certificate**](https://nyaya-satya.onrender.com/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=mr) | Printable Vernacular Legal Rights Certificate under Sec 479 BNSS |
+| **📜 Citizen Bail Adhikar Patra (PDF)** | [**View Statutory Certificate**](https://nyaya-satya.onrender.com/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=hi) | Printable Statutory Legal Rights Certificate under Sec 479 BNSS (हिंदी / English) |
 | **🤖 Agent Foundry Swarm Status** | [**View Swarm Telemetry**](https://nyaya-satya.onrender.com/api/citizen/agent-foundry-status) | Live Status of all 9 Google Antigravity autonomous agents |
 | **📚 Interactive OpenAPI / Swagger Docs** | [**View API Documentation**](https://nyaya-satya.onrender.com/docs) | Live REST API specification with all 13 engine endpoints |
 | **🩺 Live Health Probe** | [**Check System Health**](https://nyaya-satya.onrender.com/health) | Subsystem liveness and non-adjudication invariant status |
@@ -254,19 +254,19 @@ NYAYA-SATYA bridges this divide by delivering **real-time statutory bail rights 
 
 > *Verified live screen captures of actual alert dispatches transmitted to citizen relative Akash (+91-7773958375) via the NYAYA-SATYA Citizen Justice Gateway.*
 
-### 🌟 Breakthrough Citizen Innovations for 1 Billion People (सामन्य लोकांसाठी क्रांतिकारी सुविधा):
+### 🌟 Breakthrough Citizen Innovations for 1 Billion People (आम नागरिकों के लिए क्रांतिकारी विधिक सुविधाएं):
 1. **📄 Real Court PDF & FIR Forensic Ingestion (`/api/citizen/upload-document`)**:
    - Common citizens, paralegals, and legal aid clinics can upload any court record, charge sheet, or FIR (PDF up to 20MB).
    - Ingests with SHA-256 cryptographic fingerprinting, extracts accused name, FIR number, custody duration, and penal sections.
 2. **⚖️ Automated Section 479 BNSS Statutory Bail Calculation**:
    - The engine automatically cross-references penal charges against statutory limits under the new criminal code (BNSS 2023).
    - If a first-time undertrial completes **1/3rd of the maximum sentence** (e.g. 428 days served vs 365-day threshold for IPC 406), **Statutory Bail is flagged as MANDATORY by law**.
-3. **📜 1-Click Printable Bail Adhikar Patra (अधिकार पत्रक)**:
-   - Citizens can download/print an official [**नागरिक विधी हक्क पत्रक**](https://nyaya-satya.onrender.com/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=mr) in Marathi or Hindi, formatted with legal citations for immediate submission to the Court or Jail Superintendent.
-4. **🔊 Voice Audio Guidance (आवाजात ऐका / Listen Aloud)**:
-   - For illiterate or semi-literate citizens who cannot read legal English, the portal speaks out their rights and next court hearing dates aloud in their native tongue (**मराठी व हिंदी**).
+3. **📜 1-Click Printable Bail Adhikar Patra (विधिक अधिकार पत्र / Statutory Rights Certificate)**:
+   - Citizens can download/print an official [**नागरिक विधिक अधिकार पत्र (Statutory Bail Rights Certificate)**](https://nyaya-satya.onrender.com/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=hi) in Hindi or English (also available in Marathi & regional languages), formatted with statutory citations for immediate submission to the Court or Jail Superintendent.
+4. **🔊 Voice Audio Guidance (आवाज़ में सुनें / Listen Aloud)**:
+   - For illiterate or semi-literate citizens who cannot read legal English, the portal speaks out their rights and next court hearing dates aloud in their spoken language (**हिंदी, English एवं प्रांतीय भाषाएँ**).
 5. **📱 Direct 6-Language WhatsApp Delivery**:
-   - Delivers official notices to citizens' pockets in Marathi, Hindi, English, Kannada, Tamil, and Bengali with DLSA panel counsel contact details and NALSA Toll-Free Helpline **15100**.
+   - Delivers official notices to citizens' pockets in Hindi, English, Marathi, Kannada, Tamil, and Bengali with DLSA panel counsel contact details and NALSA Toll-Free Helpline **15100**.
 6. **🔍 Instant 16-Digit e-Courts CNR Digital Twin Lookup**:
    - Common litigants can enter any CNR number (e.g. `DLCT01-004820-2024`) to instantly construct a structured Case Digital Twin.
 
@@ -430,7 +430,7 @@ To address the evaluation feedback regarding **live workflow execution, legal pr
 | :--- | :--- | :--- |
 | **Statutory Pre-trial Bail** | **Section 479(1) First Proviso, BNSS 2023** | Automates first-time offender relief upon serving **1/3rd maximum term** (replaces old CrPC 436A 1/2 rule). For IPC 406 (3 yrs = 1,095 days), threshold is **365 days**. Accused with 428 days served is flagged **MANDATORY BAIL DUE** (+63 days overstay). |
 | **Supreme Court Precedent** | ***SMWP (Crl.) No. 4/2021*** (*In Re: Policy Strategy for Grant of Bail*) | Enforces apex court mandate that undertrials entitled to statutory bail must not languish due to lack of legal representation or inability to furnish surety. |
-| **Bail Representation Letter** | **NALSA SOP & DLSA Legal Aid Scheme** | Generates official, printable [**नागरिक विधी हक्क पत्रक**](https://nyaya-satya.onrender.com/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=mr) ready for immediate submission to the Jail Superintendent or DLSA Secretary. |
+| **Bail Representation Letter** | **NALSA SOP & DLSA Legal Aid Scheme** | Generates official, printable [**नागरिक विधिक अधिकार पत्र (Statutory Rights Certificate)**](https://nyaya-satya.onrender.com/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=hi) ready for immediate submission to the Jail Superintendent or DLSA Secretary. |
 | **Non-Adjudication Invariant** | **Ethical AI Legal Standard** | The AI **NEVER** decides guilt or predicts win rates; all substantive actions require licensed counsel approval via the **UNWIND Human Legal Gate**. |
 
 ### 3. Four Verified External Integrations
