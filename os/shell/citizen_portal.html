@@ -428,8 +428,43 @@
           </div>
 
           <div style="margin-top:12px;">
-            <label style="font-size:12px; color:var(--text-dim); text-transform:uppercase;">व्हॉट्सॲप / मोबाइल नंबर:</label>
-            <input type="text" id="wa-phone" class="input-field" value="7773958375" placeholder="10-digit mobile number">
+            <label style="font-size:12px; color:var(--text-dim); text-transform:uppercase; display:flex; justify-content:space-between; align-items:center;">
+              <span>व्हॉट्सॲप / मोबाइल नंबर:</span>
+              <span style="font-size:11px; color:#10b981; font-weight:600;">🔒 Privacy Masked</span>
+            </label>
+            
+            <!-- Masked Display Mode (Active by default) -->
+            <div id="wa-phone-display-wrap" style="display:flex; align-items:center; justify-content:space-between; background:#000; border:1px solid var(--border-accent); border-radius:6px; padding:9px 12px; margin-top:6px;">
+              <div style="font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:700; color:#fff;" id="wa-phone-display-text">
+                +91 •••••• 8375
+              </div>
+              <div style="display:flex; gap:6px;">
+                <button type="button" onclick="toggleViewPhone()" style="background:#1e293b; color:#94a3b8; border:1px solid #334155; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer;" id="btn-toggle-phone-view">
+                  👁️ View
+                </button>
+                <button type="button" onclick="enableEditPhone()" style="background:#1e293b; color:#38bdf8; border:1px solid #334155; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer;">
+                  ✏️ Edit / Change
+                </button>
+              </div>
+            </div>
+
+            <!-- Input Mode (When Editing) -->
+            <div id="wa-phone-edit-wrap" style="display:none; gap:6px; margin-top:6px;">
+              <input type="text" id="wa-phone" class="input-field" value="7773958375" placeholder="10-digit mobile number" style="margin-top:0; flex:1;">
+              <button type="button" class="btn-cnr" onclick="saveAndMaskPhone()" style="background:#10b981; color:#06090e; padding:6px 14px; font-size:12px;">Save & Mask</button>
+            </div>
+          </div>
+
+          <!-- Operator Token Privacy Card -->
+          <div style="margin-top:12px; background:rgba(0,0,0,0.5); border:1px solid var(--border-subtle); padding:10px 12px; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-size:11px; color:var(--text-dim); text-transform:uppercase;">Admin Security Token:</div>
+              <div id="operator-token-display" style="font-family:'JetBrains Mono', monospace; font-size:12px; font-weight:700; color:#38bdf8; margin-top:2px;">••••••••••••</div>
+            </div>
+            <div style="display:flex; gap:6px;">
+              <button type="button" onclick="toggleViewToken()" style="background:#0f172a; color:#94a3b8; border:1px solid #334155; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer;" id="btn-toggle-token-view">👁️ View</button>
+              <button type="button" onclick="editTokenPrompt()" style="background:#0f172a; color:#38bdf8; border:1px solid #334155; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer;">✏️ Change</button>
+            </div>
           </div>
 
           <button class="wa-btn" onclick="sendWhatsAppAlert()">
@@ -462,6 +497,78 @@
   <script src="/os-shared-context.js"></script>
   <script>
     let currentLang = 'mr';
+    let phoneViewUnmasked = false;
+    let currentRawPhone = '7773958375';
+    let tokenViewUnmasked = false;
+    let currentRawToken = 'dev-operator-token';
+
+    function updatePhoneDisplay() {
+      const disp = document.getElementById('wa-phone-display-text');
+      const btn = document.getElementById('btn-toggle-phone-view');
+      if (phoneViewUnmasked) {
+        disp.innerText = `+91 ${currentRawPhone}`;
+        disp.style.color = '#38bdf8';
+        btn.innerText = '🔒 Hide';
+      } else {
+        const last4 = currentRawPhone.slice(-4);
+        disp.innerText = `+91 •••••• ${last4}`;
+        disp.style.color = '#fff';
+        btn.innerText = '👁️ View';
+      }
+    }
+
+    function toggleViewPhone() {
+      phoneViewUnmasked = !phoneViewUnmasked;
+      updatePhoneDisplay();
+    }
+
+    function enableEditPhone() {
+      document.getElementById('wa-phone-display-wrap').style.display = 'none';
+      const editWrap = document.getElementById('wa-phone-edit-wrap');
+      editWrap.style.display = 'flex';
+      document.getElementById('wa-phone').value = currentRawPhone;
+      document.getElementById('wa-phone').focus();
+    }
+
+    function saveAndMaskPhone() {
+      const val = document.getElementById('wa-phone').value.trim();
+      if (val.length >= 10) {
+        currentRawPhone = val;
+        phoneViewUnmasked = false;
+        updatePhoneDisplay();
+        document.getElementById('wa-phone-edit-wrap').style.display = 'none';
+        document.getElementById('wa-phone-display-wrap').style.display = 'flex';
+      } else {
+        alert('कृपया वैध १०-अंकी मोबाइल नंबर प्रविष्ट करा.');
+      }
+    }
+
+    function updateTokenDisplay() {
+      const disp = document.getElementById('operator-token-display');
+      const btn = document.getElementById('btn-toggle-token-view');
+      if (tokenViewUnmasked) {
+        disp.innerText = currentRawToken;
+        btn.innerText = '🔒 Hide';
+      } else {
+        disp.innerText = '••••••••••••';
+        btn.innerText = '👁️ View';
+      }
+    }
+
+    function toggleViewToken() {
+      tokenViewUnmasked = !tokenViewUnmasked;
+      updateTokenDisplay();
+    }
+
+    function editTokenPrompt() {
+      const newToken = prompt('नवीन ॲडमिन सुरक्षा टोकन टाका (Enter Admin Security Token):', currentRawToken);
+      if (newToken && newToken.trim().length > 0) {
+        currentRawToken = newToken.trim();
+        tokenViewUnmasked = false;
+        updateTokenDisplay();
+        alert('सुरक्षा टोकन अद्ययावत केले आणि मास्क केले!');
+      }
+    }
 
     async function loadCitizenPortal() {
       const activeCaseId = osGetActiveCase();
@@ -493,7 +600,7 @@
 
     async function sendWhatsAppAlert() {
       const activeCaseId = osGetActiveCase();
-      const phone = document.getElementById('wa-phone').value;
+      const phone = currentRawPhone || document.getElementById('wa-phone').value;
       const name = document.getElementById('wa-name').value;
 
       const res = await fetch('/api/citizen/send-alert', {

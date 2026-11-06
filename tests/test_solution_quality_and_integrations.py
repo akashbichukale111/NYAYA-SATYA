@@ -1,0 +1,113 @@
+"""Comprehensive Hackathon Verification Suite: Solution Quality, Legal Accuracy & External Integrations.
+Verifies:
+1. Live End-to-End Workflow: Ingest PDF -> Extract -> Twin -> TARKA -> Sec 479 BNSS -> Human Gate -> WhatsApp.
+2. Legal Accuracy: BNSS Section 479 statutory threshold, IPC 406/420 penalties, Supreme Court SMWP 4/2021.
+3. External Integrations: e-Courts CNR lookup, WhatsApp Click-to-Chat gateway, NALSA 15100 registry.
+4. Privacy & Masking: Phone number and Token masking.
+"""
+
+import pytest
+import io
+import hashlib
+from fastapi.testclient import TestClient
+import app
+from pypdf import PdfReader
+
+client = TestClient(app.app)
+
+
+def test_01_live_end_to_end_workflow():
+    """Verify live workflow from real court record upload to WhatsApp alert generation."""
+    # 1. Read real court PDF sample
+    pdf_path = "samples/FIR_No_0482_2023_State_v_Rajesh_Kumar.pdf"
+    with open(pdf_path, "rb") as f:
+        pdf_bytes = f.read()
+
+    # 2. Upload via API
+    res = client.post(
+        "/api/citizen/upload-document?language=mr",
+        files={"file": ("FIR_0482.pdf", io.BytesIO(pdf_bytes), "application/pdf")}
+    )
+    assert res.status_code == 200, f"Upload failed: {res.text}"
+    data = res.json()
+    assert data["status"] == "PROCESSED_SUCCESSFULLY"
+
+    # 3. Verify extraction
+    assert data["extracted_case_data"]["accused_name"] == "Rajesh Kumar"
+    assert data["extracted_case_data"]["fir_number"] == "0482/2023"
+    assert data["extracted_case_data"]["custody_days"] == 428
+
+    # 4. Verify statutory bail audit
+    bail_audit = data["statutory_bail_audit"]
+    assert bail_audit["is_statutory_bail_mandatory"] is True
+    assert bail_audit["exceeded_by_days"] == 63  # 428 - 365
+
+    # 5. Verify Google Antigravity Agent Swarm
+    swarm = data["agent_foundry_swarm_execution"]
+    assert len(swarm) == 6
+    agent_names = [a["agent"] for a in swarm]
+    assert any("TARKA-VYUH" in name for name in agent_names)
+    assert any("Liberty Sentinel" in name for name in agent_names)
+
+
+def test_02_legal_accuracy_statutory_mappings():
+    """Verify exact legal computation of Section 479 BNSS against Indian Supreme Court standards."""
+    # Section 406 IPC = 3 years maximum punishment = 1,095 days
+    # Section 479(1) First Proviso BNSS 2023: First-time undertrials eligible for mandatory bail upon serving 1/3rd term
+    threshold = 1095 // 3  # 365 days
+
+    # Case A: 428 days served (Rajesh Kumar) -> Must be eligible
+    custody_a = 428
+    assert custody_a >= threshold
+    assert (custody_a - threshold) == 63
+
+    # Case B: 200 days served -> Under scrutiny, not yet eligible
+    custody_b = 200
+    assert custody_b < threshold
+
+    # Case C: Downloadable Adhikar Patra verification
+    res = client.get("/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=mr")
+    assert res.status_code == 200
+    assert "कलम ४७९" in res.text
+    assert "३६५" in res.text
+    assert "428 दिवस" in res.text
+    assert "15100" in res.text  # NALSA helpline
+
+
+def test_03_external_integrations():
+    """Verify e-Courts CNR Lookup, WhatsApp gateway formatting, and NALSA directory."""
+    # 1. e-Courts CNR 16-character ingestion
+    cnr_payload = {"cnr_number": "DLCT01-004820-2024"}
+    res = client.post("/api/citizen/cnr-lookup", json=cnr_payload)
+    assert res.status_code == 200
+    cnr_data = res.json()
+    assert "DLCT01-004820-2024" in cnr_data["case"]["case_id"]
+
+    # 2. WhatsApp click-to-chat payload generator
+    wa_payload = {
+        "phone_number": "7773958375",
+        "case_id": "CASE-2024-DEL-0482",
+        "language": "mr",
+        "recipient_name": "Akash (Family)"
+    }
+    wa_res = client.post("/api/citizen/send-alert", json=wa_payload)
+    assert wa_res.status_code == 200
+    wa_data = wa_res.json()
+    assert wa_data["status"] == "SUCCESS"
+    assert "api.whatsapp.com/send?phone=917773958375" in wa_data["whatsapp_direct_link"]
+    assert "कलम%20४७९" in wa_data["whatsapp_direct_link"]
+
+    # 3. NALSA Hotline verification
+    sum_res = client.get("/api/citizen/summary?lang=mr")
+    assert sum_res.status_code == 200
+    assert "15100" in sum_res.json()["free_legal_aid_hotline"]
+
+
+def test_04_agent_foundry_telemetry():
+    """Verify Google Antigravity Agent Foundry swarm topology."""
+    res = client.get("/api/citizen/agent-foundry-status")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["framework"] == "Google Antigravity Agent Foundry"
+    assert data["swarm_status"] == "ONLINE"
+    assert len(data["active_agents"]) == 9

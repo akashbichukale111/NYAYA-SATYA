@@ -47,6 +47,7 @@ from shared.case_store import case_store
 from shared.module_registry import module_registry
 from shared.attention_center import attention_center
 from shared.event_bus import event_bus
+from shared.pilot_telemetry import get_pilot_telemetry
 from adapters.modules import ADAPTERS
 from adapters.citizen_justice import router as citizen_justice_router
 
@@ -133,6 +134,12 @@ def root_health():
         "non_adjudication_invariant": "GUARANTEED_ZERO_OUTCOME_PREDICTION",
         "timestamp": datetime.now().isoformat()
     }
+
+
+@app.get("/api/impact/pilot-telemetry")
+def get_pilot_impact_telemetry():
+    """Returns verified before-and-after empirical impact telemetry and pilot cohort evidence."""
+    return get_pilot_telemetry()
 
 
 @app.get("/system-health")
