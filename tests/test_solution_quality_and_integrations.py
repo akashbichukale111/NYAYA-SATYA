@@ -327,3 +327,33 @@ def test_20_download_e_muchalka_bond():
     assert "₹0 (ZERO RUPEES)" in html
     assert "NYAYA-SETU DPI LIVE VERIFICATION QR" in html
 
+
+def test_21_pm_vishwakarma_rehabilitation():
+    """Verify Step 3: 'कौशल्य आणि मुख्य प्रवाहात पुनर्वसन' (PM Vishwakarma / Skill India Link)."""
+    res = client.post("/api/citizen/rehabilitation-enrollment?accused_name=Rajesh%20Kumar&trade_skill=Carpentry")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["status"] == "REHABILITATION_ENROLLMENT_ACTIVE"
+    assert "PM Vishwakarma" in data["program"]
+    assert "tri_pillar_reintegration_kit" in data
+    kit = data["tri_pillar_reintegration_kit"]
+    assert "अधिकार पत्र" in kit["pillar_1_legal_freedom"]["document"]
+    assert "ABHA" in kit["pillar_2_health_identity"]["document"]
+    assert kit["pillar_3_economic_dignity"]["toolkit_grant_inr"] == 15000
+    assert kit["pillar_3_economic_dignity"]["collateral_free_credit_inr"] == 100000
+    assert "download_url" in data
+
+
+def test_22_download_reintegration_kit():
+    """Verify Step 3: Download printable Tri-Pillar Reintegration Kit with QR Code."""
+    res = client.get("/api/citizen/download-reintegration-kit?accused=Rajesh%20Kumar&reg_id=PMV-2026-DL-8375")
+    assert res.status_code == 200
+    html = res.text
+    assert "त्रिसूत्री पुनर्वसन संच" in html
+    assert "TRI-PILLAR REINTEGRATION KIT" in html
+    assert "PM Vishwakarma" in html or "PM विश्वकर्मा" in html
+    assert "ABHA आरोग्य कार्ड" in html
+    assert "₹१५,०००" in html
+    assert "PM VISHWAKARMA & REHABILITATION VERIFICATION QR" in html
+
+

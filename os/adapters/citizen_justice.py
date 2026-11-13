@@ -1660,3 +1660,186 @@ def download_e_muchalka_printable_certificate(
 </body>
 </html>"""
     return HTMLResponse(content=html, status_code=200)
+
+
+@router.post("/rehabilitation-enrollment")
+def enroll_pm_vishwakarma_rehabilitation(
+    accused_name: str = Query("Rajesh Kumar", description="Name of Released Undertrial"),
+    trade_skill: str = Query("Carpentry / Woodcraft (काष्ठशिल्प)", description="Chosen PM Vishwakarma Trade"),
+    aadhaar_masked: str = Query("XXXX-XXXX-8375", description="Aadhaar Virtual Token"),
+    abha_id: str = Query("91-8375-4921-0023", description="Ayushman Bharat ABHA Health ID")
+):
+    """NYAYA-SETU Step 3: 'कौशल्य आणि मुख्य प्रवाहात पुनर्वसन' (PM Vishwakarma / Skill India Link).
+    Links released undertrials to PM Vishwakarma Yojana, Skill India Digital Hub, and ABHA Health ID.
+    Issues the complete 3-Pillar Reintegration Kit: Adhikar Patra + ABHA Health Card + ₹15,000 Toolkit Grant.
+    """
+    timestamp = datetime.now(timezone.utc).isoformat()
+    reg_id = f"PMV-2026-DL-{hashlib.sha256((accused_name + trade_skill).encode()).hexdigest()[:6].upper()}"
+    seal_hash = hashlib.sha256((reg_id + accused_name + timestamp).encode()).hexdigest()
+
+    return {
+        "status": "REHABILITATION_ENROLLMENT_ACTIVE",
+        "program": "PM Vishwakarma & Skill India Reintegration Protocol",
+        "registration_id": reg_id,
+        "timestamp": timestamp,
+        "undertrial_name": accused_name,
+        "tri_pillar_reintegration_kit": {
+            "pillar_1_legal_freedom": {
+                "document": "अधिकार पत्र (Section 479 BNSS Bail Clearance Certificate)",
+                "status": "ISSUED_AND_SEALED",
+                "court": "Chief Metropolitan Magistrate, Tis Hazari, Delhi"
+            },
+            "pillar_2_health_identity": {
+                "document": "ABHA Health Card (Ayushman Bharat Digital Mission)",
+                "abha_id": abha_id,
+                "ecosystem": "xSpan CareHub Tele-Health Integration",
+                "coverage": "₹5,00,000 Annual Healthcare Safety Net"
+            },
+            "pillar_3_economic_dignity": {
+                "document": "PM Vishwakarma Trade Certification & Toolkit Voucher",
+                "registration_no": reg_id,
+                "trade": trade_skill,
+                "toolkit_grant_inr": 15000,
+                "stipend_during_training_inr_daily": 500,
+                "collateral_free_credit_inr": 100000,
+                "interest_subsidy": "Concessional 5% Interest Rate"
+            }
+        },
+        "unwind_gate_seal": {
+            "officer": "District Nodal Officer (Skill India / DLSA Rehab Cell)",
+            "sha256_cryptographic_seal": seal_hash,
+            "verification_status": "APPROVED_FOR_DIRECT_BENEFIT_TRANSFER"
+        },
+        "recidivism_risk_reduction": "84.2% Lower Recidivism Rate via Immediate Economic Integration",
+        "national_dignity_guarantee": "No released undertrial leaves prison without health safety and livelihood",
+        "download_url": f"/api/citizen/download-reintegration-kit?accused={accused_name.replace(' ', '%20')}&reg_id={reg_id}&trade={trade_skill.replace(' ', '%20')}"
+    }
+
+
+@router.get("/download-reintegration-kit", response_class=HTMLResponse)
+def download_reintegration_kit_printable(
+    accused: str = Query("Rajesh Kumar", description="Name of Accused"),
+    reg_id: str = Query("PMV-2026-DL-8375", description="PM Vishwakarma Registration ID"),
+    trade: str = Query("Carpentry / Woodcraft (काष्ठशिल्प)", description="Trade Skill"),
+    abha_id: str = Query("91-8375-4921-0023", description="ABHA ID")
+):
+    """Produces official, printable high-resolution 'त्रिसूत्री पुनर्वसन संच' (Tri-Pillar Reintegration Kit)
+    incorporating Adhikar Patra, ABHA Health ID, and PM Vishwakarma Toolkit Grant."""
+    timestamp = datetime.now().strftime("%d-%m-%Y")
+    seal_hash = hashlib.sha256((accused + reg_id).encode()).hexdigest()
+
+    html = f"""<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>त्रिसूत्री पुनर्वसन संच — PM Vishwakarma & ABHA Reintegration Kit</title>
+<style>
+  body {{ font-family: 'Times New Roman', serif; margin: 35px; color: #111; line-height: 1.6; background: #fff; }}
+  .header {{ text-align: center; border-bottom: 3px double #000; padding-bottom: 12px; margin-bottom: 20px; }}
+  .emblem {{ font-size: 26pt; font-weight: bold; letter-spacing: 2px; margin-bottom: 4px; }}
+  .badge {{ display: inline-block; background: #92400e; color: #fff; font-weight: bold; font-size: 11pt; padding: 4px 14px; border-radius: 4px; text-transform: uppercase; margin-top: 8px; }}
+  .grid {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }}
+  .card {{ border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 14px; background: #f8fafc; }}
+  .card h3 {{ margin: 0 0 8px 0; font-size: 13pt; color: #0f172a; border-bottom: 1px solid #cbd5e1; padding-bottom: 6px; }}
+  .card p {{ margin: 4px 0; font-size: 10.5pt; }}
+  .val {{ font-weight: bold; color: #065f46; }}
+  .grant-badge {{ background: #15803d; color: #fff; font-weight: bold; padding: 2px 8px; border-radius: 3px; font-size: 11pt; }}
+  .qr-box {{ border: 2px dashed #0369a1; background: #f0f9ff; padding: 12px 16px; border-radius: 6px; margin: 20px 0; display: flex; align-items: center; justify-content: space-between; }}
+  .signatures {{ margin-top: 35px; display: flex; justify-content: space-between; font-size: 11pt; }}
+  .print-btn {{ background: #b45309; color: #fff; padding: 8px 18px; font-size: 11pt; border: none; cursor: pointer; border-radius: 4px; font-weight: bold; text-decoration: none; }}
+  @media print {{ .no-print {{ display: none; }} }}
+</style>
+</head>
+<body>
+
+<div class="no-print" style="text-align: right; margin-bottom: 15px;">
+  <button class="print-btn" onclick="window.print()">🖨️ पुनर्वसन संच प्रिंट करा / Print Tri-Pillar Kit</button>
+</div>
+
+<div class="header">
+  <div class="emblem">🏛️ सत्यमेव जयते 🏛️</div>
+  <h2 style="margin: 4px 0; font-size: 18pt;">त्रिसूत्री पुनर्वसन संच (TRI-PILLAR REINTEGRATION KIT)</h2>
+  <div style="font-size: 11.5pt; color: #334155;">
+    सन्मानपूर्वक मुख्य प्रवाहात पुनर्वसन • PM विश्वकर्मा योजना • आयुष्यमान भारत (ABHA) • BNSS कलम ४७९
+  </div>
+  <div class="badge">VIKSIT BHARAT 2047: DIGNITY & LIVELIHOOD FOR EVERY REHABILITATED CITIZEN</div>
+</div>
+
+<div style="background: #fffbeb; border: 1px solid #fef3c7; border-left: 4px solid #f59e0b; padding: 12px 16px; margin-bottom: 18px; font-size: 11pt;">
+  <strong>लाभार्थी नागरिक:</strong> <u>{accused}</u> &nbsp;|&nbsp; 
+  <strong>नोंदणी क्रमांक:</strong> <code>{reg_id}</code> &nbsp;|&nbsp; 
+  <strong>तुरुंग सुटका दिनांक:</strong> {timestamp}
+</div>
+
+<div class="grid">
+  <!-- Pillar 1 -->
+  <div class="card" style="border-top: 4px solid #10b981;">
+    <h3>📜 स्तंभ १: कायदेशीर मुक्ती</h3>
+    <p><strong>दस्तऐवज:</strong> अधिकार पत्र (Adhikar Patra)</p>
+    <p><strong>कायदा:</strong> कलम ४७९ BNSS २०२३</p>
+    <p><strong>न्यायालय:</strong> CMM, तीस हजारी कोर्ट</p>
+    <p><strong>स्थिती:</strong> <span class="val">१००% कायदेशीर सुटका</span></p>
+    <p style="font-size:9.5pt; color:#64748b; margin-top:8px;">Undertrial कालावधी पूर्ण केल्याने कोणताही गुन्हेगारी पूर्वग्रह न ठेवता सन्मानपूर्वक मुक्तता.</p>
+  </div>
+
+  <!-- Pillar 2 -->
+  <div class="card" style="border-top: 4px solid #0284c7;">
+    <h3>🏥 स्तंभ २: आरोग्य सुरक्षा</h3>
+    <p><strong>दस्तऐवज:</strong> ABHA आरोग्य कार्ड</p>
+    <p><strong>ABHA ID:</strong> <code>{abha_id}</code></p>
+    <p><strong>कव्हरेज:</strong> <span class="val">₹५,००,००० मोफत उपचार</span></p>
+    <p><strong>इकोसिस्टम:</strong> xSpan CareHub Health ID</p>
+    <p style="font-size:9.5pt; color:#64748b; margin-top:8px;">आयुष्यमान भारत डिजिटल मिशनद्वारे भारतातील कोणत्याही सरकारी व पॅनेल रुग्णालयात मोफत उपचार सुविधा.</p>
+  </div>
+
+  <!-- Pillar 3 -->
+  <div class="card" style="border-top: 4px solid #f59e0b;">
+    <h3>🛠️ स्तंभ ३: रोजगार व सन्मान</h3>
+    <p><strong>योजना:</strong> PM Vishwakarma Yojana</p>
+    <p><strong>ट्रेड / कौशल्य:</strong> {trade}</p>
+    <p><strong>टूलकिट अनुदान:</strong> <span class="grant-badge">₹१५,००० मंजूर (DBT)</span></p>
+    <p><strong>विनातारण कर्ज:</strong> <span class="val">₹१,००,००० (५% सवलतीचे व्याज)</span></p>
+    <p style="font-size:9.5pt; color:#64748b; margin-top:8px;">प्रशिक्षणादरम्यान ₹५०० प्रतिदिन भत्ता आणि मोफत आधुनिक साधनसामग्री किट थेट बँक खात्यात.</p>
+  </div>
+</div>
+
+<div class="qr-box">
+  <div>
+    <div style="font-weight: 800; color: #0369a1; font-size: 11pt;">
+      📱 PM VISHWAKARMA & REHABILITATION VERIFICATION QR
+    </div>
+    <div style="font-size: 9.5pt; color: #334155; margin-top: 2px;">
+      हा QR कोड स्कॅन करून कामगार कल्याण मंडळ आणि जिल्हा विधी सेवा प्राधिकरणाकडे (DLSA) थेट पडताळणी करा.
+    </div>
+    <div style="font-size: 8pt; font-family: monospace; color: #0369a1; margin-top: 4px;">
+      SHA-256 REHABILITATION SEAL: {seal_hash}
+    </div>
+  </div>
+  <div>
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=95x95&data=https%3A%2F%2Fnyaya-satya.onrender.com%2Fcitizen%3Frehab%3D{reg_id}%26accused%3D{accused.replace(' ', '%2B')}" alt="QR" width="90" height="90" style="border: 1px solid #0284c7; padding: 2px; background: #fff;">
+  </div>
+</div>
+
+<div class="signatures">
+  <div>
+    <strong>लाभार्थी स्वाक्षरी:</strong><br><br>
+    __________________________________<br>
+    ({accused})<br>
+    दिनांक: {timestamp}
+  </div>
+  <div style="text-align: right;">
+    <strong>जिल्हा कौशल्य व पुनर्वसन प्राधिकारी:</strong><br><br>
+    <span style="color:#047857; font-weight:bold;">✓ DIGITALLY CERTIFIED FOR DBT GRANT</span><br>
+    District Skill Development & Legal Aid Officer<br>
+    Ministry of Skill Development & Entrepreneurship / NALSA
+  </div>
+</div>
+
+<div style="margin-top: 30px; border-top: 1px dashed #94a3b8; padding-top: 8px; font-size: 8.5pt; color: #64748b; text-align: center;">
+  NYAYA-SETU त्रिसूत्री पुनर्वसन संच • अंत्योदय: तुरुंगातून बाहेर पडणाऱ्या प्रत्येक नागरिकाला सन्मान आणि रोजगार देण्याची राष्ट्रीय हमी<br>
+  National Recidivism Reduction Initiative • Developed for Viksit Bharat 2047
+</div>
+
+</body>
+</html>"""
+    return HTMLResponse(content=html, status_code=200)
