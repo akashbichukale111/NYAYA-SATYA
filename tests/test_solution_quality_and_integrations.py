@@ -357,3 +357,82 @@ def test_22_download_reintegration_kit():
     assert "PM VISHWAKARMA & REHABILITATION VERIFICATION QR" in html
 
 
+def test_23_bnss_479_statutory_audit_nuances():
+    """Verify Section 479 BNSS exact statutory nuances and exception handling."""
+    # Test 1: Capital Offense Disqualification (Section 479(1) Proviso 1)
+    res_capital = client.post("/api/citizen/bnss-479-statutory-audit", json={
+        "case_id": "TEST-CAPITAL",
+        "accused_name": "Accused Murder",
+        "offense_sections": "IPC 302 / BNS 103",
+        "max_sentence_years": 20.0,
+        "days_in_custody": 600,
+        "is_first_time_offender": True,
+        "is_life_imprisonment_or_death": True,
+        "has_multiple_pending_cases": False
+    })
+    assert res_capital.status_code == 200
+    d_cap = res_capital.json()
+    assert d_cap["statutory_decision"] == "INELIGIBLE_FOR_AUTO_BAIL"
+    assert d_cap["bail_eligible"] is False
+    assert "Proviso 1" in d_cap["statutory_citation"]
+
+    # Test 2: Multiple Pending Cases Bar (Section 479(2))
+    res_multi = client.post("/api/citizen/bnss-479-statutory-audit", json={
+        "case_id": "TEST-MULTI",
+        "accused_name": "Accused Multi",
+        "offense_sections": "IPC 420 Cheating",
+        "max_sentence_years": 7.0,
+        "days_in_custody": 900,
+        "is_first_time_offender": False,
+        "is_life_imprisonment_or_death": False,
+        "has_multiple_pending_cases": True
+    })
+    assert res_multi.status_code == 200
+    d_multi = res_multi.json()
+    assert d_multi["statutory_decision"] == "MULTIPLE_PENDING_PROCEEDINGS"
+    assert d_multi["bail_eligible"] is False
+    assert "479(2)" in d_multi["statutory_citation"]
+
+    # Test 3: First-time Offender (1/3rd Rule Eligible)
+    res_first = client.post("/api/citizen/bnss-479-statutory-audit", json={
+        "case_id": "TEST-FIRST",
+        "accused_name": "Rajesh Kumar",
+        "offense_sections": "IPC 406",
+        "max_sentence_years": 3.0,
+        "days_in_custody": 428,
+        "is_first_time_offender": True,
+        "is_life_imprisonment_or_death": False,
+        "has_multiple_pending_cases": False
+    })
+    assert res_first.status_code == 200
+    d_first = res_first.json()
+    assert d_first["statutory_decision"] == "ELIGIBLE_MANDATORY_RELEASE"
+    assert d_first["bail_eligible"] is True
+    assert d_first["days_overstayed"] > 0
+
+
+def test_24_national_benchmark_suite_12_dockets():
+    """Verify execution of the 12-Docket National Court Registry Benchmark Suite."""
+    res = client.get("/api/citizen/benchmark-suite")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["total_dockets_evaluated"] == 12
+    assert data["ground_truth_matches"] == 12
+    assert data["statutory_accuracy"] == "100.0%"
+    assert data["statutory_precision"] == "100.0%"
+    assert data["false_positive_release_rate"] == "0.0% (Zero capital/dangerous offenders released)"
+    assert len(data["docket_results"]) == 12
+
+
+def test_25_empirical_proofs_and_math():
+    """Verify empirical proof mathematical formulations and transparency matrix."""
+    res = client.get("/api/citizen/empirical-proofs")
+    assert res.status_code == 200
+    data = res.json()
+    assert "99.9%" in data["proof_1_latency_reduction"]["claim"]
+    assert "₹8,400 Crore" in data["proof_2_fiscal_savings"]["claim"]
+    assert "30-Second" in data["proof_3_thirty_second_sync"]["claim"]
+    assert len(data["transparency_engineering_matrix"]) >= 4
+
+
+
