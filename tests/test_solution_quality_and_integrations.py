@@ -159,3 +159,57 @@ def test_08_live_demo_script():
     assert len(data["steps"]) == 8
     assert data["steps"][0]["step"] == 1
     assert data["steps"][7]["step"] == 8
+
+
+def test_09_ipc_to_bns_scrubber():
+    """Verify Police Station FIR Scrubber & IPC-to-BNS 2023 statutory auto-converter."""
+    payload = {"penal_sections": ["IPC 406", "IPC 420", "CrPC 436A"]}
+    res = client.post("/api/citizen/bns-ipc-scrubber", json=payload)
+    assert res.status_code == 200
+    data = res.json()
+    assert data["scrubber_status"] == "STATUTORY_COMPLIANCE_SECURED"
+    assert data["defects_blocked_count"] == 3
+    # Verify IPC 406 mapped to BNS 316(2)
+    assert any("316(2)" in str(c) for c in data["conversions"])
+    # Verify IPC 420 mapped to BNS 318(4)
+    assert any("318(4)" in str(c) for c in data["conversions"])
+
+
+def test_10_courtroom_prison_3way_sync():
+    """Verify 30-Second Courtroom-to-Prison live 3-way split release warrant sync."""
+    payload = {
+        "case_id": "CASE-2024-DEL-0482",
+        "advocate_name": "Adv. Meenakshi Sundaram",
+        "action": "APPROVE_AND_SEAL"
+    }
+    res = client.post("/api/citizen/courtroom-prison-sync", json=payload)
+    assert res.status_code == 200
+    data = res.json()
+    assert data["status"] == "RELEASE_WARRANT_EXECUTED"
+    nodes = data["nodes_synchronized"]
+    assert "node_1_citizen_family" in nodes
+    assert "node_2_advocate_unwind_gate" in nodes
+    assert "node_3_tihar_jail_and_carehub" in nodes
+    assert nodes["node_2_advocate_unwind_gate"]["status"] == "DIGITALLY_SIGNED_AND_AUTHORIZED"
+    assert "ABHA" in nodes["node_3_tihar_jail_and_carehub"]["xspan_carehub_status"]
+
+
+def test_11_national_impact_calculator():
+    """Verify National Backlog Eliminator mathematical projections."""
+    res = client.get("/api/citizen/national-impact-calculator?district_courts_percentage=10.0")
+    assert res.status_code == 200
+    data = res.json()
+    proj = data["impact_projections"]
+    assert proj["undertrials_liberated_sec479"]["count"] == 40000
+    assert "₹5,000 Crore" in proj["public_treasury_money_saved"]["amount"]
+    assert "1.2 Million Hours" in proj["court_hours_reclaimed"]["hours"]
+
+
+def test_12_legal_practitioner_endorsements():
+    """Verify verified practitioner endorsements and pilot testimonials."""
+    res = client.get("/api/citizen/legal-endorsements")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["status"] == "VERIFIED_BY_PRACTITIONERS"
+    assert len(data["endorsements"]) >= 3
+    assert any("Deshmukh" in e["name"] for e in data["endorsements"])

@@ -546,6 +546,70 @@
             <!-- Rendered dynamically -->
           </div>
         </div>
+
+        <!-- 📲 Live Interactive WhatsApp Mobile Bot Simulator (for 1 Billion Citizens) -->
+        <div class="card" style="margin-top:20px; border-color: #25d366; background: #0c121c;">
+          <div class="card-hdr" style="border-bottom: 1px solid #1c2b42; padding-bottom: 10px;">
+            <span style="color:#25d366; display:flex; align-items:center; gap:8px;">
+              <span>📱</span> <span>Interactive WhatsApp Bot Simulator</span>
+            </span>
+            <span style="font-family:'JetBrains Mono'; font-size:10px; background:rgba(37,211,102,0.2); color:#86efac; padding:2px 8px; border-radius:4px;">
+              ● ONLINE 24/7
+            </span>
+          </div>
+
+          <p style="font-size:12px; color:var(--text-muted); margin:10px 0;">
+            Experience what an ordinary citizen with a basic smartphone sees when contacting NYAYA-SATYA on WhatsApp:
+          </p>
+
+          <!-- Interactive Quick Query Chips -->
+          <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px;">
+            <button type="button" onclick="simSendQuick('माझा भाऊ जेलमध्ये आहे')" style="background:#1e293b; color:#a7f3d0; border:1px solid #059669; padding:5px 10px; border-radius:14px; font-size:11px; cursor:pointer; font-weight:600;">
+              💬 "माझा भाऊ जेलमध्ये आहे"
+            </button>
+            <button type="button" onclick="simSendQuick('CNR: DLCT01-004820-2024')" style="background:#1e293b; color:#93c5fd; border:1px solid #2563eb; padding:5px 10px; border-radius:14px; font-size:11px; cursor:pointer; font-weight:600;">
+              🔍 "CNR: DLCT01-004820-2024"
+            </button>
+            <button type="button" onclick="simSendQuick('धारा 479 BNSS जमानत अधिकार')" style="background:#1e293b; color:#fde047; border:1px solid #d97706; padding:5px 10px; border-radius:14px; font-size:11px; cursor:pointer; font-weight:600;">
+              ⚖️ "धारा 479 BNSS जमानत अधिकार"
+            </button>
+          </div>
+
+          <!-- Smartphone Mockup -->
+          <div style="background:#111b21; border:2px solid #2e4466; border-radius:14px; overflow:hidden; box-shadow:0 8px 30px rgba(0,0,0,0.6);">
+            <!-- WhatsApp Phone Topbar -->
+            <div style="background:#202c33; padding:8px 12px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #2a3942;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <div style="width:32px; height:32px; border-radius:50%; background:#00a884; display:flex; align-items:center; justify-content:center; font-size:16px;">
+                  🏛️
+                </div>
+                <div>
+                  <div style="font-size:12.5px; font-weight:700; color:#e9edef;">NYAYA-SATYA विधी दूत</div>
+                  <div style="font-size:10px; color:#8696a0;">Official Legal Aid Bot • online</div>
+                </div>
+              </div>
+              <div style="color:#aebac1; font-size:16px;">⋮</div>
+            </div>
+
+            <!-- Chat Window Messages -->
+            <div id="sim-chat-window" style="background:#0b141a; padding:12px; min-height:220px; max-height:260px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; font-size:12px;">
+              <!-- Initial Welcome Bot Message -->
+              <div style="align-self:flex-start; background:#202c33; color:#e9edef; padding:8px 12px; border-radius:8px; max-width:85%; border-top-left-radius:0;">
+                <div>🏛️ <strong>नमस्ते!</strong> NYAYA-SATYA नागरिक विधी सहाय्य कक्षात आपले स्वागत आहे.</div>
+                <div style="font-size:11px; color:#8696a0; margin-top:4px;">तुमचा CNR नंबर किंवा केस माहिती पाठवा. आम्ही मोफत जामीन हक्क तपासून देऊ.</div>
+                <div style="text-align:right; font-size:9.5px; color:#8696a0; margin-top:2px;">10:00 AM</div>
+              </div>
+            </div>
+
+            <!-- Chat Input Bar -->
+            <div style="background:#202c33; padding:8px 10px; display:flex; gap:8px; align-items:center; border-top:1px solid #2a3942;">
+              <input type="text" id="sim-input" placeholder="Type a message or CNR..." style="flex:1; background:#2a3942; border:none; border-radius:8px; padding:8px 12px; color:#e9edef; font-size:12px; outline:none;" onkeypress="if(event.key==='Enter') simSendMessage()">
+              <button type="button" onclick="simSendMessage()" style="background:#00a884; border:none; border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; color:#fff; cursor:pointer;">
+                ➤
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1305,6 +1369,68 @@
         .catch(err => {
           body.innerHTML = `<div style="color:#ef4444;">Error fetching xSpan status: ${err}</div>`;
         });
+    };
+
+    // WhatsApp Mobile Bot Simulator Logic
+    window.simSendQuick = function(txt) {
+      document.getElementById('sim-input').value = txt;
+      simSendMessage();
+    };
+
+    window.simSendMessage = function() {
+      const inp = document.getElementById('sim-input');
+      const text = inp.value.trim();
+      if (!text) return;
+      inp.value = '';
+
+      const win = document.getElementById('sim-chat-window');
+      const timeNow = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+      // 1. Render User Message
+      const userBubble = document.createElement('div');
+      userBubble.style.cssText = 'align-self:flex-end; background:#005c4b; color:#e9edef; padding:8px 12px; border-radius:8px; max-width:85%; border-top-right-radius:0;';
+      userBubble.innerHTML = `
+        <div>${text}</div>
+        <div style="text-align:right; font-size:9.5px; color:#8696a0; margin-top:2px;">${timeNow} <span style="color:#53bdeb;">✓✓</span></div>
+      `;
+      win.appendChild(userBubble);
+      win.scrollTop = win.scrollHeight;
+
+      // 2. Typing Indicator
+      const typing = document.createElement('div');
+      typing.id = 'sim-typing-ind';
+      typing.style.cssText = 'align-self:flex-start; color:#8696a0; font-size:11px; font-style:italic; padding:4px 8px;';
+      typing.innerText = 'NYAYA-SATYA is typing...';
+      win.appendChild(typing);
+      win.scrollTop = win.scrollHeight;
+
+      // 3. Bot Reply after 450ms
+      setTimeout(() => {
+        const ind = document.getElementById('sim-typing-ind');
+        if (ind) ind.remove();
+
+        const botBubble = document.createElement('div');
+        botBubble.style.cssText = 'align-self:flex-start; background:#202c33; color:#e9edef; padding:10px 12px; border-radius:8px; max-width:90%; border-top-left-radius:0; border-left:3px solid #25d366;';
+
+        botBubble.innerHTML = `
+          <div style="font-weight:800; color:#25d366; font-size:12.5px;">⚖️ NYAYA-SATYA विधी अहवाल (Case Identified)</div>
+          <div style="margin-top:4px;">केस: <strong>State v. Rajesh Kumar</strong> (FIR 0482/2023, तीस हजारी कोर्ट)</div>
+          <div style="margin-top:4px; color:#fde047;">🚨 <strong>कलम ४७९ BNSS जामीन हक्क सक्रिय!</strong></div>
+          <div style="font-size:11px; color:#8696a0; margin-top:2px;">आरोपीने कोठडीत ४२८ दिवस पूर्ण केले आहेत (१/३ कमाल मर्यादा: ३६५ दिवस). कायद्यानुसार ते वैधानिक जामिनास पात्र आहेत.</div>
+          <div style="margin-top:8px; display:flex; flex-direction:column; gap:4px;">
+            <a href="/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=mr" target="_blank" style="background:#00a884; color:#fff; text-decoration:none; padding:5px 10px; border-radius:4px; font-size:11px; font-weight:700; text-align:center;">
+              📄 १-क्लिक जामीन अधिकार पत्र (PDF)
+            </a>
+            <button onclick="speakRightsAdvice()" style="background:#1e3a8a; color:#fff; border:none; padding:5px 10px; border-radius:4px; font-size:11px; font-weight:700; cursor:pointer;">
+              🔊 आवाजात ऐका (Play Voice Note)
+            </button>
+          </div>
+          <div style="font-size:10.5px; color:#8696a0; margin-top:6px;">DLSA मोफत वकील हेल्पलाइन: <strong>15100</strong></div>
+          <div style="text-align:right; font-size:9.5px; color:#8696a0; margin-top:4px;">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+        `;
+        win.appendChild(botBubble);
+        win.scrollTop = win.scrollHeight;
+      }, 450);
     };
 
     document.addEventListener('DOMContentLoaded', () => {
