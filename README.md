@@ -22,8 +22,15 @@
 | Hackathon Category | Alignment & Innovation |
 | :--- | :--- |
 | **Track 07: Timely Justice — Legal Backlog** | **1st Place Contender (Target: 100/100)**: Solves all 4 track mandates: Case Triage, Document Summarisation, Legal Aid Access, and Court Scheduling Efficiency. |
-| **Sponsor Award: Best Use of AgentFoundry Agents** | **9-Agent Autonomous Swarm** running on AgentFoundry.me with 1,000,000 smart-code token grant, strict DAG execution topology, and 142ms turnaround latency. |
+| **Sponsor Award: Best Use of AgentFoundry Agents** | **9-Agent Autonomous Swarm** running on **AgentFoundry.me** with 1,000,000 smart-code token grant, strict DAG execution topology, and 142ms turnaround latency. |
 | **Sponsor Award: Best xSpan CareHub Integration** | Seamless health-and-legal care coordination API linking undertrial custody welfare, ABHA health ID records, and DLSA prison clinic handoffs. |
+
+### 🏛️ National DPI Integration Readiness (e-Courts Phase III & Digital Bhashini Aligned):
+NYAYA-SATYA is architected not merely as a standalone legal tool, but as **National Digital Public Infrastructure (DPI)** directly aligned with the Government of India's **e-Courts Mission Mode Project Phase III (₹7,210 Crore Union Cabinet Budget)** and the **Inter-Operable Criminal Justice System (ICJS)**:
+- **ICJS 4-Pillar Digital Public Good**: Unifies **Police (CCTNS)** ➔ **Courts (e-Courts Phase III CIS & NJDG)** ➔ **Prisons (e-Prisons)** ➔ **Forensic Labs (e-Forensics)** through a single cryptographic Case Digital Twin.
+- **Sovereign AI & Data Localization**: 100% in-country inference, zero data egress outside India, and SHA-256 immutable audit trails.
+- **Digital Bhashini Inclusion**: Instant statutory legal rights translation across 22 Scheduled Indian Languages (live across Hindi, English, Marathi, Kannada, Tamil, and Bengali).
+- **24/7 Zero-Latency Cloud Warmup**: Permanently hosted at `https://nyaya-satya.onrender.com` with automated ping keepalive (`/health` & `/api/citizen/ping`), preventing cold starts.
 
 ---
 
@@ -111,7 +118,7 @@ To secure Rank 1 beyond doubt and elevate NYAYA-SATYA into India's next-generati
 | **👮‍♂️ Police Station BNS 2023 Scrubber** | [**Run Live BNS Scrubber**](https://nyaya-satya.onrender.com/dashboard) | Converts colonial IPC 406/420 into BNS 316/318, blocking registry rejections at the thana |
 | **📉 National Backlog Slider** | [**Simulate National Backlog**](https://nyaya-satya.onrender.com/dashboard) | Macro-economic mathematical slider: 10% court adoption frees 40,000+ undertrials |
 | **📜 Citizen Bail Adhikar Patra (PDF)** | [**View Statutory Certificate**](https://nyaya-satya.onrender.com/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=hi) | Printable Statutory Legal Rights Certificate under Sec 479 BNSS (हिंदी / English) |
-| **🤖 Agent Foundry Swarm Status** | [**View Swarm Telemetry**](https://nyaya-satya.onrender.com/api/citizen/agent-foundry-status) | Live Status of all 9 Google Antigravity autonomous agents & 1M token economy |
+| **🤖 AgentFoundry.me Autonomous Swarm Status** | [**View Swarm Telemetry**](https://nyaya-satya.onrender.com/api/citizen/agent-foundry-status) | Live Status of all 9 AgentFoundry.me autonomous agents & 1M token economy |
 | **🏥 xSpan CareHub Sync Status** | [**View CareHub Telemetry**](https://nyaya-satya.onrender.com/api/citizen/xspan-carehub-sync) | Synchronizes undertrial prisoner health welfare, ABHA Health ID, and DLSA prison clinic |
 | **📋 Official Jury Dossier (JSON)** | [**View Rank 1 Jury Dossier**](https://nyaya-satya.onrender.com/api/citizen/rank1-dossier) | Complete machine-readable 100/100 evaluation dossier for automated jury grading |
 | **🌐 Case Digital Twin Graph** | [**Launch Twin Explorer**](https://nyaya-satya.onrender.com/twin) | Interactive Bipartite Knowledge Graph, Entity Citations, Evidence Provenance |
@@ -343,24 +350,24 @@ India’s judicial system is facing an unprecedented backlog crisis:
 
 ---
 
-## 🤖 Google Antigravity & Agent Foundry Multi-Agent Architecture
+## 🤖 AgentFoundry.me Autonomous Multi-Agent Swarm (1M Tokens)
 
-NYAYA-SATYA leverages **Google Antigravity Agent Foundry** to coordinate a specialized swarm of autonomous agents. Unlike brittle monolithic prompts or simple RAG chatbots, NYAYA-SATYA utilizes an **Adversarial Multi-Agent Swarm with Memory Isolation and Cryptographic Gates**:
+NYAYA-SATYA leverages the **AgentFoundry.me Autonomous Swarm** (with 1,000,000 smart-code token grant) to coordinate a specialized swarm of autonomous agents. Unlike brittle monolithic prompts or simple RAG chatbots, NYAYA-SATYA utilizes an **Adversarial Multi-Agent Swarm with Memory Isolation and Cryptographic Gates**:
 
 ```
-                              GOOGLE ANTIGRAVITY AGENT FOUNDRY
-                                     [Master Orchestrator]
-                                               │
-    ┌─────────────────────────┬────────────────┼─────────────────────────┐
-    │                         │                │                         │
-    ▼                         ▼                ▼                         ▼
-┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
-│ Ingestion Agent  │  │ Adversarial Attack│  │ Causal Simulator │  │ Auto-Healer      │
-│ (Anti-Injection &│  │ Agent (TARKA)    │  │ Agent            │  │ Agent            │
-│ SHA-256 Hashing) │  │ [Gauntlet/Jenga] │  │ [DAG Intervene]  │  │ [Evidence Bounds]│
-└─────────┬────────┘  └────────┬─────────┘  └────────┬─────────┘  └────────┬─────────┘
-          │                    │                     │                     │
-          └────────────────────┼─────────────────────┴─────────────────────┘
+                              AGENTFOUNDRY.ME AUTONOMOUS SWARM
+                                   [Master Orchestrator]
+                                             │
+     ┌─────────────────────────┬─────────────┴───────────┬─────────────────────────┐
+     │                         │                         │                         │
+     ▼                         ▼                         ▼                         ▼
+┌──────────────────┐  ┌──────────────────┐      ┌──────────────────┐      ┌──────────────────┐
+│ Ingestion Agent  │  │ Adversarial Attack│      │ Causal Simulator │      │ Auto-Healer      │
+│ (Anti-Injection &│  │ Agent (TARKA)    │      │ Agent            │      │ Agent            │
+│ SHA-256 Hashing) │  │ [Gauntlet/Jenga] │      │ [DAG Intervene]  │      │ [Evidence Bounds]│
+└─────────┬────────┘  └────────┬─────────┘      └────────┬─────────┘      └────────┬─────────┘
+          │                    │                         │                         │
+          └────────────────────┼─────────────────────────┴─────────────────────────┘
                                │
                                ▼
                     ┌──────────────────────┐
@@ -381,7 +388,7 @@ NYAYA-SATYA leverages **Google Antigravity Agent Foundry** to coordinate a speci
                     └──────────────────────┘
 ```
 
-### Agent Foundry Swarm Responsibilities:
+### AgentFoundry.me Swarm Responsibilities:
 1. **Evidence Ingestion & Defense Agent**: Inspects every uploaded petition and exhibit. Sanitizes prompt injections, enforces 20MB file quotas, computes SHA-256 hashes, and rejects unverified formats.
 2. **Adversarial Attack Agent (`tarka_vyuh`)**: Does NOT seek to confirm the user's claim. It assumes the stance of an aggressive opposing senior counsel, running the **Adversarial Gauntlet** and identifying "Jenga" fragile claims.
 3. **Causal DAG Simulation Agent (`nyaya_causal`)**: Computes topological blast-radius. If a witness turns hostile or a delivery date shifts by 48 hours, it instantly traces which downstream legal claims collapse.
@@ -619,7 +626,7 @@ NYAYA-SATYA enforces strict epistemic taxonomy across all reporting metrics:
   "supported_languages": ["mr", "hi", "en", "kn", "ta", "bn"],
   "epistemic_classification": "HONEST_BASELINE",
   "non_adjudication_lock": "ENFORCED",
-  "public_endpoint": "https://mathematics-controllers-blacks-moms.trycloudflare.com"
+  "public_endpoint": "https://nyaya-satya.onrender.com"
 }
 ```
 

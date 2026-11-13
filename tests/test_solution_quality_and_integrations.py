@@ -224,3 +224,48 @@ def test_13_live_subsystems_smoke_test():
     assert data["total_passed"] == 14
     assert data["total_failed"] == 0
     assert len(data["subsystems"]) == 14
+
+
+def test_14_national_apex_command_view():
+    """Verify CJI & PMO National Jail Apex View telemetry across 6 linguistic states."""
+    res = client.get("/api/citizen/national-apex-view")
+    assert res.status_code == 200
+    data = res.json()
+    assert "Bharat National Jail" in data["title"]
+    s = data["national_summary"]
+    assert s["total_eligible_undertrials"] >= 100000
+    assert s["total_prevented_adjournments"] >= 300000
+    assert len(data["states_telemetry"]) == 6
+    assert any(st["state"] == "Maharashtra" for st in data["states_telemetry"])
+
+
+def test_15_bulk_dlsa_dispatch():
+    """Verify 1-click Suo Motu Bulk DLSA dispatch across 672 District Courts."""
+    res = client.post("/api/citizen/bulk-dlsa-dispatch")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["status"] == "BULK_DISPATCH_TRANSMITTED"
+    assert data["districts_covered"] == 672
+    assert "DLSA-NAT-2026-" in data["batch_id"]
+    assert len(data["sha256_cryptographic_seal"]) == 64
+
+
+def test_16_icjs_dpi_readiness():
+    """Verify e-Courts Phase III and ICJS 4-pillar architectural compliance."""
+    res = client.get("/api/citizen/icjs-dpi-readiness")
+    assert res.status_code == 200
+    data = res.json()
+    assert "ICJS" in data["national_dpi_framework"]
+    assert len(data["four_pillar_icjs_matrix"]) == 4
+    assert any("CCTNS" in (p.get("pillar", "") + p.get("system", "")) for p in data["four_pillar_icjs_matrix"])
+    assert any("e-Prisons" in (p.get("pillar", "") + p.get("system", "")) for p in data["four_pillar_icjs_matrix"])
+
+
+def test_17_adhikar_patra_qr_code():
+    """Verify Adhikar Patra PDF/HTML certificate contains scannable verification QR Code."""
+    res = client.get("/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=hi")
+    assert res.status_code == 200
+    html = res.text
+    assert "LIVE DIGITAL PUBLIC INFRASTRUCTURE (DPI) VERIFICATION QR" in html
+    assert "api.qrserver.com" in html
+    assert "verify" in html and "DLCT01-004820-2024" in html
