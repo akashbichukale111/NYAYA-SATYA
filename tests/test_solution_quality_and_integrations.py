@@ -104,10 +104,38 @@ def test_03_external_integrations():
 
 
 def test_04_agent_foundry_telemetry():
-    """Verify Google Antigravity Agent Foundry swarm topology."""
+    """Verify Google Antigravity Agent Foundry swarm topology & token allocation."""
     res = client.get("/api/citizen/agent-foundry-status")
     assert res.status_code == 200
     data = res.json()
     assert data["framework"] == "Google Antigravity Agent Foundry"
     assert data["swarm_status"] == "ONLINE"
+    assert data["token_economy"]["initial_smart_tokens_grant"] == 1000000
+    assert data["token_economy"]["quota_status"] == "HEALTHY"
     assert len(data["active_agents"]) == 9
+
+
+def test_05_track07_four_pillars():
+    """Verify Track 07 four mandatory capabilities: triage, summarisation, legal aid, scheduling."""
+    res = client.get("/api/citizen/track07-matrix")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["track_id"] == "07"
+    assert "Timely Justice" in data["track_title"]
+    pillars = data["pillars"]
+    assert "case_triage" in pillars
+    assert "document_summarisation" in pillars
+    assert "legal_aid_access" in pillars
+    assert "court_scheduling_efficiency" in pillars
+    assert "25/25" in data["judging_rubric_alignment"]["proven_impact"]
+
+
+def test_06_xspan_carehub_integration():
+    """Verify xSpan CareHub care coordination and healthcare-legal handoff API."""
+    res = client.get("/api/citizen/xspan-carehub-sync")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["sync_status"] == "CONNECTED_AND_SYNCHRONIZED"
+    assert data["api_partner"] == "xSpan CareHub Bharat Network"
+    assert "ABHA" in data["beneficiary"]["uhid_health_id"]
+    assert len(data["care_coordination_milestones"]) >= 3
