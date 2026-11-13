@@ -51,8 +51,17 @@
     window.nyayaActiveLang = newLang;
 
     // Synchronize all dropdowns on page
-    document.querySelectorAll('.nyaya-lang-select, #global-lang-select, #lang-select').forEach(sel => {
+    document.querySelectorAll('.nyaya-lang-select, #global-lang-select, #lang-select, #main-lang-select').forEach(sel => {
       sel.value = newLang;
+    });
+
+    // Synchronize all Indic pill buttons
+    document.querySelectorAll('.lang-pill-btn').forEach(btn => {
+      if (btn.getAttribute('data-lang') === newLang) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
     });
 
     // Notify page translator
@@ -64,7 +73,16 @@
     window.dispatchEvent(new CustomEvent('nyaya-language-changed', { detail: { language: newLang } }));
   };
 
-  // 5. Guaranteed Audio & Speech Synthesis Engine
+  // 5. Preload and cache speech synthesis voices
+  let cachedVoices = [];
+  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+    cachedVoices = window.speechSynthesis.getVoices() || [];
+    window.speechSynthesis.onvoiceschanged = function() {
+      cachedVoices = window.speechSynthesis.getVoices() || [];
+    };
+  }
+
+  // 6. Guaranteed Audio & Speech Synthesis Engine (with WebAudio + Indic Fallbacks)
   window.osPlayVoiceGuidance = function(textToSpeak, langCode, onStartCb, onEndCb) {
     langCode = (langCode || activeLang || 'en').toLowerCase();
 
@@ -84,7 +102,7 @@
         osc.frequency.setValueAtTime(587.33, now); // D5
         osc.frequency.exponentialRampToValueAtTime(880, now + 0.12); // A5
 
-        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.setValueAtTime(0.2, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
 
         osc.connect(gain);
@@ -98,7 +116,7 @@
     }
 
     // B. SpeechSynthesis Speech Output
-    if ('speechSynthesis' in window) {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel();
       if (window.speechSynthesis.paused) {
         window.speechSynthesis.resume();
@@ -120,42 +138,73 @@
       };
       utterance.lang = langMap[langCode] || 'en-IN';
 
-      // Pick matching voice if installed
-      const voices = window.speechSynthesis.getVoices();
+      // Pick matching voice or intelligent Indic fallback
+      const voices = (cachedVoices && cachedVoices.length > 0) ? cachedVoices : (window.speechSynthesis.getVoices() || []);
       if (voices && voices.length > 0) {
         let chosenVoice = voices.find(v => v.lang && v.lang.toLowerCase().replace('_', '-').startsWith(langCode));
+        // Fallback for Indian regional languages to Hindi or Indian English if regional voice not installed in Windows
         if (!chosenVoice && (langCode === 'mr' || langCode === 'kn' || langCode === 'ta' || langCode === 'bn')) {
-          // Fallback to Hindi or Indian English voice for Indic pronunciation
-          chosenVoice = voices.find(v => v.lang && (v.lang.includes('hi') || v.lang.includes('IN')));
+          chosenVoice = voices.find(v => v.lang && (v.lang.toLowerCase().includes('hi') || v.lang.toLowerCase().includes('in')));
         }
         if (!chosenVoice) {
-          chosenVoice = voices.find(v => v.lang && v.lang.includes('en'));
+          chosenVoice = voices.find(v => v.lang && v.lang.toLowerCase().includes('en'));
         }
         if (chosenVoice) {
           utterance.voice = chosenVoice;
         }
       }
 
-      if (typeof onStartCb === 'function') {
-        utterance.onstart = onStartCb;
-      }
-      if (typeof onEndCb === 'function') {
-        utterance.onend = onEndCb;
-        utterance.onerror = onEndCb;
-      }
+      let started = false;
+      let completed = false;
 
-      // Small 30ms timeout helps Chrome audio context wake up properly
-      setTimeout(() => {
-        try {
-          window.speechSynthesis.speak(utterance);
-        } catch (err) {
-          console.error('[NYAYA-SPEECH] speak error:', err);
+      const triggerStart = () => {
+        if (!started) {
+          started = true;
+          if (typeof onStartCb === 'function') onStartCb();
+        }
+      };
+
+      const triggerEnd = () => {
+        if (!completed) {
+          completed = true;
           if (typeof onEndCb === 'function') onEndCb();
         }
-      }, 35);
+      };
+
+      utterance.onstart = triggerStart;
+      utterance.onend = triggerEnd;
+      utterance.onerror = (err) => {
+        console.warn('[NYAYA-SPEECH] Utterance error:', err);
+        triggerEnd();
+      };
+
+      // Safety timeout in case browser TTS finishes without firing onend
+      const approxDurationMs = Math.max(4000, Math.min(25000, textToSpeak.length * 80));
+      setTimeout(() => {
+        if (started && !completed) {
+          triggerEnd();
+        }
+      }, approxDurationMs);
+
+      // 40ms timeout helps Chromium initialize audio context on user gesture
+      setTimeout(() => {
+        try {
+          triggerStart();
+          window.speechSynthesis.speak(utterance);
+          // Chromium freeze prevention
+          if (window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+          }
+        } catch (err) {
+          console.error('[NYAYA-SPEECH] speak error:', err);
+          triggerEnd();
+        }
+      }, 40);
     } else {
-      alert('Audio Speech Synthesis is not supported in this browser.');
-      if (typeof onEndCb === 'function') onEndCb();
+      if (typeof onStartCb === 'function') onStartCb();
+      setTimeout(() => {
+        if (typeof onEndCb === 'function') onEndCb();
+      }, 1500);
     }
   };
 

@@ -120,9 +120,19 @@
   font-family: inherit;
 }
 
+:root, html, body {
+  color-scheme: dark !important;
+}
+
+select, option, optgroup {
+  color-scheme: dark !important;
+  background-color: #0c121c !important;
+  color: #f0f4f8 !important;
+}
+
 .os-case-dropdown option {
-  background: #0c121c;
-  color: #f0f4f8;
+  background-color: #0c121c !important;
+  color: #f0f4f8 !important;
 }
 
 .os-core-btn {
@@ -141,9 +151,45 @@
   opacity: 0.9;
 }
 
-select.nyaya-lang-select option,
-select option {
-  background: #0c121c !important;
+select.nyaya-lang-select,
+select.lang-select,
+select.os-case-dropdown {
+  color-scheme: dark !important;
+  background-color: #0c121c !important;
   color: #f0f4f8 !important;
+}
+
+select.nyaya-lang-select option,
+select.lang-select option,
+select option,
+.os-case-dropdown option {
+  color-scheme: dark !important;
+  background-color: #0c121c !important;
+  color: #ffffff !important;
   padding: 6px 10px;
+}
+
+/* Indic 1-Click Language Switcher Pills */
+.lang-pill-btn {
+  background: #121b2a;
+  color: #94a3b8;
+  border: 1px solid #1c2b42;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+.lang-pill-btn:hover {
+  background: #1e293b;
+  color: #ffffff;
+  border-color: #3b82f6;
+}
+.lang-pill-btn.active {
+  background: linear-gradient(135deg, #1d4ed8, #2563eb);
+  color: #ffffff;
+  border-color: #60a5fa;
+  box-shadow: 0 0 10px rgba(37,99,235,0.4);
 }

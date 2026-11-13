@@ -273,14 +273,10 @@ To prove how NYAYA-SATYA processes authentic legal records without synthetic sho
 
 Over **75% of inmates in Indian prisons are undertrials**, and millions of families cannot afford private counsel or understand formal English legal terminology. 
 
-NYAYA-SATYA bridges this divide by delivering **real-time statutory bail rights and legal aid notices directly to citizens' WhatsApp accounts** in their native language (**मराठी, हिंदी, English, ಕನ್ನಡ, தமிழ், বাংলা**), complete with direct NALSA/DLSA legal aid advocate contacts:
+NYAYA-SATYA bridges this divide by delivering **real-time statutory bail rights and legal aid notices directly to citizens' WhatsApp accounts** in their native language (**हिंदी, English, मराठी, ಕನ್ನಡ, தமிழ், বাংলা**), complete with direct NALSA/DLSA legal aid advocate contacts:
 
 <table style="width: 100%; border-collapse: collapse;">
   <tr>
-    <td style="width: 33%; padding: 5px; vertical-align: top;">
-      <img src="docs/screenshots/whatsapp_marathi_alert_full.png" alt="WhatsApp Marathi Alert" width="100%">
-      <p align="center"><strong>Marathi (मराठी)</strong><br><em>कॉलम ४७९ BNSS वैधानिक जामीन सूचना</em></p>
-    </td>
     <td style="width: 33%; padding: 5px; vertical-align: top;">
       <img src="docs/screenshots/whatsapp_hindi_alert.png" alt="WhatsApp Hindi Alert" width="100%">
       <p align="center"><strong>Hindi (हिंदी)</strong><br><em>धारा ४७९ BNSS विधिक अधिकार सूचना</em></p>
@@ -288,6 +284,10 @@ NYAYA-SATYA bridges this divide by delivering **real-time statutory bail rights 
     <td style="width: 33%; padding: 5px; vertical-align: top;">
       <img src="docs/screenshots/whatsapp_marathi_english_alert.png" alt="WhatsApp English Alert" width="100%">
       <p align="center"><strong>English</strong><br><em>Statutory Bail Rights Notification</em></p>
+    </td>
+    <td style="width: 33%; padding: 5px; vertical-align: top;">
+      <img src="docs/screenshots/whatsapp_marathi_alert_full.png" alt="WhatsApp Marathi Alert" width="100%">
+      <p align="center"><strong>Marathi (मराठी)</strong><br><em>कलम ४७९ BNSS वैधानिक जामीन सूचना</em></p>
     </td>
   </tr>
   <tr>
@@ -504,7 +504,7 @@ To address the evaluation feedback regarding **live workflow execution, legal pr
 1. **e-Courts 16-Character CNR API Integration** (`POST /api/citizen/cnr-lookup`):
    - Accepts any Indian court CNR (e.g. `DLCT01-004820-2024`) and instantly constructs a structured Case Digital Twin.
 2. **WhatsApp Business Direct Dispatch Gateway** (`POST /api/citizen/send-alert`):
-   - Generates direct Click-to-Chat URI encoded payloads with statutory notices in **6 Indian Languages** (मराठी, हिंदी, English, ಕನ್ನಡ, தமிழ், বাংলা).
+   - Generates direct Click-to-Chat URI encoded payloads with statutory notices in **6 Indian Languages** (हिंदी, English, मराठी, ಕನ್ನಡ, தமிழ், বাংলা).
 3. **National Legal Services Authority (NALSA / DLSA) Registry**:
    - Integrates national legal aid helpline **`15100`** and DLSA panel counsel contact directly into citizen notices.
 4. **xSpan CareHub Care-Coordination Public API** (`GET /api/citizen/xspan-carehub-sync`):

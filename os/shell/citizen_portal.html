@@ -25,11 +25,40 @@
       --whatsapp-green: #25d366;
     }
 
+    :root, html, body {
+      color-scheme: dark !important;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    select, option, select option, .nyaya-lang-select option, .lang-select option {
+    select, option, select option, .nyaya-lang-select, .nyaya-lang-select option, .lang-select, .lang-select option {
+      color-scheme: dark !important;
       background-color: #0c121c !important;
-      color: #f0f4f8 !important;
+      color: #ffffff !important;
+    }
+
+    .lang-pill-btn {
+      background: #121b2a;
+      color: #94a3b8;
+      border: 1px solid #1c2b42;
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .lang-pill-btn:hover {
+      background: #1e293b;
+      color: #ffffff;
+      border-color: #3b82f6;
+    }
+    .lang-pill-btn.active {
+      background: linear-gradient(135deg, #1d4ed8, #2563eb);
+      color: #ffffff;
+      border-color: #60a5fa;
+      box-shadow: 0 0 10px rgba(37,99,235,0.4);
     }
     body {
       background-color: var(--bg-base);
@@ -294,6 +323,9 @@
           <button onclick="openLiveTourModal()" style="background:linear-gradient(135deg, #d4af37, #f59e0b); color:#06090e; padding:7px 16px; border-radius:6px; font-size:12px; font-weight:900; cursor:pointer; display:flex; align-items:center; gap:6px; border:none; box-shadow:0 0 16px rgba(212, 175, 55, 0.4); transition:all 0.2s;">
             <span>🏆</span> <span>Judge's Live Tour (Rank 1)</span>
           </button>
+          <button onclick="openMobileQrModal()" style="background:rgba(56, 189, 248, 0.2); border:1px solid #38bdf8; color:#bae6fd; padding:7px 12px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px;">
+            <span>📱</span> <span>Scan QR (Mobile)</span>
+          </button>
           <button onclick="openAgentFoundryModal()" style="background:rgba(99, 102, 241, 0.25); border:1px solid #818cf8; color:#e0e7ff; padding:7px 14px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px;">
             <span>🤖</span> <span>AgentFoundry Swarm</span>
           </button>
@@ -319,16 +351,24 @@
         </p>
       </div>
 
-      <div class="lang-switcher-box" style="background:#0c121c; border:1px solid var(--border-accent);">
+      <div class="lang-switcher-box" style="background:#0c121c; border:1px solid var(--border-accent); display:flex; align-items:center; gap:8px; padding:6px 12px; border-radius:8px; flex-wrap:wrap;">
         <span style="font-size:12px; color:var(--text-dim); font-weight:700;" id="lbl-lang-select">LANGUAGE:</span>
-        <select id="lang-select" class="lang-select nyaya-lang-select" onchange="changeLanguage(this.value)" style="background:#0c121c; color:#f0f4f8;">
-          <option value="en" style="background:#0c121c; color:#f0f4f8;" selected>English (Default)</option>
-          <option value="hi" style="background:#0c121c; color:#f0f4f8;">हिंदी (Hindi)</option>
-          <option value="mr" style="background:#0c121c; color:#f0f4f8;">मराठी (Marathi)</option>
-          <option value="kn" style="background:#0c121c; color:#f0f4f8;">ಕನ್ನಡ (Kannada)</option>
-          <option value="ta" style="background:#0c121c; color:#f0f4f8;">தமிழ் (Tamil)</option>
-          <option value="bn" style="background:#0c121c; color:#f0f4f8;">বাংলা (Bengali)</option>
+        <select id="lang-select" class="lang-select nyaya-lang-select" onchange="changeLanguage(this.value)" style="color-scheme:dark !important; background:#0c121c !important; color:#ffffff !important; border:none; outline:none; font-size:12px; font-weight:700; cursor:pointer;">
+          <option value="en" style="background:#0c121c; color:#ffffff;" selected>English (Default)</option>
+          <option value="hi" style="background:#0c121c; color:#ffffff;">हिंदी (Hindi)</option>
+          <option value="mr" style="background:#0c121c; color:#ffffff;">मराठी (Marathi)</option>
+          <option value="kn" style="background:#0c121c; color:#ffffff;">ಕನ್ನಡ (Kannada)</option>
+          <option value="ta" style="background:#0c121c; color:#ffffff;">தமிழ் (Tamil)</option>
+          <option value="bn" style="background:#0c121c; color:#ffffff;">বাংলা (Bengali)</option>
         </select>
+        <div style="display:flex; align-items:center; gap:3px; margin-left:4px; padding-left:6px; border-left:1px solid #1c2b42;">
+          <button type="button" class="lang-pill-btn active" data-lang="en" onclick="changeLanguage('en')" title="English">EN</button>
+          <button type="button" class="lang-pill-btn" data-lang="hi" onclick="changeLanguage('hi')" title="हिंदी (Hindi)">हिंदी</button>
+          <button type="button" class="lang-pill-btn" data-lang="mr" onclick="changeLanguage('mr')" title="मराठी (Marathi)">मराठी</button>
+          <button type="button" class="lang-pill-btn" data-lang="kn" onclick="changeLanguage('kn')" title="ಕನ್ನಡ (Kannada)">ಕನ್ನಡ</button>
+          <button type="button" class="lang-pill-btn" data-lang="ta" onclick="changeLanguage('ta')" title="தமிழ் (Tamil)">தமிழ்</button>
+          <button type="button" class="lang-pill-btn" data-lang="bn" onclick="changeLanguage('bn')" title="বাংলা (Bengali)">বাংলা</button>
+        </div>
       </div>
     </div>
 
@@ -839,6 +879,15 @@
       const sel = document.getElementById('lang-select');
       if (sel) sel.value = currentLang;
 
+      // Synchronize language pills
+      document.querySelectorAll('.lang-pill-btn').forEach(btn => {
+        if (btn.getAttribute('data-lang') === currentLang) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
       // Update text nodes
       if (document.getElementById('nav-portal-title')) document.getElementById('nav-portal-title').innerText = dict.nav_title;
       if (document.getElementById('nav-cmd-center')) document.getElementById('nav-cmd-center').innerText = dict.cmd_center;
@@ -1326,6 +1375,33 @@
         .catch(err => {
           body.innerHTML = `<div style="color:#ef4444;">Error fetching tour: ${err}</div>`;
         });
+    };
+
+    window.openMobileQrModal = function() {
+      const backdrop = document.getElementById('nyaya-modal-backdrop');
+      const title = document.getElementById('nyaya-modal-title');
+      const body = document.getElementById('nyaya-modal-body');
+      title.innerHTML = '<span>📱</span> <span>Scan to Experience on Mobile Smartphone</span>';
+      backdrop.style.display = 'flex';
+
+      body.innerHTML = `
+        <div style="text-align:center; padding:20px;">
+          <div style="background:#fff; display:inline-block; padding:12px; border-radius:12px; box-shadow:0 0 24px rgba(0,229,255,0.3); margin-bottom:16px;">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https://nyaya-satya.onrender.com/citizen" alt="Mobile QR Code" width="220" height="220">
+          </div>
+          <div style="font-size:16px; font-weight:800; color:#fff; margin-bottom:6px;">
+            Test the Citizen Portal & WhatsApp Simulator on Your Phone
+          </div>
+          <div style="font-size:13px; color:#cbd5e1; max-width:440px; margin:0 auto; line-height:1.5;">
+            Point your smartphone camera at this QR code to launch the real Indic mobile experience instantly without installing any app!
+          </div>
+          <div style="margin-top:14px;">
+            <a href="https://nyaya-satya.onrender.com/citizen" target="_blank" style="color:#00e5ff; font-family:'JetBrains Mono'; font-size:12px; text-decoration:none;">
+              Direct URL: https://nyaya-satya.onrender.com/citizen ↗
+            </a>
+          </div>
+        </div>
+      `;
     };
 
     window.openXspanModal = function() {

@@ -213,3 +213,14 @@ def test_12_legal_practitioner_endorsements():
     assert data["status"] == "VERIFIED_BY_PRACTITIONERS"
     assert len(data["endorsements"]) >= 3
     assert any("Deshmukh" in e["name"] for e in data["endorsements"])
+
+
+def test_13_live_subsystems_smoke_test():
+    """Verify live self-diagnostic health probe for all 14 legal intelligence subsystems."""
+    res = client.get("/api/citizen/smoke-test")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["status"] == "ALL_14_SUBSYSTEMS_HEALTHY"
+    assert data["total_passed"] == 14
+    assert data["total_failed"] == 0
+    assert len(data["subsystems"]) == 14

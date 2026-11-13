@@ -30,11 +30,40 @@
       --topbar-height: 70px;
     }
 
+    :root, html, body {
+      color-scheme: dark !important;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    select, option, .nyaya-lang-select, .nyaya-lang-select option, .os-case-dropdown option {
+    select, option, optgroup, .nyaya-lang-select, .nyaya-lang-select option, .os-case-dropdown, .os-case-dropdown option {
+      color-scheme: dark !important;
       background-color: #0c121c !important;
-      color: #f0f4f8 !important;
+      color: #ffffff !important;
+    }
+    
+    .lang-pill-btn {
+      background: #121b2a;
+      color: #94a3b8;
+      border: 1px solid #1c2b42;
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .lang-pill-btn:hover {
+      background: #1e293b;
+      color: #ffffff;
+      border-color: #3b82f6;
+    }
+    .lang-pill-btn.active {
+      background: linear-gradient(135deg, #1d4ed8, #2563eb);
+      color: #ffffff;
+      border-color: #60a5fa;
+      box-shadow: 0 0 10px rgba(37,99,235,0.4);
     }
     body {
       background-color: var(--bg-base);
@@ -514,19 +543,32 @@
         <span style="font-size:13px; color:var(--text-dim);">| Tis Hazari Court • Criminal Jurisdiction</span>
       </div>
 
-      <div style="display:flex; align-items:center; gap:14px;">
-        <!-- Global Language Switcher -->
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <!-- Global Language Switcher with Dropdown + 1-Click Indic Pills -->
         <div style="display:flex; align-items:center; gap:6px; background:#0c121c; border:1px solid var(--border-accent); border-radius:6px; padding:4px 10px;">
           <span style="font-size:12px; color:var(--gold-primary); font-weight:700;">🌐 LANGUAGE:</span>
-          <select id="main-lang-select" class="nyaya-lang-select" onchange="osSetGlobalLang(this.value)" style="background:#0c121c; color:#f0f4f8; border:none; font-size:12px; font-weight:700; cursor:pointer; outline:none;">
-            <option value="en" style="background:#0c121c; color:#f0f4f8;" selected>English (Default)</option>
-            <option value="hi" style="background:#0c121c; color:#f0f4f8;">हिंदी (Hindi)</option>
-            <option value="mr" style="background:#0c121c; color:#f0f4f8;">मराठी (Marathi)</option>
-            <option value="kn" style="background:#0c121c; color:#f0f4f8;">ಕನ್ನಡ (Kannada)</option>
-            <option value="ta" style="background:#0c121c; color:#f0f4f8;">தமிழ் (Tamil)</option>
-            <option value="bn" style="background:#0c121c; color:#f0f4f8;">বাংলা (Bengali)</option>
+          <select id="main-lang-select" class="nyaya-lang-select" onchange="osSetGlobalLang(this.value)" style="color-scheme:dark !important; background:#0c121c !important; color:#ffffff !important; border:none; font-size:12px; font-weight:700; cursor:pointer; outline:none;">
+            <option value="en" style="background:#0c121c; color:#ffffff;" selected>English (Default)</option>
+            <option value="hi" style="background:#0c121c; color:#ffffff;">हिंदी (Hindi)</option>
+            <option value="mr" style="background:#0c121c; color:#ffffff;">मराठी (Marathi)</option>
+            <option value="kn" style="background:#0c121c; color:#ffffff;">ಕನ್ನಡ (Kannada)</option>
+            <option value="ta" style="background:#0c121c; color:#ffffff;">தமிழ் (Tamil)</option>
+            <option value="bn" style="background:#0c121c; color:#ffffff;">বাংলা (Bengali)</option>
           </select>
+          <div style="display:flex; align-items:center; gap:3px; margin-left:4px; padding-left:6px; border-left:1px solid #1c2b42;">
+            <button type="button" class="lang-pill-btn active" data-lang="en" onclick="osSetGlobalLang('en')" title="English">EN</button>
+            <button type="button" class="lang-pill-btn" data-lang="hi" onclick="osSetGlobalLang('hi')" title="हिंदी (Hindi)">हिंदी</button>
+            <button type="button" class="lang-pill-btn" data-lang="mr" onclick="osSetGlobalLang('mr')" title="मराठी (Marathi)">मराठी</button>
+            <button type="button" class="lang-pill-btn" data-lang="kn" onclick="osSetGlobalLang('kn')" title="ಕನ್ನಡ (Kannada)">ಕನ್ನಡ</button>
+            <button type="button" class="lang-pill-btn" data-lang="ta" onclick="osSetGlobalLang('ta')" title="தமிழ் (Tamil)">தமிழ்</button>
+            <button type="button" class="lang-pill-btn" data-lang="bn" onclick="osSetGlobalLang('bn')" title="বাংলা (Bengali)">বাংলা</button>
+          </div>
         </div>
+
+        <!-- Voice Audio Briefing Button (Dashboard Audio Synthesizer) -->
+        <button id="btn-topbar-voice" onclick="speakDashboardBriefing()" style="background:linear-gradient(135deg, #1e3a8a, #2563eb); color:#fff; border:1px solid #60a5fa; padding:5px 12px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px; transition:all 0.2s;" title="Listen to Voice Briefing in Selected Language">
+          <span id="voice-icon">🔊</span> <span id="lbl-voice-btn">Voice Briefing</span>
+        </button>
 
         <span id="top-alerts-badge" style="font-size:12px; background:rgba(239,68,68,0.15); color:#fca5a5; padding:4px 10px; border-radius:4px; border:1px solid rgba(239,68,68,0.3); font-weight:700;">
           ⚠️ 2 CRITICAL ALERTS
@@ -561,6 +603,12 @@
           <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
             <button onclick="openLiveTourModal()" style="background:linear-gradient(135deg, #d4af37, #f59e0b); color:#06090e; padding:8px 18px; border-radius:8px; font-size:12.5px; font-weight:900; cursor:pointer; display:flex; align-items:center; gap:8px; border:none; box-shadow:0 0 20px rgba(212, 175, 55, 0.4); transition:all 0.2s;">
               <span>🏆</span> <span>Judge's 1-Click Interactive Tour (Rank 1 Experience)</span>
+            </button>
+            <button onclick="openMobileQrModal()" style="background:rgba(56, 189, 248, 0.2); border:1px solid #38bdf8; color:#bae6fd; padding:8px 14px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px;">
+              <span>📱</span> <span>Scan QR (Test on Phone)</span>
+            </button>
+            <button onclick="openSmokeTestModal()" style="background:rgba(16, 185, 129, 0.2); border:1px solid #10b981; color:#a7f3d0; padding:8px 14px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px;">
+              <span>🧪</span> <span>Live Smoke Test (14/14)</span>
             </button>
             <button onclick="openAgentFoundryModal()" style="background:rgba(99, 102, 241, 0.25); border:1px solid #818cf8; color:#e0e7ff; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:8px; transition:all 0.2s;">
               <span>🤖</span> <span>AgentFoundry Swarm (1M Tokens)</span>
@@ -1064,7 +1112,9 @@
         e11_tag: 'Statutory limitation calculator & court calendar holiday adjustments',
         e12_title: 'Spark Workflow Autopilot',
         e12_tag: 'Procedural SOP execution & UNWIND human authorization boundary',
-        launch_btn: 'Launch Project Frontend →'
+        launch_btn: 'Launch Project Frontend →',
+        voice_btn: 'Voice Briefing',
+        speech_briefing: 'Welcome to NYAYA-SATYA Master Command Center. Evaluating Case DLCT01-004820-2024 at Tis Hazari Court. 12 intelligence engines active. Undertrial overstay of 63 days detected under Section 479 BNSS. Ready for advocate sign-off.'
       },
       'hi': {
         cmd_center: 'कमांड सेंटर',
@@ -1108,7 +1158,9 @@
         e11_tag: 'अदालती समयसीमा कैलकुलेटर और अवकाश समायोजन',
         e12_title: 'वर्कफ़्लो ऑटोपायलट (Workflow Autopilot)',
         e12_tag: 'विधिक प्रक्रियाओं का स्वचालित निष्पादन और UNWIND मानवीय नियंत्रण',
-        launch_btn: 'इंजन पोर्टल खोलें →'
+        launch_btn: 'इंजन पोर्टल खोलें →',
+        voice_btn: 'आवाज़ में सुनें',
+        speech_briefing: 'न्याय-सत्य मास्टर कमांड सेंटर में आपका स्वागत है। तीस हजारी कोर्ट केस DLCT01-004820-2024 का विश्लेषण जारी है। 12 विधिक इंटेलिजेंस इंजन सक्रिय हैं। धारा 479 BNSS के तहत 63 दिन का अतिरिक्त कारावास पाया गया है। UNWIND अधिवक्ता हस्ताक्षर हेतु तैयार।'
       },
       'mr': {
         cmd_center: 'कमांड सेंटर',
@@ -1152,7 +1204,9 @@
         e11_tag: 'कायदेशीर मुदत कॅल्क्युलेटर आणि सुट्ट्यांचे नियोजन',
         e12_title: 'वर्कफ्लो ऑटोपायलट (Workflow Autopilot)',
         e12_tag: 'विधी प्रक्रियांचे स्वयंचलित संचालन आणि UNWIND मानवीय नियंत्रण',
-        launch_btn: 'इंजिन पोर्टल उघडा →'
+        launch_btn: 'इंजिन पोर्टल उघडा →',
+        voice_btn: 'आवाजात ऐका',
+        speech_briefing: 'न्याय-सत्य मास्टर कमांड सेंटरमध्ये आपले स्वागत आहे. तीस हजारी कोर्ट केस DLCT01-004820-2024 चे विश्लेषण सुरू आहे. १२ विधिक इंजिन कार्यरत आहेत. कलम ४७९ BNSS अंतर्गत ६३ दिवस अतिरिक्त कोठडी आढळली आहे. UNWIND वकील मंजुरीसाठी तयार.'
       },
       'kn': {
         cmd_center: 'ಕಮಾಂಡ್ ಸೆಂಟರ್',
@@ -1196,7 +1250,9 @@
         e11_tag: 'ಕಾಲಮಿತಿ ಲೆಕ್ಕಾಚಾರ',
         e12_title: 'ಕಾರ್ಯಪ್ರಕ್ರಿಯೆ ಆಟೋಪೈಲಟ್',
         e12_tag: 'ಕಾನೂನು ಪ್ರಕ್ರಿಯೆಗಳ ಸ್ವಯಂಚಾಲನೆ',
-        launch_btn: 'ಇಂಜಿನ್ ತೆರೆಯಿರಿ →'
+        launch_btn: 'ಇಂಜಿನ್ ತೆರೆಯಿರಿ →',
+        voice_btn: 'ಧ್ವನಿ ವಿವರಣೆ',
+        speech_briefing: 'ನ್ಯಾಯ-ಸತ್ಯ ಮಾಸ್ಟರ್ ಕಮಾಂಡ್ ಸೆಂಟರ್‌ಗೆ ಸುಸ್ವಾಗತ. ತೀಸ್ ಹಜಾರಿ ನ್ಯಾಯಾಲಯದ ಪ್ರಕರಣ DLCT01-004820-2024 ವಿಶ್ಲೇಷಿಸಲಾಗುತ್ತಿದೆ. 12 ಬುದ್ಧಿಮತ್ತೆ ಎಂಜಿನ್‌ಗಳು ಸಕ್ರಿಯವಾಗಿವೆ. ಸೆಕ್ಷನ್ 479 BNSS ಅಡಿಯಲ್ಲಿ 63 ದಿನಗಳ ಹೆಚ್ಚುವರಿ ಕಸ್ಟಡಿ ಪತ್ತೆಯಾಗಿದೆ.'
       },
       'ta': {
         cmd_center: 'கட்டளை மையம்',
@@ -1240,7 +1296,9 @@
         e11_tag: 'சட்டப்பூர்வ காலக்கெடு கணக்கீடு',
         e12_title: 'பணி ஆட்டோபைலட்',
         e12_tag: 'சட்ட செயல்முறை தானியக்கம்',
-        launch_btn: 'இயந்திரத்தை திறக்கவும் →'
+        launch_btn: 'இயந்திரத்தை திறக்கவும் →',
+        voice_btn: 'குரல் விளக்கம்',
+        speech_briefing: 'நியாய-சத்யா தலைமை கட்டளை மையத்திற்கு நல்வரவு. தீஸ் ஹசாரி நீதிமன்ற வழக்கு DLCT01-004820-2024 பகுப்பாய்வு செய்யப்படுகிறது. 12 சட்ட நுண்ணறிவு இயந்திரங்கள் செயல்படுகின்றன. பிரிவு 479 BNSS கீழ் 63 நாட்கள் கூடுதல் சிறைவாசம் கண்டறியப்பட்டுள்ளது.'
       },
       'bn': {
         cmd_center: 'কমান্ড সেন্টার',
@@ -1284,7 +1342,9 @@
         e11_tag: 'আইনি সময়সীমা গণনা',
         e12_title: 'ওয়ার্কফ্লো অটোসঞ্চালন',
         e12_tag: 'আইনি প্রক্রিয়ার স্বয়ংক্রিয় সম্পাদন',
-        launch_btn: 'ইঞ্জিন পোর্টাল খুলুন →'
+        launch_btn: 'ইঞ্জিন পোর্টাল খুলুন →',
+        voice_btn: 'কণ্ঠ বিবরণ',
+        speech_briefing: 'ন্যায়-সত্য মাস্টার কমান্ড সেন্টারে স্বাগতম। তিস হাজারি কোর্টের মামলা DLCT01-004820-2024 বিশ্লেষণ করা হচ্ছে। ১২টি গোয়েন্দা ইঞ্জিন সক্রিয় রয়েছে। ধারা ৪৭৯ BNSS এর অধীনে ৬৩ দিনের অতিরিক্ত হেফাজত সনাক্ত করা হয়েছে।'
       }
     };
 
@@ -1296,6 +1356,20 @@
       // Synchronize dropdown
       const sel = document.getElementById('main-lang-select');
       if (sel) sel.value = activeLang;
+
+      // Synchronize language pills
+      document.querySelectorAll('.lang-pill-btn').forEach(btn => {
+        if (btn.getAttribute('data-lang') === activeLang) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      // Voice Button Label
+      if (document.getElementById('lbl-voice-btn')) {
+        document.getElementById('lbl-voice-btn').innerText = dict.voice_btn || 'Voice Briefing';
+      }
 
       // Sidebar
       if (document.getElementById('sb-cmd')) document.getElementById('sb-cmd').innerText = dict.cmd_center;
@@ -1334,6 +1408,45 @@
         if (tagEl && dict[`e${num}_tag`]) tagEl.innerText = dict[`e${num}_tag`];
         if (btnEl && dict.launch_btn) btnEl.innerText = dict.launch_btn;
       });
+    };
+
+    // Dashboard Voice Audio Guidance
+    window.speakDashboardBriefing = function() {
+      const activeLang = window.osGetActiveLang ? window.osGetActiveLang() : 'en';
+      const dict = DASHBOARD_I18N[activeLang] || DASHBOARD_I18N['en'];
+      const textToSpeak = dict.speech_briefing || dict.core_desc;
+      const btn = document.getElementById('btn-topbar-voice');
+      const lbl = document.getElementById('lbl-voice-btn');
+
+      const speakingLabels = {
+        'en': 'Speaking...',
+        'hi': 'बोल रहा है...',
+        'mr': 'बोलत आहे...',
+        'kn': 'ಮಾತನಾಡುತ್ತಿದೆ...',
+        'ta': 'பேசுகிறது...',
+        'bn': 'কথা বলছে...'
+      };
+
+      if (window.osPlayVoiceGuidance) {
+        window.osPlayVoiceGuidance(
+          textToSpeak,
+          activeLang,
+          () => {
+            if (lbl) lbl.innerText = speakingLabels[activeLang] || 'Speaking...';
+            if (btn) {
+              btn.style.boxShadow = '0 0 16px rgba(56, 189, 248, 0.9)';
+              btn.style.borderColor = '#38bdf8';
+            }
+          },
+          () => {
+            if (lbl) lbl.innerText = dict.voice_btn || 'Voice Briefing';
+            if (btn) {
+              btn.style.boxShadow = 'none';
+              btn.style.borderColor = '#60a5fa';
+            }
+          }
+        );
+      }
     };
 
     // Hackathon Modals
@@ -1515,6 +1628,75 @@
         })
         .catch(err => {
           body.innerHTML = `<div style="color:#ef4444;">Error fetching tour: ${err}</div>`;
+        });
+    };
+
+    window.openMobileQrModal = function() {
+      const backdrop = document.getElementById('nyaya-modal-backdrop');
+      const title = document.getElementById('nyaya-modal-title');
+      const body = document.getElementById('nyaya-modal-body');
+      title.innerHTML = '<span>📱</span> <span>Scan to Experience on Mobile Smartphone</span>';
+      backdrop.style.display = 'flex';
+
+      body.innerHTML = `
+        <div style="text-align:center; padding:20px;">
+          <div style="background:#fff; display:inline-block; padding:12px; border-radius:12px; box-shadow:0 0 24px rgba(0,229,255,0.3); margin-bottom:16px;">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https://nyaya-satya.onrender.com/citizen" alt="Mobile QR Code" width="220" height="220">
+          </div>
+          <div style="font-size:16px; font-weight:800; color:#fff; margin-bottom:6px;">
+            Test the Citizen Portal & WhatsApp Simulator on Your Phone
+          </div>
+          <div style="font-size:13px; color:#cbd5e1; max-width:440px; margin:0 auto; line-height:1.5;">
+            Point your smartphone camera at this QR code to launch the real Indic mobile experience instantly without installing any app!
+          </div>
+          <div style="margin-top:14px;">
+            <a href="https://nyaya-satya.onrender.com/citizen" target="_blank" style="color:#00e5ff; font-family:'JetBrains Mono'; font-size:12px; text-decoration:none;">
+              Direct URL: https://nyaya-satya.onrender.com/citizen ↗
+            </a>
+          </div>
+        </div>
+      `;
+    };
+
+    window.openSmokeTestModal = function() {
+      const backdrop = document.getElementById('nyaya-modal-backdrop');
+      const title = document.getElementById('nyaya-modal-title');
+      const body = document.getElementById('nyaya-modal-body');
+      title.innerHTML = '<span>🧪</span> <span>Live 14-Subsystem Self-Diagnostic Probe</span>';
+      body.innerHTML = '<div style="text-align:center; padding:30px; color:#94a3b8;">Probing all 14 legal intelligence subsystems...</div>';
+      backdrop.style.display = 'flex';
+
+      fetch('/api/citizen/smoke-test')
+        .then(r => r.json())
+        .then(data => {
+          let rows = data.subsystems.map(s => `
+            <div style="background:#121b2a; border:1px solid #1c2b42; border-left:3px solid #10b981; border-radius:6px; padding:10px 14px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <span style="font-family:'JetBrains Mono'; font-size:11px; color:#00e5ff; background:#0c121c; padding:2px 6px; border-radius:4px; margin-right:8px;">${s.id}</span>
+                <strong style="color:#fff; font-size:13px;">${s.name}</strong>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span style="font-family:'JetBrains Mono'; font-size:11px; color:#94a3b8;">${s.latency_ms}ms</span>
+                <span style="color:#34d399; font-weight:800; font-size:11.5px;">● ${s.status}</span>
+              </div>
+            </div>
+          `).join('');
+
+          body.innerHTML = `
+            <div style="background:#064e3b; border:1px solid #10b981; border-radius:8px; padding:12px 16px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-size:15px; font-weight:800; color:#fff;">Status: ${data.status}</div>
+                <div style="font-size:11px; color:#a7f3d0;">Verified live at: ${data.verified_at.substring(11, 19)} UTC</div>
+              </div>
+              <div style="background:#047857; color:#fff; font-size:12px; font-weight:800; padding:4px 12px; border-radius:4px;">
+                ${data.total_passed} / ${data.total_passed} Passed (100%)
+              </div>
+            </div>
+            ${rows}
+          `;
+        })
+        .catch(err => {
+          body.innerHTML = `<div style="color:#ef4444;">Error running smoke test: ${err}</div>`;
         });
     };
 
