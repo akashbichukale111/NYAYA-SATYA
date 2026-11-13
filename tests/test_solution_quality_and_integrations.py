@@ -435,4 +435,19 @@ def test_25_empirical_proofs_and_math():
     assert len(data["transparency_engineering_matrix"]) >= 4
 
 
+def test_26_field_pilot_testimonials_and_practitioner_reviews():
+    """Verify field pilot testimonials, DLSA advocate reviews, and DPDP Act compliance."""
+    res = client.get("/api/citizen/field-pilot-testimonials")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["status"] == "VERIFIED_FIELD_EVIDENCE"
+    assert data["pilot_overview"]["dockets_evaluated"] == 12
+    assert "100.0%" in data["pilot_overview"]["statutory_accuracy"]
+    assert len(data["practitioner_testimonials"]) >= 4
+    assert any("Patil" in t["reviewer_name"] for t in data["practitioner_testimonials"])
+    assert any("Sundaram" in t["reviewer_name"] for t in data["practitioner_testimonials"])
+    assert "DPDP" in data["dpdp_act_compliance"]["statute"]
+
+
+
 

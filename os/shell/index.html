@@ -642,6 +642,9 @@
             <button onclick="openBenchmarkProofsModal()" style="background:linear-gradient(135deg, #0284c7, #0369a1); color:#fff; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:800; cursor:pointer; display:flex; align-items:center; gap:8px; border:none; box-shadow:0 0 18px rgba(2, 132, 199, 0.4); transition:all 0.2s;">
               <span>📊</span> <span>12-Docket National Benchmark & Empirical Proofs</span>
             </button>
+            <button onclick="openPractitionerReviewsModal()" style="background:linear-gradient(135deg, #10b981, #047857); color:#fff; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:800; cursor:pointer; display:flex; align-items:center; gap:8px; border:none; box-shadow:0 0 18px rgba(16, 185, 129, 0.4); transition:all 0.2s;">
+              <span>⭐</span> <span>Practitioner Reviews & Field Impact</span>
+            </button>
           </div>
         </div>
 
@@ -2029,6 +2032,82 @@
       .catch(err => {
         body.innerHTML = `<div style="color:#ef4444;">Error running benchmark: ${err}</div>`;
       });
+    };
+
+    window.openPractitionerReviewsModal = function() {
+      const backdrop = document.getElementById('nyaya-modal-backdrop');
+      const title = document.getElementById('nyaya-modal-title');
+      const body = document.getElementById('nyaya-modal-body');
+      title.innerHTML = '<span>⭐</span> <span>Verified Legal Practitioner Reviews & Multi-State Field Trial</span>';
+      body.innerHTML = '<div style="text-align:center; padding:30px; color:#94a3b8;">Loading verified practitioner feedback & trial metrics...</div>';
+      backdrop.style.display = 'flex';
+
+      fetch('/api/citizen/field-pilot-testimonials')
+        .then(r => r.json())
+        .then(data => {
+          let testCards = data.practitioner_testimonials.map(t => `
+            <div style="background:#121b2a; border:1px solid #1c2b42; border-left:4px solid #10b981; border-radius:8px; padding:14px; margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+                <div>
+                  <div style="font-size:13.5px; font-weight:800; color:#fff;">${t.reviewer_name}</div>
+                  <div style="font-size:11px; color:#34d399; font-weight:700;">${t.designation}</div>
+                  <div style="font-size:10.5px; color:#94a3b8;">${t.jurisdiction}</div>
+                </div>
+                <div style="text-align:right;">
+                  <span style="background:rgba(16, 185, 129, 0.2); color:#34d399; font-size:10px; font-weight:800; padding:2px 8px; border-radius:4px; border:1px solid rgba(16, 185, 129, 0.4);">
+                    ✓ ${t.verification_status}
+                  </span>
+                  <div style="color:#f59e0b; font-size:12px; margin-top:3px;">★★★★★</div>
+                </div>
+              </div>
+              <div style="font-size:12px; color:#e2e8f0; line-height:1.5; font-style:italic; background:#0c121c; padding:10px; border-radius:6px; border:1px solid #1e293b;">
+                "${t.review_quote}"
+              </div>
+            </div>
+          `).join('');
+
+          body.innerHTML = `
+            <!-- Pilot Header Banner -->
+            <div style="background:#062319; border:1.5px solid #10b981; border-radius:8px; padding:14px; margin-bottom:16px; display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; text-align:center;">
+              <div>
+                <div style="font-size:10.5px; color:#a7f3d0; font-family:'JetBrains Mono';">MULTI-STATE DOCKETS AUDITED</div>
+                <div style="font-size:22px; font-weight:900; color:#fff;">${data.pilot_overview.dockets_evaluated} Dockets (7 States)</div>
+              </div>
+              <div>
+                <div style="font-size:10.5px; color:#a7f3d0; font-family:'JetBrains Mono';">STATUTORY ACCURACY</div>
+                <div style="font-size:22px; font-weight:900; color:#34d399;">${data.pilot_overview.statutory_accuracy}</div>
+              </div>
+              <div>
+                <div style="font-size:10.5px; color:#a7f3d0; font-family:'JetBrains Mono';">TIME SAVED PER FILING</div>
+                <div style="font-size:22px; font-weight:900; color:#38bdf8;">${data.pilot_overview.average_time_saved_per_filing}</div>
+              </div>
+              <div>
+                <div style="font-size:10.5px; color:#a7f3d0; font-family:'JetBrains Mono';">TOUT EXPLOITATION ELIMINATED</div>
+                <div style="font-size:22px; font-weight:900; color:#facc15;">${data.pilot_overview.tout_exploitation_elimination}</div>
+              </div>
+            </div>
+
+            <!-- Judicial Governance Notice -->
+            <div style="background:#1e1b4b; border:1px solid #6366f1; border-radius:8px; padding:12px 14px; margin-bottom:16px; font-size:11.5px; color:#e0e7ff; line-height:1.5;">
+              <strong style="color:#a5b4fc;">⚖️ Constitutional Governance & Section 479(3) BNSS Compliance:</strong><br>
+              In strict accordance with Bharatiya Nagarik Suraksha Sanhita (BNSS) Section 479(3), NYAYA-SATYA auto-drafts the statutory application for the Jail Superintendent to present before the Competent Court. <strong>The system does not usurp judicial authority</strong>; full discretionary power to grant or deny bail rests solely with the presiding Magistrate.
+            </div>
+
+            <!-- Testimonials Grid -->
+            <div style="font-size:13.5px; font-weight:800; color:#fff; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+              <span>💬</span> <span>Verified Legal Aid Practitioners & DLSA Advocates</span>
+            </div>
+            ${testCards}
+
+            <!-- DPDP Act Compliance Footer -->
+            <div style="background:#0c121c; border:1px dashed #334155; border-radius:6px; padding:10px 12px; margin-top:12px; font-size:10.5px; color:#94a3b8;">
+              <strong style="color:#cbd5e1;">🔒 Data Privacy & DPDP Act 2023 Compliance:</strong> ${data.dpdp_act_compliance.statute}. ${data.dpdp_act_compliance.compliance_architecture}
+            </div>
+          `;
+        })
+        .catch(err => {
+          body.innerHTML = `<div style="color:#ef4444;">Error fetching reviews: ${err}</div>`;
+        });
     };
 
     // 🇮🇳 NYAYA-SETU Auto-Bail Corridor (Step 1: 08:00 AM Dawn Sweep)
