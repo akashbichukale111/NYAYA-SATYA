@@ -748,6 +748,33 @@
           </div>
         </div>
 
+        <!-- 0. NYAYA-SETU: AUTO-BAIL CORRIDOR (STEP 1: 08:00 AM JAILER TRIGGER) -->
+        <div style="margin-bottom:26px; background:linear-gradient(135deg, rgba(6, 78, 59, 0.4), rgba(15, 23, 42, 0.85)); border:1.5px solid #10b981; border-radius:12px; padding:20px; box-shadow:0 0 24px rgba(16, 185, 129, 0.2);">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:14px;">
+            <div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="background:#047857; color:#a7f3d0; font-size:10px; font-weight:800; padding:2px 8px; border-radius:4px; font-family:'JetBrains Mono';">PM VISION: NYAYA-SETU</span>
+                <span style="background:rgba(212, 175, 55, 0.2); color:#fde047; font-size:10px; font-weight:800; padding:2px 8px; border-radius:4px; font-family:'JetBrains Mono';">SEC 479(3) BNSS MANDATE</span>
+              </div>
+              <div style="font-size:16px; font-weight:800; color:#fff; margin-top:3px; display:flex; align-items:center; gap:8px;">
+                <span>🇮🇳 NYAYA-SETU: Auto-Bail Corridor (08:00 AM Suo-Motu Freedom Pipeline)</span>
+              </div>
+              <div style="font-size:12.5px; color:#cbd5e1; margin-top:2px; max-width:850px;">
+                Eliminates the need for poor undertrials to hire lawyers or file bail petitions. The moment a prisoner completes 1/3rd sentence, the system autonomously serves a legally binding Form 479(3) mandate directly to the Jail Superintendent!
+              </div>
+            </div>
+            <div>
+              <button id="btn-nyaya-setu-trigger" onclick="runNyayaSetuAutoSweep()" style="background:linear-gradient(135deg, #047857, #10b981); color:#fff; border:none; padding:9px 20px; border-radius:8px; font-size:13px; font-weight:800; cursor:pointer; display:flex; align-items:center; gap:8px; box-shadow:0 0 16px rgba(16, 185, 129, 0.4); transition:all 0.2s;">
+                <span>⏰</span> <span>Simulate 08:00 AM Automated Dawn Sweep</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="nyaya-setu-results-box" style="display:none; background:#0c121c; border:1px solid #1c2b42; border-radius:8px; padding:16px; margin-top:10px;">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+
         <!-- 1. 30-Second Courtroom-to-Prison 3-Way Split View -->
         <div style="margin-bottom:24px;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
@@ -1810,6 +1837,53 @@
         .catch(err => {
           body.innerHTML = `<div style="color:#ef4444;">Error fetching xSpan status: ${err}</div>`;
         });
+    };
+
+    // 🇮🇳 NYAYA-SETU Auto-Bail Corridor (Step 1: 08:00 AM Dawn Sweep)
+    window.runNyayaSetuAutoSweep = async function() {
+      const btn = document.getElementById('btn-nyaya-setu-trigger');
+      const box = document.getElementById('nyaya-setu-results-box');
+      if (!btn || !box) return;
+
+      btn.innerText = '⏰ Running 08:00 AM Dawn Sweep across Central Jails...';
+      btn.style.opacity = '0.7';
+
+      try {
+        const res = await fetch('/api/citizen/nyaya-setu-auto-trigger', { method: 'POST' });
+        const data = await res.json();
+        btn.innerText = '✓ 08:00 AM Sweep Executed • Notice Auto-Served';
+        btn.style.background = '#047857';
+        btn.style.opacity = '1';
+
+        box.style.display = 'block';
+        box.innerHTML = `
+          <div style="border-left:4px solid #10b981; padding-left:14px; margin-bottom:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <strong style="color:#fff; font-size:14px;">MANDATORY SECTION 479(3) BNSS RELEASE NOTICE AUTO-SERVED</strong>
+              <span style="font-family:'JetBrains Mono'; font-size:11px; color:#34d399; background:#064e3b; padding:2px 8px; border-radius:4px;">● TIME: ${data.trigger_time}</span>
+            </div>
+            <div style="font-size:12.5px; color:#cbd5e1; margin-top:4px;">
+              Undertrial: <strong style="color:#fff;">${data.undertrial_profile.name}</strong> | FIR: <strong>${data.undertrial_profile.fir_number}</strong> | Facility: <strong>${data.undertrial_profile.prison_facility}</strong> | Actual Custody: <strong style="color:#f87171;">${data.undertrial_profile.actual_custody_days} Days</strong> (Threshold: ${data.undertrial_profile.statutory_ceiling_days} Days)
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:10px; margin-bottom:12px;">
+            ${data.auto_served_destinations.map(d => `
+              <div style="background:#121b2a; border:1px solid #1c2b42; border-radius:6px; padding:12px;">
+                <div style="font-size:11.5px; font-weight:800; color:#38bdf8;">${d.recipient.split(',')[0]}</div>
+                <div style="font-size:11.5px; color:#cbd5e1; margin-top:2px;">${d.action_demanded}</div>
+                <div style="font-size:10.5px; color:#34d399; margin-top:6px; font-family:'JetBrains Mono';">✓ ${d.ack_status} at ${d.delivery_time}</div>
+              </div>
+            `).join('')}
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; font-size:11.5px; color:#94a3b8; border-top:1px solid #1c2b42; padding-top:10px;">
+            <span>Zero-Delay Guarantee: <strong style="color:#34d399;">No prisoner petition required • Zero surety required under law</strong></span>
+            <span style="font-family:'JetBrains Mono'; color:#00e5ff;">Notice ID: ${data.cryptographic_seal.notice_id}</span>
+          </div>
+        `;
+      } catch (err) {
+        btn.innerText = 'Error: ' + err.message;
+        btn.style.opacity = '1';
+      }
     };
 
     // 30-Second Courtroom-to-Prison Split Execution

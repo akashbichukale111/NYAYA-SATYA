@@ -269,3 +269,22 @@ def test_17_adhikar_patra_qr_code():
     assert "LIVE DIGITAL PUBLIC INFRASTRUCTURE (DPI) VERIFICATION QR" in html
     assert "api.qrserver.com" in html
     assert "verify" in html and "DLCT01-004820-2024" in html
+
+
+def test_18_nyaya_setu_auto_trigger():
+    """Verify NYAYA-SETU Auto-Bail Corridor 08:00 AM automated jailer trigger."""
+    res = client.post("/api/citizen/nyaya-setu-auto-trigger")
+    assert res.status_code == 200
+    data = res.json()
+    assert "NYAYA-SETU" in data["corridor"]
+    assert "Section 479(3)" in data["statutory_mandate"]
+    assert data["execution_status"] == "MANDATORY_STATUTORY_NOTICE_AUTO_SERVED"
+    assert data["zero_bribe_zero_delay_guarantee"]["prisoner_application_needed"] is False
+    assert len(data["auto_served_destinations"]) == 3
+    assert any("Tihar" in dest["recipient"] for dest in data["auto_served_destinations"])
+
+    status_res = client.get("/api/citizen/nyaya-setu-status")
+    assert status_res.status_code == 200
+    status_data = status_res.json()
+    assert status_data["status"] == "CORRIDOR_ACTIVE"
+    assert status_data["statutory_compliance_bnss479"] == "100%"
