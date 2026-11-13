@@ -1,7 +1,8 @@
 # 🏛️ NYAYA-SATYA (न्याय-सत्य)
 ### *Unified Legal Intelligence Operating System & Citizen Justice Platform for 1 Billion People*
 
-> 🌟 **"UPI ने भारताची अर्थव्यवस्था बदलली; NYAYA-SATYA चे 'न्याय-सेतू' भारतातील ५ कोटी खटल्यांचा निकाल लावून कोट्यवधी गरिबांना वेळेवर न्याय देईल — Developed for Viksit Bharat 2047."**
+> 🌟 **"Just as UPI revolutionized India's financial economy, NYAYA-SATYA's 'NYAYA-SETU' will resolve India's 5 Crore pending case backlog and deliver timely justice to a billion citizens — Developed for Viksit Bharat 2047."**  
+> *(“जैसे UPI ने भारत की अर्थव्यवस्था को बदला, वैसे ही NYAYA-SATYA का 'न्याय-सेतु' भारत के ५ करोड़ मुकदमों का निपटारा कर करोड़ों नागरिकों को समय पर न्याय दिलाएगा — विकसित भारत २०४७”)*
 >
 > *"Don't just explain the case. Understand it, attack it, stress-test it, repair it, re-attack it, and deliver justice to the last mile."*
 
@@ -34,8 +35,8 @@ NYAYA-SATYA is architected not merely as a standalone legal tool, but as **Natio
 - **Digital Bhashini Inclusion**: Instant statutory legal rights translation across 22 Scheduled Indian Languages (live across Hindi, English, Marathi, Kannada, Tamil, and Bengali).
 - **24/7 Zero-Latency Cloud Warmup**: Permanently hosted at `https://nyaya-satya.onrender.com` with automated ping keepalive (`/health` & `/api/citizen/ping`), preventing cold starts.
 
-### 🇮🇳 NYAYA-SETU (न्याय-सेतू): Auto-Bail Corridor & Zero-Surety Freedom Protocol
-*(PM Vision: Autonomous Digital Public Infrastructure for Timely Justice & Undertrial Liberation)*
+### 🇮🇳 NYAYA-SETU (न्याय-सेतु): Auto-Bail Corridor & Zero-Surety Freedom Protocol
+*(PM Vision: Autonomous Digital Public Infrastructure for Timely Justice & Undertrial Liberation / समयबद्ध न्याय एवं विचाराधीन कैदी मुक्ति)*
 
 Over **77.1% of inmates in Indian prisons are undertrials**, languishing behind bars not because of guilt, but because they lack money for bail bonds (surety) or cannot afford private advocates to file applications. 
 
@@ -53,24 +54,24 @@ To turn Prime Minister Narendra Modi's vision of humane criminal justice and Sec
   4. **Zero-Bribe, Zero-Delay Guarantee**: No paper application from the prisoner is required. No surety bond is demanded for first-time offenders under the Section 479 proviso.
   5. **Live Verification API**: Testable at `POST https://nyaya-satya.onrender.com/api/citizen/nyaya-setu-auto-trigger`.
 
-#### 📄 Step 2: 'ई-मुचलका' (Jan-Dhan / Aadhaar Linked Zero-Rupee Bail Bond)
+#### 📄 Step 2: 'E-Muchalka' (ई-मुचलका) — Jan-Dhan & Aadhaar Linked Zero-Rupee Bail Bond
 - **The Ground Bottleneck Solved**: Over 30% of undertrials granted bail in India remain trapped in jail because they lack property documents or cash for sureties, making them easy prey for exploitative bail touts (दलाल).
 - **The Zero-Surety Freedom Protocol**:
   1. **Statutory Anchors**: Codified under Section 479(1) Proviso and Section 480 of BNSS 2023, coupled with the Supreme Court's mandate in *Satender Kumar Antil v. CBI (2022)* requiring unconditional personal bonds for indigent prisoners.
   2. **₹0 Financial Surety**: Eliminates property papers and solvent guarantor requirements completely. Surety amount is set to **₹0 (Zero Rupees)**.
-  3. **Jan-Dhan & Aadhaar Integration**: Proves BPL indigence in real time via Pradhan Mantri Jan Dhan Yojana (PMJDY) account linkage (`PMJDY-DEL-984210`) and UIDAI virtual token (`XXXX-XXXX-8375`).
+  3. **Jan-Dhan & Aadhaar Integration**: Proves Below-Poverty-Line (BPL) indigence in real time via Pradhan Mantri Jan Dhan Yojana (PMJDY) account linkage (`PMJDY-DEL-984210`) and UIDAI virtual token (`XXXX-XXXX-8375`).
   4. **UNWIND Human Legal Gate Seal**: Pre-authorized and digitally sealed by DLSA panel counsel (`Adv. Meenakshi Sundaram, D/1482/2012`) with a verifiable SHA-256 cryptographic seal.
   5. **Instant QR Verification Certificate**: Printable high-resolution bilingual certificate with live DPI verification QR code, ensuring immediate jail discharge without court clerks or touts.
   6. **Live Endpoints**:
      - Generate Bond Payload: `POST https://nyaya-satya.onrender.com/api/citizen/generate-e-muchalka`
      - Download Official Certificate: `GET https://nyaya-satya.onrender.com/api/citizen/download-e-muchalka?accused=Rajesh%20Kumar&bond_id=EMUCHALKA-8375A1-2026`
 
-#### 🛠️ Step 3: 'कौशल्य आणि मुख्य प्रवाहात पुनर्वसन' (PM Vishwakarma / Skill India Link & Tri-Pillar Reintegration Kit)
+#### 🛠️ Step 3: Skill & Mainstream Reintegration (कौशल्य एवं मुख्यधारा में पुनर्वास) — PM Vishwakarma & Skill India Link
 - **The Ground Bottleneck Solved**: When an indigent undertrial leaves prison after 428 days of pre-trial custody, he faces societal stigma, has zero money or employment, and frequently relapses into poverty-driven petty crime.
-- **The Tri-Pillar Reintegration Kit (त्रिसूत्री पुनर्वसन संच)**:
-  1. 📜 **स्तंभ १: कायदेशीर मुक्ती (Legal Freedom)**: Official **अधिकार पत्र (Adhikar Patra)** confirming 100% statutory acquittal/bail clearance under Section 479 BNSS with zero criminal prejudice.
-  2. 🏥 **स्तंभ २: आरोग्य सुरक्षा (Health Safety Net)**: Real-time **ABHA Health ID** issuance via **xSpan CareHub** API integration, providing ₹5,00,000 annual healthcare coverage under Ayushman Bharat Digital Mission.
-  3. 🛠️ **स्तंभ ३: रोजगार व सन्मान (Economic Dignity)**: Autonomous enrollment into **PM Vishwakarma Yojana** & **Skill India Digital Hub**, unlocking:
+- **The Tri-Pillar Reintegration Kit (त्रिसूत्रीय पुनर्वास संच / Tri-Fold Freedom Kit)**:
+  1. 📜 **Pillar 1: Legal Freedom (विधिक मुक्ति)**: Official **नागरिक विधिक अधिकार पत्र (Adhikar Patra)** confirming 100% statutory acquittal/bail clearance under Section 479 BNSS with zero criminal prejudice.
+  2. 🏥 **Pillar 2: Health Safety Net (स्वास्थ्य सुरक्षा)**: Real-time **ABHA Health ID (आयुष्मान भारत)** issuance via **xSpan CareHub** API integration, providing ₹5,00,000 annual healthcare coverage under Ayushman Bharat Digital Mission.
+  3. 🛠️ **Pillar 3: Economic Dignity & Livelihood (आजीविका एवं सम्मान)**: Autonomous enrollment into **PM Vishwakarma Yojana** & **Skill India Digital Hub**, unlocking:
      - **₹15,000 Direct Benefit Transfer (DBT)** for modern toolkit purchase.
      - **₹500/day stipend** during advanced skill enhancement.
      - **₹1,00,000 collateral-free credit** at 5% concessional interest rate.
@@ -79,12 +80,12 @@ To turn Prime Minister Narendra Modi's vision of humane criminal justice and Sec
   - Reintegration Enrollment: `POST https://nyaya-satya.onrender.com/api/citizen/rehabilitation-enrollment?accused_name=Rajesh%20Kumar&trade_skill=Carpentry`
   - Download Official Tri-Pillar Certificate: `GET https://nyaya-satya.onrender.com/api/citizen/download-reintegration-kit?accused=Rajesh%20Kumar&reg_id=PMV-2026-DL-8375`
 
-#### 📊 National Impact Ticker (The PM Pitch Impact)
-| National Metric | Ground Transformation | Impact Value |
+#### 📊 National Impact Ticker (The PM Pitch Impact / राष्ट्रीय प्रभाव मैट्रिक्स)
+| National Pillar (राष्ट्रीय स्तंभ) | Ground Transformation (वास्तविक परिवर्तन) | Impact Value (राष्ट्रीय प्रभाव) |
 | :--- | :--- | :--- |
-| **१. वसाहतवादी कायद्यातून मुक्ती (Decolonizing Justice)** | Replaced 1860 British IPC with 100% automated BNSS 2023 & BNS execution | **India's 1st Sovereign Autonomous Legal AI Engine** |
-| **२. सरकारी तिजोरीची थेट बचत (Fiscal Savings)** | Under Section 479, timely release of eligible undertrials avoids ₹30,000–₹50,000 annual cost per inmate | **₹8,400 Crore / Year Taxpayer Savings** |
-| **३. 'अंत्योदय' (न्याय शेवटच्या माणसापर्यंत)** | Doorstep legal rights in 22 languages (Marathi, Hindi, Kannada, Tamil, Bengali) via WhatsApp & Voice | **Zero English & Zero Advocate Fees Barrier** |
+| **1. Decolonizing Justice (वसाहतवादी कानूनों से मुक्ति)** | Replaced 1860 British IPC with 100% automated BNSS 2023 & BNS execution | **India's 1st Sovereign Autonomous Legal AI Engine** |
+| **2. Fiscal Savings for Public Exchequer (सरकारी खजाने की सीधी बचत)** | Under Section 479, timely release of eligible undertrials avoids ₹30,000–₹50,000 annual cost per inmate | **₹8,400 Crore / Year Direct Taxpayer Savings** |
+| **3. Antyodaya — Justice to the Last Mile (अंत्योदय — अंतिम व्यक्ति तक न्याय)** | Doorstep legal rights in 22 languages (English, Hindi, and regional languages) via WhatsApp & Voice | **Zero English & Zero Advocate Fees Barrier** |
 
 ---
 
