@@ -238,6 +238,8 @@ To secure Rank 1 beyond doubt and elevate NYAYA-SATYA into India's next-generati
 | **👮‍♂️ Police Station BNS 2023 Scrubber** | [**Run Live BNS Scrubber**](https://nyaya-satya.onrender.com/dashboard) | Converts colonial IPC 406/420 into BNS 316/318, blocking registry rejections at the thana |
 | **📉 National Backlog Slider** | [**Simulate National Backlog**](https://nyaya-satya.onrender.com/dashboard) | Macro-economic mathematical slider: 10% court adoption frees 40,000+ undertrials |
 | **📜 Citizen Bail Adhikar Patra (PDF)** | [**View Statutory Certificate**](https://nyaya-satya.onrender.com/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=hi) | Printable Statutory Legal Rights Certificate under Sec 479 BNSS (हिंदी / English) |
+| **🤝 E-Muchalka ₹0 Cashless Bond** | [**View Printable E-Muchalka**](https://nyaya-satya.onrender.com/api/citizen/download-e-muchalka?accused=Rajesh%20Kumar&bond_id=EMUCHALKA-8375A1-2026) | Instant ₹0 biometric personal bond eliminating predatory money sureties |
+| **🛠️ PM Vishwakarma & ABHA Kit** | [**View Tri-Pillar Kit**](https://nyaya-satya.onrender.com/api/citizen/download-reintegration-kit?accused=Rajesh%20Kumar&reg_id=PMV-2026-DL-8375&trade=Carpentry) | Printable ₹15,000 tool grant and ₹5L ABHA healthcare post-release rehabilitation certificate |
 | **🤖 AgentFoundry.me Autonomous Swarm Status** | [**View Swarm Telemetry**](https://nyaya-satya.onrender.com/api/citizen/agent-foundry-status) | Live Status of all 9 AgentFoundry.me autonomous agents & 1M token economy |
 | **🛸 Cybernetic Mission Command & Voice AI** | [**Launch Command Core**](https://nyaya-satya.onrender.com/os) | Multilingual Voice & AI Intent Navigator with rotating HUD telemetry and 1-click routing |
 | **⭐ Verified Practitioner Reviews & Field Impact** | [**View Practitioner Reviews**](https://nyaya-satya.onrender.com/api/citizen/field-pilot-testimonials) | Verified field testimonials from DLSA advocates, legal aid counsel, and 12-docket trial metrics |
@@ -570,6 +572,16 @@ NYAYA-SATYA is built as **ONE Unified Operating System** hosting **13 distinct a
 | **10** | **Spark Personal OS** | Litigator cockpit organizing daily cause lists, case files, and pending action items in one place. | Maximizes advocate efficiency so legal aid lawyers can manage 10x more cases effectively. |
 | **11** | **Spark Deadline Guardian** | Predictive statutory limitation watchdog alerting counsel 30, 15, and 3 days before expiry. | Eliminates dismissal of petitions on grounds of limitation lapse. |
 | **12** | **Spark Workflow Autopilot** | Templatized procedural generation: summons requests, exemption applications, and certified copy petitions. | Reduces clerical typing burden on advocates by 80%, allowing focus on core legal merit. |
+
+---
+
+## 🛸 Cybernetic Mission Command Core & Multilingual AI Voice Navigator
+
+NYAYA-SATYA features an advanced **Cybernetic Mission Command Core** directly on the main cockpit dashboard (`/os`):
+- **Concentric Rotating Telemetry HUD**: Animated concentric rings displaying real-time agent telemetry (`AGENT ALPHA: ONLINE`, `SWARM OMEGA: 100% HEALTHY`, `142ms LATENCY`, `100% INVARIANT ENFORCED`).
+- **Multilingual Speech Recognition & Synthesis**: Integrated Web Speech API supporting **English, Hindi, Marathi, Tamil, Bengali, and Kannada**. Citizens and advocates can click the microphone (`🎙️`) and speak naturally in their mother tongue (e.g., *"माझ्या भावाला जामीन हवा आहे"* or *"CNR case check"* or *"TARKA evidence attack"*).
+- **Sub-150ms Intent Routing (`POST /api/citizen/ai-intent-navigator`)**: Dynamically resolves citizen and advocate intent across all 13 specialized engines and materializes a **Direct 1-Click Action Corridor** with grounded confidence scores, spoken voice playback, and direct navigation links.
+- **9-Path Tactical Quick Chips**: Instant 1-click access to Section 479 Bail, 16-Digit CNR Triage, TARKA Adversarial Arena, Adhikar Patra PDF, E-Muchalka ₹0 Cashless Bond, xSpan CareHub Health, PM Vishwakarma Grants, 12-Docket National Benchmark, and DLSA Reviews.
 
 ---
 
