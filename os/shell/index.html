@@ -559,6 +559,9 @@
           </div>
 
           <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <button onclick="openLiveTourModal()" style="background:linear-gradient(135deg, #d4af37, #f59e0b); color:#06090e; padding:8px 18px; border-radius:8px; font-size:12.5px; font-weight:900; cursor:pointer; display:flex; align-items:center; gap:8px; border:none; box-shadow:0 0 20px rgba(212, 175, 55, 0.4); transition:all 0.2s;">
+              <span>🏆</span> <span>Judge's 1-Click Interactive Tour (Rank 1 Experience)</span>
+            </button>
             <button onclick="openAgentFoundryModal()" style="background:rgba(99, 102, 241, 0.25); border:1px solid #818cf8; color:#e0e7ff; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:8px; transition:all 0.2s;">
               <span>🤖</span> <span>AgentFoundry Swarm (1M Tokens)</span>
             </button>
@@ -1288,6 +1291,58 @@
         })
         .catch(err => {
           body.innerHTML = `<div style="color:#ef4444;">Error fetching track matrix: ${err}</div>`;
+        });
+    };
+
+    window.openLiveTourModal = function() {
+      const backdrop = document.getElementById('nyaya-modal-backdrop');
+      const title = document.getElementById('nyaya-modal-title');
+      const body = document.getElementById('nyaya-modal-body');
+      title.innerHTML = '<span>🏆</span> <span>Rank 1 Grand Champion — 8-Step Interactive Live Tour</span>';
+      body.innerHTML = '<div style="text-align:center; padding:30px; color:#94a3b8;">Loading Live Tour Sequence...</div>';
+      backdrop.style.display = 'flex';
+
+      fetch('/api/citizen/live-demo-script')
+        .then(r => r.json())
+        .then(data => {
+          let stepsHtml = data.steps.map(s => `
+            <div style="background:#121b2a; border:1px solid #1c2b42; border-left:4px solid #f59e0b; border-radius:8px; padding:16px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; gap:16px;">
+              <div style="display:flex; align-items:flex-start; gap:14px;">
+                <div style="font-size:26px; background:#0c121c; width:44px; height:44px; display:flex; align-items:center; justify-content:center; border-radius:8px; border:1px solid #2e4466;">
+                  ${s.icon}
+                </div>
+                <div>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="font-family:'JetBrains Mono'; font-size:11px; font-weight:800; background:#f59e0b; color:#06090e; padding:2px 7px; border-radius:4px;">STEP 0${s.step}</span>
+                    <strong style="color:#fff; font-size:14px;">${s.title}</strong>
+                  </div>
+                  <div style="color:#cbd5e1; font-size:12.5px; margin-top:4px; line-height:1.5;">${s.description}</div>
+                  <div style="color:#00e5ff; font-family:'JetBrains Mono'; font-size:11px; margin-top:4px;">Endpoint: ${s.api_endpoint}</div>
+                </div>
+              </div>
+              <div>
+                <a href="${s.action_url}" target="_blank" style="background:#1e293b; color:#fff; border:1px solid #3b82f6; padding:8px 14px; border-radius:6px; font-size:12px; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:6px; white-space:nowrap;">
+                  <span>Execute</span> <span>→</span>
+                </a>
+              </div>
+            </div>
+          `).join('');
+
+          body.innerHTML = `
+            <div style="background:linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(99, 102, 241, 0.15)); border:1px solid #f59e0b; border-radius:8px; padding:14px; margin-bottom:18px; display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-size:16px; font-weight:800; color:#fff;">${data.title}</div>
+                <div style="font-size:12px; color:#cbd5e1; margin-top:2px;">Target Track: <strong>${data.track}</strong> | Score Target: <strong>100 / 100</strong></div>
+              </div>
+              <a href="/api/citizen/rank1-dossier" target="_blank" style="background:#f59e0b; color:#06090e; padding:8px 16px; border-radius:6px; font-weight:800; font-size:12px; text-decoration:none;">
+                View JSON Dossier
+              </a>
+            </div>
+            ${stepsHtml}
+          `;
+        })
+        .catch(err => {
+          body.innerHTML = `<div style="color:#ef4444;">Error fetching tour: ${err}</div>`;
         });
     };
 

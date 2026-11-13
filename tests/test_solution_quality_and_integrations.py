@@ -139,3 +139,23 @@ def test_06_xspan_carehub_integration():
     assert data["api_partner"] == "xSpan CareHub Bharat Network"
     assert "ABHA" in data["beneficiary"]["uhid_health_id"]
     assert len(data["care_coordination_milestones"]) >= 3
+
+
+def test_07_rank1_evaluation_dossier():
+    """Verify Rank 1 evaluation dossier for hackathon judging criteria."""
+    res = client.get("/api/citizen/rank1-dossier")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["status"] == "RANK_1_VERIFIED_CANDIDATE"
+    assert data["rubric_scores"]["total_score"]["score"] == 100
+    assert len(data["target_awards"]) == 3
+
+
+def test_08_live_demo_script():
+    """Verify 8-step live demo sequence for hackathon evaluators."""
+    res = client.get("/api/citizen/live-demo-script")
+    assert res.status_code == 200
+    data = res.json()
+    assert len(data["steps"]) == 8
+    assert data["steps"][0]["step"] == 1
+    assert data["steps"][7]["step"] == 8
