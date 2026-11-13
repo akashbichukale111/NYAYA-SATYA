@@ -1535,6 +1535,7 @@ def generate_e_muchalka_bond(
 
 
 @router.get("/download-e-muchalka", response_class=HTMLResponse)
+@router.get("/emuchalka-bond", response_class=HTMLResponse)
 def download_e_muchalka_printable_certificate(
     accused: str = Query("Rajesh Kumar", description="Name of Accused"),
     bond_id: str = Query("EMUCHALKA-8375A1-2026", description="Bond Reference ID"),
@@ -1717,6 +1718,7 @@ def enroll_pm_vishwakarma_rehabilitation(
 
 
 @router.get("/download-reintegration-kit", response_class=HTMLResponse)
+@router.get("/download-rehabilitation-card", response_class=HTMLResponse)
 def download_reintegration_kit_printable(
     accused: str = Query("Rajesh Kumar", description="Name of Accused"),
     reg_id: str = Query("PMV-2026-DL-8375", description="PM Vishwakarma Registration ID"),
