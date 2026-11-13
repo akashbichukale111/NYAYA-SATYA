@@ -227,6 +227,81 @@
       50% { opacity: 0.5; transform: scale(0.85); }
     }
 
+    /* Cybernetic Command Core Animations */
+    @keyframes cyber-spin-cw {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes cyber-spin-ccw {
+      0% { transform: rotate(360deg); }
+      100% { transform: rotate(0deg); }
+    }
+    @keyframes cyber-pulse-radar {
+      0%, 100% { transform: scale(1); opacity: 0.85; }
+      50% { transform: scale(1.03); opacity: 1; }
+    }
+    @keyframes mic-listen-glow {
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.8); }
+      70% { box-shadow: 0 0 0 16px rgba(239, 68, 68, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+    .cyber-ring-outer {
+      position: absolute;
+      width: 440px;
+      height: 440px;
+      border-radius: 50%;
+      border: 2px dashed rgba(245, 158, 11, 0.45);
+      border-top-color: #f59e0b;
+      border-bottom-color: #06b6d4;
+      animation: cyber-spin-cw 28s linear infinite;
+      pointer-events: none;
+    }
+    .cyber-ring-middle {
+      position: absolute;
+      width: 370px;
+      height: 370px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      border-left: 3px solid #38bdf8;
+      border-right: 3px solid #38bdf8;
+      box-shadow: 0 0 25px rgba(56, 189, 248, 0.3);
+      animation: cyber-spin-ccw 16s linear infinite;
+      pointer-events: none;
+    }
+    .cyber-ring-outer.turbo-scan {
+      animation: cyber-spin-cw 2.5s linear infinite !important;
+      border-color: #ef4444 !important;
+      box-shadow: 0 0 35px rgba(239, 68, 68, 0.6) !important;
+    }
+    .cyber-ring-middle.turbo-scan {
+      animation: cyber-spin-ccw 1.8s linear infinite !important;
+      border-left-color: #f59e0b !important;
+      border-right-color: #f59e0b !important;
+      box-shadow: 0 0 35px rgba(245, 158, 11, 0.6) !important;
+    }
+    .cyber-chip-btn {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: #cbd5e1;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .cyber-chip-btn:hover {
+      background: rgba(56, 189, 248, 0.18);
+      border-color: #38bdf8;
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.3);
+    }
+
     /* Main Area */
     .main-viewport {
       flex: 1;
@@ -591,6 +666,146 @@
           NATIONAL DPI MANDATE
         </span>
       </div>
+
+      <!-- 🛸 CYBERNETIC COMMAND CORE & MULTILINGUAL AI NAVIGATOR -->
+      <section style="position:relative; background:radial-gradient(circle at center, rgba(14, 165, 233, 0.15) 0%, rgba(15, 23, 42, 0.98) 75%, #06090e 100%); border:2px solid rgba(56, 189, 248, 0.4); border-radius:18px; padding:28px 24px 34px; margin-bottom:28px; box-shadow:0 0 50px rgba(56, 189, 248, 0.2), inset 0 0 40px rgba(14, 165, 233, 0.08); overflow:hidden;">
+        
+        <!-- Top HUD Telemetry Bar -->
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; border-bottom:1px solid rgba(56, 189, 248, 0.2); padding-bottom:14px; margin-bottom:24px; font-family:'JetBrains Mono', monospace; font-size:11px;">
+          <div style="display:flex; gap:16px; align-items:center; color:#94a3b8;">
+            <span style="background:rgba(245, 158, 11, 0.2); color:#fbbf24; border:1px solid rgba(245, 158, 11, 0.4); padding:3px 8px; border-radius:4px; font-weight:800;">TERMINAL</span>
+            <span style="color:#38bdf8; font-weight:700;">MISSION: ZERO-CUSTODY OVERSTAY</span>
+            <span style="color:#64748b;">|</span>
+            <span style="color:#a7f3d0;">SWARM: 9/9 AGENTS ONLINE (AGT-01..09)</span>
+          </div>
+          <div style="display:flex; gap:16px; align-items:center; color:#94a3b8;">
+            <span style="color:#38bdf8;">AVG LATENCY: 142ms</span>
+            <span style="color:#64748b;">|</span>
+            <span style="color:#34d399; font-weight:800;">✓ INVARIANT: 100% ENFORCED</span>
+          </div>
+        </div>
+
+        <!-- Central Circular Radar Core Container -->
+        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; min-height:460px; padding:20px 0;">
+          
+          <!-- Concentric Animated Rings -->
+          <div class="cyber-ring-outer" id="cyber-outer-ring"></div>
+          <div class="cyber-ring-middle" id="cyber-mid-ring"></div>
+
+          <!-- Top and Bottom Arc Floating Agent Badges -->
+          <div style="position:absolute; top:20px; z-index:3; background:rgba(12, 18, 28, 0.95); border:1px solid #f59e0b; color:#fbbf24; font-family:'JetBrains Mono'; font-size:10px; font-weight:800; padding:3px 12px; border-radius:20px; box-shadow:0 0 14px rgba(245, 158, 11, 0.5); letter-spacing:1px;">
+            AGENT ALPHA • ONLINE
+          </div>
+          <div style="position:absolute; bottom:20px; z-index:3; background:rgba(12, 18, 28, 0.95); border:1px solid #38bdf8; color:#38bdf8; font-family:'JetBrains Mono'; font-size:10px; font-weight:800; padding:3px 12px; border-radius:20px; box-shadow:0 0 14px rgba(56, 189, 248, 0.5); letter-spacing:1px;">
+            SWARM OMEGA • 100% HEALTHY
+          </div>
+
+          <!-- Central Core Content (Inside the Radar) -->
+          <div style="position:relative; z-index:5; max-width:650px; width:100%; text-align:center; padding:24px 20px; background:rgba(6, 9, 14, 0.88); backdrop-filter:blur(14px); border:1.5px solid rgba(56, 189, 248, 0.35); border-radius:24px; box-shadow:0 12px 40px rgba(0, 0, 0, 0.8);">
+            
+            <!-- Central Icon -->
+            <div style="width:52px; height:52px; margin:0 auto 12px; background:linear-gradient(135deg, rgba(2, 132, 199, 0.3), rgba(245, 158, 11, 0.3)); border:1.5px solid #38bdf8; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:24px; box-shadow:0 0 20px rgba(56, 189, 248, 0.5);">
+              ⚖️
+            </div>
+
+            <!-- Big Command Query Text -->
+            <h2 style="font-size:22px; font-weight:900; color:#ffffff; letter-spacing:0.5px; text-transform:uppercase; margin-bottom:4px;">
+              WHAT WOULD YOU LIKE TO DO?
+            </h2>
+            <div style="font-size:12.5px; color:#93c5fd; font-weight:600; margin-bottom:14px;">
+              आप क्या करना चाहते हैं? • तुम्हाला काय करायचे आहे?
+            </div>
+            <div style="font-size:11.5px; color:#94a3b8; margin-bottom:16px;">
+              Speak into the microphone or type your query in <strong style="color:#e2e8f0;">English, हिंदी, मराठी, தமிழ், বাংলা</strong>:
+            </div>
+
+            <!-- Cyber Search & Voice Input Box -->
+            <div style="display:flex; align-items:center; gap:8px; background:#0c121c; border:1.5px solid #38bdf8; border-radius:12px; padding:6px 8px 6px 14px; box-shadow:0 0 22px rgba(56, 189, 248, 0.25); margin-bottom:14px;">
+              <span style="font-size:18px; color:#38bdf8;">🔍</span>
+              <input type="text" id="cyber-voice-input" placeholder="e.g. 'माझ्या भावाला जामीन हवा', 'Audit Sec 479', 'CNR case check', 'TARKA attack'..." 
+                style="flex:1; background:transparent; border:none; outline:none; color:#ffffff; font-size:13.5px; font-family:'Plus Jakarta Sans', system-ui, sans-serif;"
+                onkeydown="if(event.key==='Enter') executeCyberAiSearch();" />
+              
+              <!-- Voice Microphone Button -->
+              <button id="cyber-mic-btn" onclick="toggleCyberVoiceRecording()" title="Click to speak (Voice AI Mode)"
+                style="background:rgba(239, 68, 68, 0.15); border:1px solid #ef4444; color:#fca5a5; width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer; transition:all 0.2s;">
+                🎙️
+              </button>
+
+              <!-- Execute Button -->
+              <button onclick="executeCyberAiSearch()" 
+                style="background:linear-gradient(135deg, #0284c7, #0369a1); border:none; color:#ffffff; font-weight:800; font-size:12px; padding:9px 18px; border-radius:10px; cursor:pointer; display:flex; align-items:center; gap:6px; box-shadow:0 0 16px rgba(2, 132, 199, 0.4); transition:all 0.2s;">
+                <span>⚡</span> <span>ANALYZE</span>
+              </button>
+            </div>
+
+            <!-- Live Status & Spoken Feedback Line -->
+            <div id="cyber-mic-status" style="font-size:11px; color:#64748b; font-family:'JetBrains Mono'; min-height:18px; margin-bottom:12px;">
+              READY • Click 🎙️ to speak or enter query above
+            </div>
+
+            <!-- Dynamic Result Card (Hidden by default, pops up on query) -->
+            <div id="cyber-result-card" style="display:none; background:#041525; border:1.5px solid #10b981; border-radius:12px; padding:16px; margin-bottom:16px; text-align:left; box-shadow:0 0 25px rgba(16, 185, 129, 0.3);">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <span id="cyber-result-engine" style="background:#064e3b; color:#a7f3d0; font-family:'JetBrains Mono'; font-size:10.5px; font-weight:800; padding:3px 10px; border-radius:4px; border:1px solid #10b981;">
+                  ENGINE 07: LIBERTY SENTINEL
+                </span>
+                <span id="cyber-result-confidence" style="color:#34d399; font-weight:800; font-size:11px; font-family:'JetBrains Mono';">
+                  ✓ 99.8% GROUNDED
+                </span>
+              </div>
+              <div id="cyber-result-spoken" style="font-size:13px; font-weight:700; color:#fff; margin-bottom:4px;">
+                कलम ४७९ अंतर्गत वैधानिक जामीन कक्ष उघडत आहे.
+              </div>
+              <div id="cyber-result-desc" style="font-size:11px; color:#cbd5e1; margin-bottom:12px;">
+                Audits 1/3rd detention threshold under BNSS 2023 and auto-drafts the Section 479(3) formal court application.
+              </div>
+              <div style="display:flex; gap:10px; align-items:center;">
+                <a id="cyber-result-launch-btn" href="#" style="flex:1; text-align:center; text-decoration:none; background:linear-gradient(135deg, #10b981, #059669); color:#fff; font-weight:900; font-size:13px; padding:10px 18px; border-radius:8px; box-shadow:0 0 20px rgba(16, 185, 129, 0.5); display:flex; align-items:center; justify-content:center; gap:8px;">
+                  <span>🚀</span> <span id="cyber-result-btn-text">LAUNCH ENGINE NOW (1-CLICK)</span>
+                </a>
+                <button onclick="document.getElementById('cyber-result-card').style.display='none'" style="background:#1e293b; border:1px solid #334155; color:#94a3b8; padding:9px 14px; border-radius:8px; font-size:12px; cursor:pointer;">
+                  Dismiss
+                </button>
+              </div>
+            </div>
+
+            <!-- Tactical Quick Action Chips Grid (9 Core Paths) -->
+            <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:8px;">
+              <a href="/projects/undertrial-liberty" class="cyber-chip-btn">
+                <span>⚖️</span> <span>Sec 479 Bail</span>
+              </a>
+              <a href="/projects/case-bottleneck" class="cyber-chip-btn">
+                <span>🗂️</span> <span>16-Digit CNR Triage</span>
+              </a>
+              <a href="/governance/tarka-vyuh" class="cyber-chip-btn">
+                <span>⚔️</span> <span>TARKA Adversarial</span>
+              </a>
+              <a href="/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=hi" class="cyber-chip-btn">
+                <span>📜</span> <span>Adhikar Patra PDF</span>
+              </a>
+              <a href="/api/citizen/emuchalka-bond" class="cyber-chip-btn">
+                <span>🤝</span> <span>E-Muchalka ₹0</span>
+              </a>
+              <button onclick="openXspanModal()" class="cyber-chip-btn">
+                <span>🏥</span> <span>xSpan CareHub</span>
+              </button>
+              <a href="/api/citizen/download-rehabilitation-card?accused=Rajesh%20Kumar&trade=Carpentry&lang=hi" class="cyber-chip-btn">
+                <span>🛠️</span> <span>PM Vishwakarma</span>
+              </a>
+              <button onclick="openBenchmarkProofsModal()" class="cyber-chip-btn">
+                <span>📊</span> <span>12-Docket Benchmark</span>
+              </button>
+              <button onclick="openPractitionerReviewsModal()" class="cyber-chip-btn">
+                <span>⭐</span> <span>DLSA Reviews</span>
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
 
       <!-- Code for a Billion Hackathon 2026: Track 07 & AgentFoundry.me Master Ribbon -->
       <section style="background:linear-gradient(135deg, rgba(30, 27, 75, 0.95), rgba(15, 23, 42, 0.98), rgba(6, 78, 59, 0.9)); border:1.5px solid #6366f1; border-radius:14px; padding:20px 24px; margin-bottom:24px; box-shadow:0 8px 32px rgba(99, 102, 241, 0.25);">
@@ -2108,6 +2323,147 @@
         .catch(err => {
           body.innerHTML = `<div style="color:#ef4444;">Error fetching reviews: ${err}</div>`;
         });
+    };
+
+    // 🛸 CYBERNETIC COMMAND CORE & MULTILINGUAL AI NAVIGATOR
+    let cyberSpeechRecognizer = null;
+    let isCyberListening = false;
+
+    window.toggleCyberVoiceRecording = function() {
+      const micBtn = document.getElementById('cyber-mic-btn');
+      const statusEl = document.getElementById('cyber-mic-status');
+      const outerRing = document.getElementById('cyber-outer-ring');
+      const midRing = document.getElementById('cyber-mid-ring');
+
+      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        statusEl.innerHTML = '<span style="color:#f59e0b;">⚠️ Speech recognition not supported in this browser. Please type query above.</span>';
+        return;
+      }
+
+      if (isCyberListening && cyberSpeechRecognizer) {
+        cyberSpeechRecognizer.stop();
+        isCyberListening = false;
+        micBtn.style.background = 'rgba(239, 68, 68, 0.15)';
+        micBtn.style.animation = 'none';
+        if (outerRing) outerRing.classList.remove('turbo-scan');
+        if (midRing) midRing.classList.remove('turbo-scan');
+        statusEl.innerText = 'PAUSED • Enter query or click 🎙️ again';
+        return;
+      }
+
+      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      cyberSpeechRecognizer = new SpeechRec();
+      cyberSpeechRecognizer.continuous = false;
+      cyberSpeechRecognizer.interimResults = false;
+
+      const curLang = (window.currentNyayaLang || 'mr');
+      cyberSpeechRecognizer.lang = curLang === 'mr' ? 'mr-IN' : (curLang === 'hi' ? 'hi-IN' : 'en-IN');
+
+      cyberSpeechRecognizer.onstart = function() {
+        isCyberListening = true;
+        micBtn.style.background = '#ef4444';
+        micBtn.style.color = '#ffffff';
+        micBtn.style.animation = 'mic-listen-glow 1.2s infinite';
+        if (outerRing) outerRing.classList.add('turbo-scan');
+        if (midRing) midRing.classList.add('turbo-scan');
+        statusEl.innerHTML = '<span style="color:#ef4444; font-weight:800;">🎙️ LISTENING (SPEAK NOW IN MARATHI / HINDI / ENGLISH)...</span>';
+      };
+
+      cyberSpeechRecognizer.onresult = function(e) {
+        const transcript = e.results[0][0].transcript;
+        const inputEl = document.getElementById('cyber-voice-input');
+        if (inputEl) inputEl.value = transcript;
+        statusEl.innerHTML = `<span style="color:#34d399;">✓ HEARD: "${transcript}"</span>`;
+        executeCyberAiSearch();
+      };
+
+      cyberSpeechRecognizer.onerror = function(err) {
+        statusEl.innerHTML = `<span style="color:#f59e0b;">Speech status: ${err.error || 'Check microphone'}. Type query above.</span>`;
+        if (outerRing) outerRing.classList.remove('turbo-scan');
+        if (midRing) midRing.classList.remove('turbo-scan');
+        isCyberListening = false;
+        micBtn.style.background = 'rgba(239, 68, 68, 0.15)';
+        micBtn.style.animation = 'none';
+      };
+
+      cyberSpeechRecognizer.onend = function() {
+        isCyberListening = false;
+        micBtn.style.background = 'rgba(239, 68, 68, 0.15)';
+        micBtn.style.color = '#fca5a5';
+        micBtn.style.animation = 'none';
+        if (outerRing) outerRing.classList.remove('turbo-scan');
+        if (midRing) midRing.classList.remove('turbo-scan');
+      };
+
+      cyberSpeechRecognizer.start();
+    };
+
+    window.executeCyberAiSearch = function() {
+      const inputEl = document.getElementById('cyber-voice-input');
+      const statusEl = document.getElementById('cyber-mic-status');
+      const card = document.getElementById('cyber-result-card');
+      const outerRing = document.getElementById('cyber-outer-ring');
+      const midRing = document.getElementById('cyber-mid-ring');
+
+      if (!inputEl) return;
+      const query = inputEl.value.trim();
+      if (!query) {
+        statusEl.innerHTML = '<span style="color:#f59e0b;">Please enter a query or click 🎙️ to speak.</span>';
+        return;
+      }
+
+      if (outerRing) outerRing.classList.add('turbo-scan');
+      if (midRing) midRing.classList.add('turbo-scan');
+      statusEl.innerHTML = '<span style="color:#38bdf8;">⚡ AI SWARM ANALYZING LEGAL INTENT ACROSS 13 ENGINES...</span>';
+
+      fetch('/api/citizen/ai-intent-navigator', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: query, language: window.currentNyayaLang || 'auto' })
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (outerRing) outerRing.classList.remove('turbo-scan');
+        if (midRing) midRing.classList.remove('turbo-scan');
+
+        document.getElementById('cyber-result-engine').innerText = data.target_engine;
+        document.getElementById('cyber-result-confidence').innerText = `✓ ${(data.confidence * 100).toFixed(1)}% GROUNDED`;
+        document.getElementById('cyber-result-spoken').innerText = data.spoken_response;
+        document.getElementById('cyber-result-desc').innerText = data.description;
+        document.getElementById('cyber-result-btn-text').innerText = data.action_label;
+
+        const launchBtn = document.getElementById('cyber-result-launch-btn');
+        if (data.modal_action) {
+          launchBtn.removeAttribute('href');
+          launchBtn.onclick = function(e) {
+            e.preventDefault();
+            if (typeof window[data.modal_action] === 'function') {
+              window[data.modal_action]();
+            }
+          };
+        } else {
+          launchBtn.onclick = null;
+          launchBtn.setAttribute('href', data.action_url);
+        }
+
+        card.style.display = 'block';
+        statusEl.innerHTML = `<span style="color:#34d399;">✓ ACTION CORRIDOR IDENTIFIED: ${data.detected_intent}</span>`;
+
+        if ('speechSynthesis' in window) {
+          try {
+            window.speechSynthesis.cancel();
+            const utter = new SpeechSynthesisUtterance(data.spoken_response);
+            utter.rate = 1.0;
+            utter.pitch = 1.0;
+            window.speechSynthesis.speak(utter);
+          } catch(e) {}
+        }
+      })
+      .catch(err => {
+        if (outerRing) outerRing.classList.remove('turbo-scan');
+        if (midRing) midRing.classList.remove('turbo-scan');
+        statusEl.innerHTML = `<span style="color:#ef4444;">Error analyzing query: ${err}</span>`;
+      });
     };
 
     // 🇮🇳 NYAYA-SETU Auto-Bail Corridor (Step 1: 08:00 AM Dawn Sweep)

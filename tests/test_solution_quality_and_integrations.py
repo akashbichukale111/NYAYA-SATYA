@@ -449,5 +449,31 @@ def test_26_field_pilot_testimonials_and_practitioner_reviews():
     assert "DPDP" in data["dpdp_act_compliance"]["statute"]
 
 
+def test_27_ai_intent_navigator_multilingual():
+    """Verify natural language spoken/text intent navigation in Marathi, Hindi, and English."""
+    # 1. Marathi query for Bail (कलम ४७९ जामीन)
+    res_mr = client.post("/api/citizen/ai-intent-navigator", json={"query": "माझ्या भावाला जामीन हवा आहे", "language": "mr"})
+    assert res_mr.status_code == 200
+    d_mr = res_mr.json()
+    assert d_mr["detected_intent"] == "SECTION_479_STATUTORY_BAIL"
+    assert "/projects/undertrial-liberty" in d_mr["action_url"]
+    assert "कलम ४७९" in d_mr["spoken_response"]
+
+    # 2. Hindi/English query for Case Triage
+    res_hi = client.post("/api/citizen/ai-intent-navigator", json={"query": "e-court cnr case triage check karna hai", "language": "hi"})
+    assert res_hi.status_code == 200
+    d_hi = res_hi.json()
+    assert d_hi["detected_intent"] == "CASE_TRIAGE_INGESTION"
+    assert "ENGINE 03" in d_hi["target_engine"]
+
+    # 3. Adversarial query for TARKA stress test
+    res_tarka = client.post("/api/citizen/ai-intent-navigator", json={"query": "tarka adversarial evidence attack", "language": "en"})
+    assert res_tarka.status_code == 200
+    d_tarka = res_tarka.json()
+    assert d_tarka["detected_intent"] == "TARKA_ADVERSARIAL_ANALYSIS"
+    assert "/governance/tarka-vyuh" in d_tarka["action_url"]
+
+
+
 
 
