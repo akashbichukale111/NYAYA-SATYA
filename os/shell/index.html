@@ -763,9 +763,12 @@
                 Eliminates the need for poor undertrials to hire lawyers or file bail petitions. The moment a prisoner completes 1/3rd sentence, the system autonomously serves a legally binding Form 479(3) mandate directly to the Jail Superintendent!
               </div>
             </div>
-            <div>
-              <button id="btn-nyaya-setu-trigger" onclick="runNyayaSetuAutoSweep()" style="background:linear-gradient(135deg, #047857, #10b981); color:#fff; border:none; padding:9px 20px; border-radius:8px; font-size:13px; font-weight:800; cursor:pointer; display:flex; align-items:center; gap:8px; box-shadow:0 0 16px rgba(16, 185, 129, 0.4); transition:all 0.2s;">
-                <span>⏰</span> <span>Simulate 08:00 AM Automated Dawn Sweep</span>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button id="btn-nyaya-setu-trigger" onclick="runNyayaSetuAutoSweep()" style="background:linear-gradient(135deg, #047857, #10b981); color:#fff; border:none; padding:9px 18px; border-radius:8px; font-size:12.5px; font-weight:800; cursor:pointer; display:flex; align-items:center; gap:8px; box-shadow:0 0 16px rgba(16, 185, 129, 0.4); transition:all 0.2s;">
+                <span>⏰</span> <span>Step 1: 08:00 AM Suo-Motu Sweep</span>
+              </button>
+              <button id="btn-nyaya-setu-muchalka" onclick="runNyayaSetuMuchalka()" style="background:linear-gradient(135deg, #0d9488, #14b8a6); color:#fff; border:none; padding:9px 18px; border-radius:8px; font-size:12.5px; font-weight:800; cursor:pointer; display:flex; align-items:center; gap:8px; box-shadow:0 0 16px rgba(20, 184, 166, 0.4); transition:all 0.2s;">
+                <span>⚖️</span> <span>Step 2: Generate ₹0 ई-मुचलका (Zero-Surety Bond)</span>
               </button>
             </div>
           </div>
@@ -1878,6 +1881,80 @@
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; font-size:11.5px; color:#94a3b8; border-top:1px solid #1c2b42; padding-top:10px;">
             <span>Zero-Delay Guarantee: <strong style="color:#34d399;">No prisoner petition required • Zero surety required under law</strong></span>
             <span style="font-family:'JetBrains Mono'; color:#00e5ff;">Notice ID: ${data.cryptographic_seal.notice_id}</span>
+          </div>
+        `;
+      } catch (err) {
+        btn.innerText = 'Error: ' + err.message;
+        btn.style.opacity = '1';
+      }
+    };
+
+    // 🇮🇳 NYAYA-SETU Step 2: 'ई-मुचलका' (Jan-Dhan / Aadhaar Linked Zero-Rupee Bail Bond)
+    window.runNyayaSetuMuchalka = async function() {
+      const btn = document.getElementById('btn-nyaya-setu-muchalka');
+      const box = document.getElementById('nyaya-setu-results-box');
+      if (!btn || !box) return;
+
+      btn.innerText = '⚡ Generating ₹0 ई-मुचलका via Aadhaar & Jan-Dhan...';
+      btn.style.opacity = '0.7';
+
+      try {
+        const res = await fetch('/api/citizen/generate-e-muchalka', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            accused_name: "Rajesh Kumar",
+            case_id: "CASE-2024-DEL-0482",
+            fir_number: "0482/2023",
+            under_sections: "IPC 406 / BNS 316(2)",
+            aadhaar_last_four: "8375",
+            jan_dhan_account: "PMJDY-DEL-984210",
+            indigent_undertrial: true,
+            surety_amount_demanded: 0
+          })
+        });
+        const data = await res.json();
+        btn.innerText = '✓ ₹0 ई-मुचलका Generated & Sealed';
+        btn.style.background = '#0d9488';
+        btn.style.opacity = '1';
+
+        box.style.display = 'block';
+        box.innerHTML = `
+          <div style="border-left:4px solid #14b8a6; padding-left:14px; margin-bottom:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <strong style="color:#fff; font-size:14px;">🇮🇳 ई-मुचलका (ZERO-RUPEE PERSONAL BOND) ISSUED</strong>
+              <span style="font-family:'JetBrains Mono'; font-size:11px; color:#5eead4; background:#134e4a; padding:2px 8px; border-radius:4px;">● REF: ${data.bond_id}</span>
+            </div>
+            <div style="font-size:12.5px; color:#cbd5e1; margin-top:4px;">
+              Accused: <strong style="color:#fff;">${data.undertrial_details.name}</strong> | FIR: <strong>${data.undertrial_details.fir_number}</strong> | Aadhaar: <strong style="color:#5eead4;">${data.undertrial_details.aadhaar_virtual_token}</strong> | Jan-Dhan: <strong>${data.undertrial_details.jandhan_account}</strong> (BPL Certified)
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px; margin-bottom:12px;">
+            <div style="background:#121b2a; border:1px solid #1c2b42; border-radius:6px; padding:12px;">
+              <div style="font-size:11px; font-weight:800; color:#5eead4;">BAIL / SURETY AMOUNT</div>
+              <div style="font-size:15px; font-weight:800; color:#34d399; margin-top:2px;">₹0 (ZERO RUPEES)</div>
+              <div style="font-size:11px; color:#94a3b8; margin-top:2px;">Completely free under BNSS 479 & 480</div>
+            </div>
+            <div style="background:#121b2a; border:1px solid #1c2b42; border-radius:6px; padding:12px;">
+              <div style="font-size:11px; font-weight:800; color:#38bdf8;">PROPERTY / GUARANTOR SURETY</div>
+              <div style="font-size:15px; font-weight:800; color:#38bdf8; margin-top:2px;">ZERO (Not Required)</div>
+              <div style="font-size:11px; color:#94a3b8; margin-top:2px;">No property papers or court touts needed</div>
+            </div>
+            <div style="background:#121b2a; border:1px solid #1c2b42; border-radius:6px; padding:12px;">
+              <div style="font-size:11px; font-weight:800; color:#f59e0b;">UNWIND HUMAN GATE SEAL</div>
+              <div style="font-size:12px; font-weight:800; color:#fde047; margin-top:2px;">✓ Verified by DLSA Panel Counsel</div>
+              <div style="font-size:10.5px; color:#94a3b8; margin-top:2px; font-family:'JetBrains Mono';">SHA-256: ${data.unwind_gate_seal.sha256_cryptographic_seal.slice(0, 16)}...</div>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; border-top:1px solid #1c2b42; padding-top:10px;">
+            <div style="font-size:12px; color:#cbd5e1;">
+              Status: <span style="color:#34d399; font-weight:700;">APPROVED FOR IMMEDIATE PRISON DISCHARGE</span>
+            </div>
+            <a href="${data.download_url}" target="_blank" style="background:linear-gradient(135deg, #0d9488, #14b8a6); color:#fff; text-decoration:none; padding:7px 16px; border-radius:6px; font-size:12px; font-weight:800; display:inline-flex; align-items:center; gap:6px;">
+              <span>🖨️</span> <span>Open & Print Official 'ई-मुचलका' (PDF Certificate)</span>
+            </a>
           </div>
         `;
       } catch (err) {

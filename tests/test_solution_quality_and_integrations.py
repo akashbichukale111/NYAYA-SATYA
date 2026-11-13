@@ -288,3 +288,42 @@ def test_18_nyaya_setu_auto_trigger():
     status_data = status_res.json()
     assert status_data["status"] == "CORRIDOR_ACTIVE"
     assert status_data["statutory_compliance_bnss479"] == "100%"
+
+
+def test_19_generate_e_muchalka():
+    """Verify Step 2: 'ई-मुचलका' (Jan-Dhan / Aadhaar Linked Zero-Rupee Bail Bond)."""
+    payload = {
+        "accused_name": "Rajesh Kumar",
+        "case_id": "CASE-2024-DEL-0482",
+        "fir_number": "0482/2023",
+        "under_sections": "IPC 406 / BNS 316(2)",
+        "aadhaar_last_four": "8375",
+        "jan_dhan_account": "PMJDY-DEL-984210",
+        "indigent_undertrial": True,
+        "surety_amount_demanded": 0
+    }
+    res = client.post("/api/citizen/generate-e-muchalka", json=payload)
+    assert res.status_code == 200
+    data = res.json()
+    assert data["status"] == "E_MUCHALKA_GENERATED_ACTIVE"
+    assert "ई-मुचलका" in data["bond_type"]
+    assert "479" in data["financial_mandate"]["statutory_basis"]
+    assert data["financial_mandate"]["bond_amount_inr"] == 0
+    assert data["financial_mandate"]["surety_guarantor_required"] == "NO_SURETY_REQUIRED"
+    assert data["undertrial_details"]["bpl_indigence_verified"] is True
+    assert data["unwind_gate_seal"]["legal_status"] == "APPROVED_FOR_IMMEDIATE_PRISON_DISCHARGE"
+    assert "download_url" in data
+
+
+def test_20_download_e_muchalka_bond():
+    """Verify Step 2: Download printable certificate for 'ई-मुचलका' with QR seal."""
+    res = client.get("/api/citizen/download-e-muchalka?accused=Rajesh%20Kumar&bond_id=EMUCHALKA-8375A1-2026")
+    assert res.status_code == 200
+    html = res.text
+    assert "ई-मुचलका" in html
+    assert "ZERO-RUPEE PERSONAL RECOGNIZANCE BOND" in html
+    assert "XXXX-XXXX-8375" in html
+    assert "PMJDY-DEL-984210" in html
+    assert "₹0 (ZERO RUPEES)" in html
+    assert "NYAYA-SETU DPI LIVE VERIFICATION QR" in html
+

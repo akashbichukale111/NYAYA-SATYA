@@ -485,11 +485,14 @@
 
           <!-- Citizen Voice & Adhikar Patra Download Actions -->
           <div style="display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;">
-            <button id="btn-speak-voice" onclick="speakRightsAdvice()" style="flex:1; background:linear-gradient(135deg, #1e3a8a, #3b82f6); color:#fff; border:none; padding:10px 14px; border-radius:6px; font-weight:700; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; transition:all 0.2s;">
+            <button id="btn-speak-voice" onclick="speakRightsAdvice()" style="flex:1; min-width:180px; background:linear-gradient(135deg, #1e3a8a, #3b82f6); color:#fff; border:none; padding:10px 14px; border-radius:6px; font-weight:700; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; transition:all 0.2s;">
               <span>🔊</span> <span id="btn-speak-lbl">Listen Aloud (Voice Audio)</span>
             </button>
-            <a id="btn-download-adhikar" href="/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=en" target="_blank" style="flex:1.2; background:linear-gradient(135deg, #047857, #10b981); color:#fff; text-decoration:none; padding:10px 14px; border-radius:6px; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; gap:6px;">
+            <a id="btn-download-adhikar" href="/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=en" target="_blank" style="flex:1; min-width:210px; background:linear-gradient(135deg, #047857, #10b981); color:#fff; text-decoration:none; padding:10px 14px; border-radius:6px; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; gap:6px;">
               <span>📜</span> <span id="btn-download-lbl">Download Bail Certificate (Adhikar Patra)</span>
+            </a>
+            <a id="btn-download-muchalka" href="/api/citizen/download-e-muchalka?accused=Rajesh%20Kumar&bond_id=EMUCHALKA-8375A1-2026" target="_blank" style="flex:1; min-width:210px; background:linear-gradient(135deg, #0d9488, #14b8a6); color:#fff; text-decoration:none; padding:10px 14px; border-radius:6px; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; gap:6px;">
+              <span>⚖️</span> <span id="btn-download-muchalka-lbl">Download ₹0 ई-मुचलका (Personal Bond)</span>
             </a>
           </div>
         </div>
@@ -1542,6 +1545,9 @@
           <div style="margin-top:8px; display:flex; flex-direction:column; gap:4px;">
             <a href="/api/citizen/download-adhikar-patra?accused=Rajesh%20Kumar&custody=428&lang=mr" target="_blank" style="background:#00a884; color:#fff; text-decoration:none; padding:5px 10px; border-radius:4px; font-size:11px; font-weight:700; text-align:center;">
               📄 १-क्लिक जामीन अधिकार पत्र (PDF)
+            </a>
+            <a href="/api/citizen/download-e-muchalka?accused=Rajesh%20Kumar&bond_id=EMUCHALKA-8375A1-2026" target="_blank" style="background:#0d9488; color:#fff; text-decoration:none; padding:5px 10px; border-radius:4px; font-size:11px; font-weight:700; text-align:center;">
+              ⚖️ विना-शुल्क ई-मुचलका (₹0 Personal Bond PDF)
             </a>
             <button onclick="speakRightsAdvice()" style="background:#1e3a8a; color:#fff; border:none; padding:5px 10px; border-radius:4px; font-size:11px; font-weight:700; cursor:pointer;">
               🔊 आवाजात ऐका (Play Voice Note)
